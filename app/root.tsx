@@ -22,12 +22,16 @@ import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getBrowserEnv } from "./utils/env";
 
 export const links: LinksFunction = () => [
-	{ rel: "stylesheet preload prefetch", href: tailwindStylesheetUrl, as: "style" },
+	{
+		rel: "stylesheet preload prefetch",
+		href: tailwindStylesheetUrl,
+		as: "style",
+	},
 ];
 
 export const meta: MetaFunction = () => [
-	{ title: "Remix Notes" },
-	{ name: "description", content: "Remix Notes App" },
+	{ title: "PoiTricks" },
+	{ name: "description", content: "PoiTricks" },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -56,6 +60,9 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="h-full">
+				<div className="flex-1 p-4 text-2xl">
+					<a href="/">PoiTricks</a>
+				</div>
 				<Outlet />
 				<ScrollRestoration />
 				<script

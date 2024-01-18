@@ -1,66 +1,33 @@
-import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, Outlet, Link, NavLink } from "@remix-run/react";
+import { useLoaderData, Outlet } from "@remix-run/react";
 
-import { LogoutButton, requireAuthSession } from "~/modules/auth";
-import { getNotes } from "~/modules/note";
-import { notFound } from "~/utils/http.server";
+import { getTricks } from "~/modules/trick";
+import { Grid } from "~/modules/trick/components/grid";
+import { TrickCard } from "~/modules/trick/components/trick-card";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-	const { userId, email } = await requireAuthSession(request);
-
-	const notes = await getNotes({ userId });
-
-	if (!notes) {
-		throw notFound(`No user with id ${userId}`);
-	}
-
-	return json({ email, notes });
+export async function loader() {
+	const tricks = await getTricks();
+	return json({ tricks });
 }
 
 export default function NotesPage() {
 	const data = useLoaderData<typeof loader>();
-
 	return (
 		<div className="flex h-full min-h-screen flex-col">
-			<header className="flex items-center justify-between bg-slate-800 p-4 text-white">
-				<h1 className="text-3xl font-bold">
-					<Link to=".">Notes</Link>
-				</h1>
-				<p>{data.email}</p>
-				<LogoutButton />
-			</header>
+			<Grid>
+				{data?.tricks.map((trick) => (
+					<TrickCard
+						key={trick.id}
+						id={trick.id}
+						name={trick.name}
+						preview={trick.preview}
+						types={trick.types}
+						creators={trick.creators ?? []}
+					/>
+				))}
+			</Grid>
 
 			<main className="flex h-full bg-white">
-				<div className="h-full w-80 border-r bg-gray-50">
-					<Link to="new" className="block p-4 text-xl text-blue-500">
-						+ New Note
-					</Link>
-
-					<hr />
-
-					{data.notes.length === 0 ? (
-						<p className="p-4">No notes yet</p>
-					) : (
-						<ol>
-							{data.notes.map((note) => (
-								<li key={note.id}>
-									<NavLink
-										className={({ isActive }) =>
-											`block border-b p-4 text-xl ${
-												isActive ? "bg-white" : ""
-											}`
-										}
-										to={note.id}
-									>
-										📝 {note.title}
-									</NavLink>
-								</li>
-							))}
-						</ol>
-					)}
-				</div>
-
 				<div className="flex-1 p-6">
 					<Outlet />
 				</div>

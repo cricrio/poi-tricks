@@ -1,26 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model Collection {
+  id        String   @id() @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  category  String
+  tricks    Trick[]
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Creator {
+  id        String            @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime          @default(now()) @db.Timestamptz(6)
+  name      String            @default("")
+  bio       String            @default("")
+  picture   String            @default("")
+  platforms CreatorPlatform[]
+  videos    Video[]
+  tricks    Trick[]
+}
+
+model CreatorPlatform {
+  id         BigInt   @id @default(autoincrement())
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  platform   String?
+  url        String?  @unique
+  externalId String?
+  creatorId  String?  @db.Uuid
+  creator    Creator? @relation(fields: [creatorId], references: [id])
+}
+
+model Trick {
+  id            String           @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime         @default(now()) @db.Timestamptz(6)
+  name          String
+  preview       String            @default("")
+  difficulty    TrickDifficulty
+  types         String[]
+  collections   Collection[]
+  videos        Video[]
+  creators      Creator[]
+  prerequisites Trick[]          @relation("Prerequisite")
+  next          Trick[]          @relation("Prerequisite")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  notes     Note[]
+  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
+  email       String?      @unique
+  collections Collection[]
 }
 
-model Note {
-  id        String   @id @default(cuid())
-  title     String
-  body      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String
+model Video {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  externalId String?
+  source     String?
+  trickId    String?  @db.Uuid
+  title      String   @default("")
+  creatorId  String?  @db.Uuid
+  creator    Creator? @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  trick      Trick?   @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum TrickDifficulty {
+  others
+  beginner
+  intermediate
+  basics
+  advanced
 }
