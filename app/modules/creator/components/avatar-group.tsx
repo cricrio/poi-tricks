@@ -3,7 +3,5 @@ interface Props {
 }
 
 export const AvatarGroup: React.FC<Props> = ({ children }: Props) => (
-	<div className="avatar-group -space-x-6 rtl:space-x-reverse">
-		{children}
-	</div>
+	<div className="flex -space-x-1 overflow-hidden">{children}</div>
 );
