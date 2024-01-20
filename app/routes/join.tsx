@@ -19,6 +19,7 @@ import {
 } from "~/modules/auth";
 import { getUserByEmail, createUserAccount } from "~/modules/user";
 import { assertIsPost, isFormProcessing } from "~/utils";
+import { ROUTES } from "~/routes";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
@@ -76,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	return createAuthSession({
 		request,
 		authSession,
-		redirectTo: redirectTo || "/notes",
+		redirectTo: redirectTo || ROUTES.home,
 	});
 }
 

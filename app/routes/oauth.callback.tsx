@@ -14,13 +14,14 @@ import {
 } from "~/modules/auth";
 import { tryCreateUser, getUserByEmail } from "~/modules/user";
 import { assertIsPost, safeRedirect } from "~/utils";
+import { ROUTES } from "~/routes";
 
 // imagine a user go back after OAuth login success or type this URL
 // we don't want him to fall in a black hole 👽
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
 
-	if (authSession) return redirect("/notes");
+	if (authSession) return redirect(ROUTES.home);
 
 	return json({});
 }
@@ -97,7 +98,7 @@ export default function LoginCallback() {
 	const error = useActionData<typeof action>();
 	const fetcher = useFetcher();
 	const [searchParams] = useSearchParams();
-	const redirectTo = searchParams.get("redirectTo") ?? "/notes";
+	const redirectTo = searchParams.get("redirectTo") ?? ROUTES.home;
 
 	useEffect(() => {
 		const {
@@ -120,7 +121,7 @@ export default function LoginCallback() {
 				formData.append("refreshToken", refreshToken);
 				formData.append("redirectTo", redirectTo);
 
-				fetcher.submit(formData, { method: "post", });
+				fetcher.submit(formData, { method: "post" });
 			}
 		});
 

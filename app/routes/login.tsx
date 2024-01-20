@@ -19,13 +19,14 @@ import {
 	ContinueWithEmailForm,
 } from "~/modules/auth";
 import { assertIsPost, isFormProcessing } from "~/utils";
+import { ROUTES } from "~/routes";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
 	const t = await i18nextServer.getFixedT(request, "auth");
 	const title = t("login.title");
 
-	if (authSession) return redirect("/notes");
+	if (authSession) return redirect(ROUTES.home);
 
 	return json({ title });
 }
@@ -67,7 +68,7 @@ export async function action({ request }: ActionFunctionArgs) {
 	return createAuthSession({
 		request,
 		authSession,
-		redirectTo: redirectTo || "/notes",
+		redirectTo: redirectTo || "/",
 	});
 }
 

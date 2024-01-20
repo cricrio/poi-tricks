@@ -6,6 +6,7 @@ import type {
 import { json } from "@remix-run/node";
 import {
 	Links,
+	Link,
 	LiveReload,
 	Meta,
 	Outlet,
@@ -21,6 +22,7 @@ import { i18nextServer } from "~/integrations/i18n";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import globalStyle from "./styles/global.css";
 import { getBrowserEnv } from "./utils/env";
+import { LogoutButton, getAuthSession } from "./modules/auth";
 
 export const links: LinksFunction = () => [
 	{
@@ -42,14 +44,16 @@ export const meta: MetaFunction = () => [
 
 export const loader: LoaderFunction = async ({ request }) => {
 	const locale = await i18nextServer.getLocale(request);
+	const session = await getAuthSession(request);
 	return json({
 		locale,
 		env: getBrowserEnv(),
+		connected: Boolean(session?.userId),
 	});
 };
 
 export default function App() {
-	const { env, locale } = useLoaderData<typeof loader>();
+	const { env, locale, connected } = useLoaderData<typeof loader>();
 	const { i18n } = useTranslation();
 
 	useChangeLanguage(locale);
@@ -65,9 +69,16 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className="h-full dark">
-				<div className="flex-1 p-4 text-2xl">
-					<a href="/">PoiTricks</a>
+			<body className="h-full">
+				<div className="flex justify-between p-8">
+					<Link to="/" className="text-2xl">
+						PoiTricks
+					</Link>
+					{connected ? (
+						<LogoutButton />
+					) : (
+						<Link to="/login">Login</Link>
+					)}
 				</div>
 				<Outlet />
 				<ScrollRestoration />

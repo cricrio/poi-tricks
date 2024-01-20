@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { i18nextServer } from "~/integrations/i18n";
 import { getAuthSession, sendResetPasswordLink } from "~/modules/auth";
+import { ROUTES } from "~/routes";
 import { assertIsPost, isFormProcessing, tw } from "~/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -15,7 +16,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const t = await i18nextServer.getFixedT(request, "auth");
 	const title = t("login.forgotPassword");
 
-	if (authSession) return redirect("/notes");
+	if (authSession) return redirect(ROUTES.home);
 
 	return json({ title });
 }

@@ -16,13 +16,14 @@ import {
 	updateAccountPassword,
 } from "~/modules/auth";
 import { assertIsPost, isFormProcessing, tw } from "~/utils";
+import { ROUTES } from "~/routes";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
 	const t = await i18nextServer.getFixedT(request, "auth");
 	const title = t("register.changePassword");
 
-	if (authSession) return redirect("/notes");
+	if (authSession) return redirect(ROUTES.home);
 
 	return json({ title });
 }
