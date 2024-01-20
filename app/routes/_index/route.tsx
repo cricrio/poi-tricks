@@ -1,41 +1,60 @@
-import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { LoaderFunctionArgs, json } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 
-import { Grid } from "~/modules/trick/components/grid";
-import { TrickCard } from "~/modules/trick/components/trick-card";
-import { Header } from "~/modules/ui/header";
-import { Main } from "~/modules/ui/main";
+import { Avatar } from "~/modules/creator/";
+import { Grid, TrickCard } from "~/modules/trick/";
+import { Header, Main } from "~/modules/ui/";
 
-import { getTricksByDifficulties } from "./queries";
+import { getFirstCreators, getTricksByDifficulties } from "./queries";
+import { getAuthSession } from "~/modules/auth/session.server";
+import { getUserSavedTricks } from "~/modules/trick/";
+import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
+import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 
-export const loader = async () => {
-	const tricksByDifficulties = await getTricksByDifficulties();
-	return json({ tricksByDifficulties });
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+	const authSession = await getAuthSession(request);
+
+	const savedTricks = await getUserSavedTricksLoader(request);
+
+	const [tricksByDifficulties, creators] = await Promise.all([
+		getTricksByDifficulties(),
+		getFirstCreators(),
+	]);
+
+	return json({
+		tricksByDifficulties,
+		creators,
+		savedTricks,
+	});
 };
 export default function Index() {
-	const { tricksByDifficulties } = useLoaderData<typeof loader>();
+	const { tricksByDifficulties, creators, savedTricks } =
+		useLoaderData<typeof loader>();
 	return (
 		<Main>
-			{/* <section>
-				<Header href="/creators">Featuring ({creatorCount})</Header>
+			<section>
+				<Header href="/creators">Featuring ({creators.count})</Header>
 				<Grid>
-					{creatorList?.map((creator) => (
-						<div className="flex justify-space-between flex-col items-center gap-2">
+					{creators.data?.map((creator) => (
+						<div
+							className="flex flex-col items-center gap-2"
+							key={creator.id}
+						>
 							<Avatar
-								name={creator.name ?? ""}
+								name={creator.name}
 								src={creator.picture}
 								width="w-36"
 							/>
-							<a
-								className="text-xl justify-self-end capitalize text-center max-w-44"
-								href={`/creators/${creator.id}`}
+							<Link
+								className="max-w-44 justify-self-end text-center text-xl capitalize"
+								to={`/creators/${creator.id}`}
 							>
 								{creator.name}
-							</a>
+							</Link>
 						</div>
 					))}
 				</Grid>
-			</section> */}
+			</section>
 			{tricksByDifficulties.map(({ difficulty, tricks, count }) => (
 				<section className="my-16" key={difficulty}>
 					<Header href={`/tricks/difficulty/${difficulty}`}>
@@ -50,7 +69,12 @@ export default function Index() {
 								types={trick.types ?? []}
 								creators={trick?.creators ?? []}
 								key={trick.id}
-							/>
+							>
+								<SaveTrickButton
+									trickId={trick.id}
+									category={savedTricks[trick.id]}
+								/>
+							</TrickCard>
 						))}
 					</Grid>
 				</section>

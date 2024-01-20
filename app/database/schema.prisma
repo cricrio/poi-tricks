@@ -7,15 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Collection {
-  id        String   @id() @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt DateTime @default(now()) @db.Timestamptz(6)
-  category  String
-  tricks    Trick[]
-  userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id])
-}
-
 model Creator {
   id        String            @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime          @default(now()) @db.Timestamptz(6)
@@ -38,24 +29,33 @@ model CreatorPlatform {
 }
 
 model Trick {
-  id            String           @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt     DateTime         @default(now()) @db.Timestamptz(6)
+  id            String          @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime        @default(now()) @db.Timestamptz(6)
   name          String
-  preview       String            @default("")
+  preview       String          @default("")
   difficulty    TrickDifficulty
   types         String[]
-  collections   Collection[]
   videos        Video[]
   creators      Creator[]
-  prerequisites Trick[]          @relation("Prerequisite")
-  next          Trick[]          @relation("Prerequisite")
+  prerequisites Trick[]         @relation("Prerequisite")
+  next          Trick[]         @relation("Prerequisite")
+  savedTricks   SavedTrick[]
+}
+
+model SavedTrick {
+  id       String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user     User   @relation(fields: [userId], references: [id])
+  trick    Trick  @relation(fields: [trickId], references: [id])
+  category String
+  userId   String @db.Uuid
+  trickId  String @db.Uuid
 }
 
 model User {
   id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt   DateTime     @default(now()) @db.Timestamptz(6)
   email       String?      @unique
-  collections Collection[]
+  savedTricks SavedTrick[]
 }
 
 model Video {

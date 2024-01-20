@@ -19,12 +19,18 @@ import { useChangeLanguage } from "remix-i18next";
 import { i18nextServer } from "~/integrations/i18n";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
+import globalStyle from "./styles/global.css";
 import { getBrowserEnv } from "./utils/env";
 
 export const links: LinksFunction = () => [
 	{
 		rel: "stylesheet preload prefetch",
 		href: tailwindStylesheetUrl,
+		as: "style",
+	},
+	{
+		rel: "stylesheet preload prefetch",
+		href: globalStyle,
 		as: "style",
 	},
 ];
@@ -49,7 +55,7 @@ export default function App() {
 	useChangeLanguage(locale);
 
 	return (
-		<html lang={locale} dir={i18n.dir()} className="h-full">
+		<html lang={locale} dir={i18n.dir()} className="h-full dark">
 			<head>
 				<meta charSet="utf-8" />
 				<meta
@@ -59,7 +65,7 @@ export default function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className="h-full">
+			<body className="h-full dark">
 				<div className="flex-1 p-4 text-2xl">
 					<a href="/">PoiTricks</a>
 				</div>

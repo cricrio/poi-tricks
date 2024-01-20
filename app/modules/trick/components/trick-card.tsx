@@ -14,10 +14,11 @@ interface Props {
 	preview: string | null;
 	types: string[];
 	creators?: Array<CreatorProps>;
+	children?: React.ReactNode;
 }
 
 export const TrickCard: React.FC<Props> = (props: Props) => {
-	const { name, id, preview, types, creators } = props;
+	const { name, id, preview, types, creators, children } = props;
 
 	return (
 		<div className="card card-compact border border-base-content shadow-xl">
@@ -50,7 +51,7 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 						</AvatarGroup>
 						<div>
 							{creators?.map((creator, index) => (
-								<>
+								<div key={creator.id}>
 									<Link
 										to={`/creators/${creator.id}`}
 										className="capitalize"
@@ -60,11 +61,11 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 									{index < creators.length - 1 && (
 										<span className="mr-1">,</span>
 									)}
-								</>
+								</div>
 							))}
 						</div>
 					</div>
-					{/* <SelectCategory trickId={id} /> */}
+					{children}
 				</div>
 				<Link to={`/tricks/${id}`}>
 					<h2 className="card-title">{name}</h2>

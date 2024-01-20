@@ -54,7 +54,8 @@
 				"alphabetize": {
 					"order": "asc",
 					"caseInsensitive": true
-				}
+				},
+				"tailwindcss/no-custom-classname": "off"
 			}
 		]
 	},

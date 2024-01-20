@@ -1,9 +1,13 @@
 import type { Config } from "tailwindcss";
 
-/** @type {import('tailwindcss').Config} */
-export default {
+const config = {
 	darkMode: ["class"],
-	content: ["./app/**/*.{ts,tsx,jsx,js}"],
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
+	],
 	prefix: "",
 	theme: {
 		container: {
@@ -70,11 +74,7 @@ export default {
 			},
 		},
 	},
-	plugins: [
-		require("tailwindcss-animate"),
-		require("daisyui"),
-		require("@tailwindcss/typography"),
-		require("@tailwindcss/forms"),
-		require("tailwind-scrollbar"),
-	],
+	plugins: [require("tailwindcss-animate"), require("daisyui")],
 } satisfies Config;
+
+export default config;

@@ -11,6 +11,7 @@ import {
 
 import { refreshAccessToken, verifyAuthSession } from "./service.server";
 import type { AuthSession } from "./types";
+import { mapAuthSession } from "./mappers";
 
 const SESSION_KEY = "authenticated";
 const SESSION_ERROR_KEY = "error";
@@ -61,7 +62,7 @@ export async function getAuthSession(
 	request: Request,
 ): Promise<AuthSession | null> {
 	const session = await getSession(request);
-	return session.get(SESSION_KEY);
+	return session?.get(SESSION_KEY);
 }
 
 export async function commitAuthSession(
@@ -205,4 +206,15 @@ async function refreshAuthSession(request: Request): Promise<AuthSession> {
 
 	// we can't redirect because we are in an action, so, deal with it and don't forget to handle session commit 👮‍♀️
 	return refreshedAuthSession;
+}
+
+export async function protectedQuery(
+	request: Request,
+	callback: (authSession: AuthSession) => Promise<any>,
+) {
+	const authSession = await getAuthSession(request);
+	if (authSession) {
+		return callback(authSession);
+	}
+	return null;
 }
