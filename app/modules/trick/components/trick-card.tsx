@@ -5,6 +5,8 @@ import { Avatar } from "~/modules/creator/components/avatar";
 import { AvatarGroup } from "~/modules/creator/components/avatar-group";
 
 import { PreviewImage } from "./preview-image";
+import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
+import { Badge } from "~/modules/ui/badge";
 
 type CreatorProps = Pick<Creator, "id" | "name" | "picture">;
 
@@ -21,8 +23,8 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 	const { name, id, preview, types, creators, children } = props;
 
 	return (
-		<div className="card card-compact border border-base-content shadow-xl">
-			<figure>
+		<Card>
+			<figure className="overflow-hidden rounded-t-xl">
 				<Link to={`/tricks/${id}`} className="flex-1">
 					{
 						//quick fix add a default image if no image
@@ -36,7 +38,7 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 					}
 				</Link>
 			</figure>
-			<div className="card-body">
+			<CardHeader>
 				<div className="flex justify-between">
 					<div className="flex items-center gap-4">
 						<AvatarGroup>
@@ -68,22 +70,22 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 					{children}
 				</div>
 				<Link to={`/tricks/${id}`}>
-					<h2 className="card-title">{name}</h2>
+					<CardTitle className="py-3">{name}</CardTitle>
 				</Link>
 
 				<div className="flex flex-wrap gap-2">
 					{types &&
 						types.length > 0 &&
 						types.map((type) => (
-							<div
-								className="badge badge-secondary p-3"
+							<Badge
+								className="bg-fuchsia-500 text-white"
 								key={type}
 							>
 								{type}
-							</div>
+							</Badge>
 						))}
 				</div>
-			</div>
-		</div>
+			</CardHeader>
+		</Card>
 	);
 };
