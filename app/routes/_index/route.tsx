@@ -2,12 +2,11 @@ import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
 import { Avatar } from "~/modules/creator/";
-import { Grid, TrickCard } from "~/modules/trick/";
+import { Grid, NotConnectedDialog, TrickCard } from "~/modules/trick/";
 import { Header, Main } from "~/modules/ui/";
 
 import { getFirstCreators, getTricksByDifficulties } from "./queries";
 import { getAuthSession } from "~/modules/auth/session.server";
-import { getUserSavedTricks } from "~/modules/trick/";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 
@@ -22,13 +21,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 	]);
 
 	return json({
+		connected: !!authSession,
 		tricksByDifficulties,
 		creators,
 		savedTricks,
 	});
 };
 export default function Index() {
-	const { tricksByDifficulties, creators, savedTricks } =
+	const { tricksByDifficulties, creators, savedTricks, connected } =
 		useLoaderData<typeof loader>();
 	return (
 		<Main>
@@ -70,10 +70,14 @@ export default function Index() {
 								creators={trick?.creators ?? []}
 								key={trick.id}
 							>
-								<SaveTrickButton
-									trickId={trick.id}
-									category={savedTricks[trick.id]}
-								/>
+								{connected ? (
+									<SaveTrickButton
+										trickId={trick.id}
+										category={savedTricks[trick.id]}
+									/>
+								) : (
+									<NotConnectedDialog />
+								)}
 							</TrickCard>
 						))}
 					</Grid>
