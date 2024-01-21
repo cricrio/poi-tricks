@@ -48,7 +48,6 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 									key={creator.id}
 									src={creator.picture}
 									name={creator.name}
-									width="w-8"
 								/>
 							))}
 						</AvatarGroup>
