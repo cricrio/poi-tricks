@@ -3,10 +3,11 @@ import { Link } from "@remix-run/react";
 
 import { Avatar } from "~/modules/creator/components/avatar";
 import { AvatarGroup } from "~/modules/creator/components/avatar-group";
+import { Badge } from "~/modules/ui/badge";
+import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
 
 import { PreviewImage } from "./preview-image";
-import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
-import { Badge } from "~/modules/ui/badge";
+
 
 type CreatorProps = Pick<Creator, "id" | "name" | "picture">;
 

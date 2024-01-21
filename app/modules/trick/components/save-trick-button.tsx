@@ -1,6 +1,7 @@
 import { useFetcher } from "@remix-run/react";
+
 import { Button } from "~/modules/ui";
-import { action } from "~/routes/save-trick";
+import type { action } from "~/routes/save-trick";
 
 interface Props {
 	trickId: string;

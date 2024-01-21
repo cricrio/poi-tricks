@@ -1,5 +1,6 @@
 import { Form } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
+
 import { Button } from "~/modules/ui";
 
 export function LogoutButton() {

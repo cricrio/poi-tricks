@@ -13,13 +13,13 @@ export const Header: React.FC<Props> = (props: Props) => {
 			{href ? (
 				<>
 					<a
-						className="border-b border-transparent hover:border-primary-content"
+						className="hover:border-primary-content border-b border-transparent"
 						href={href}
 					>
 						{h2}
 					</a>
 					<a
-						className="border-b border-transparent pb-1 uppercase hover:border-primary-content"
+						className="hover:border-primary-content border-b border-transparent pb-1 uppercase"
 						href={href}
 					>
 						See all

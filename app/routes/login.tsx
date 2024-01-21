@@ -18,9 +18,9 @@ import {
 	signInWithEmail,
 	ContinueWithEmailForm,
 } from "~/modules/auth";
-import { assertIsPost, isFormProcessing } from "~/utils";
-import { ROUTES } from "~/routes";
 import { Input, Label } from "~/modules/ui";
+import { ROUTES } from "~/routes";
+import { assertIsPost, isFormProcessing } from "~/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
@@ -193,7 +193,7 @@ export default function LoginPage() {
 							<div className="w-full border-t border-gray-300" />
 						</div>
 						<div className="relative flex justify-center text-sm">
-							<span className="bg-white p-2 text-gray-600 rounded">
+							<span className="rounded bg-white p-2 text-gray-600">
 								{t("login.orContinueWith")}
 							</span>
 						</div>

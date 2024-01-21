@@ -11,7 +11,6 @@ import {
 
 import { refreshAccessToken, verifyAuthSession } from "./service.server";
 import type { AuthSession } from "./types";
-import { mapAuthSession } from "./mappers";
 
 const SESSION_KEY = "authenticated";
 const SESSION_ERROR_KEY = "error";

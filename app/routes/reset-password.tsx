@@ -15,9 +15,9 @@ import {
 	refreshAccessToken,
 	updateAccountPassword,
 } from "~/modules/auth";
-import { assertIsPost, isFormProcessing, tw } from "~/utils";
-import { ROUTES } from "~/routes";
 import { Label } from "~/modules/ui";
+import { ROUTES } from "~/routes";
+import { assertIsPost, isFormProcessing, tw } from "~/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
@@ -135,7 +135,7 @@ export default function ResetPassword() {
 					<div>
 						<Label
 							htmlFor={zo.fields.password()}
-							className="block text-sm font-mediumtext-gray-700"
+							className="font-mediumtext-gray-700 block text-sm"
 						>
 							{t("register.password")}
 						</Label>
@@ -161,7 +161,7 @@ export default function ResetPassword() {
 					<div>
 						<Label
 							htmlFor={zo.fields.confirmPassword()}
-							className="block text-sm font-mediumtext-gray-700"
+							className="font-mediumtext-gray-700 block text-sm"
 						>
 							{t("register.confirmPassword")}
 						</Label>

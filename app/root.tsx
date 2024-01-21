@@ -19,10 +19,10 @@ import { useChangeLanguage } from "remix-i18next";
 
 import { i18nextServer } from "~/integrations/i18n";
 
-import tailwindStylesheetUrl from "./styles/tailwind.css";
-import globalStyle from "./styles/global.css";
-import { getBrowserEnv } from "./utils/env";
 import { LogoutButton, getAuthSession } from "./modules/auth";
+import globalStyle from "./styles/global.css";
+import tailwindStylesheetUrl from "./styles/tailwind.css";
+import { getBrowserEnv } from "./utils/env";
 
 export const links: LinksFunction = () => [
 	{
@@ -59,7 +59,7 @@ export default function App() {
 	useChangeLanguage(locale);
 
 	return (
-		<html lang={locale} dir={i18n.dir()} className="h-full dark">
+		<html lang={locale} dir={i18n.dir()} className="dark h-full">
 			<head>
 				<meta charSet="utf-8" />
 				<meta

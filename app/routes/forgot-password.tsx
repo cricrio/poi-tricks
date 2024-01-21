@@ -82,7 +82,7 @@ export default function ForgotPassword() {
 						<div>
 							<Label
 								htmlFor={zo.fields.email()}
-								className="block text-sm font-mediumtext-gray-700"
+								className="font-mediumtext-gray-700 block text-sm"
 							>
 								{t("register.email")}
 							</Label>

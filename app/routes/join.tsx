@@ -1,5 +1,6 @@
 import * as React from "react";
 
+import { Label } from "@radix-ui/react-label";
 import type {
 	ActionFunctionArgs,
 	LoaderFunctionArgs,
@@ -17,11 +18,10 @@ import {
 	getAuthSession,
 	ContinueWithEmailForm,
 } from "~/modules/auth";
-import { getUserByEmail, createUserAccount } from "~/modules/user";
-import { assertIsPost, isFormProcessing } from "~/utils";
-import { ROUTES } from "~/routes";
 import { Input } from "~/modules/ui";
-import { Label } from "@radix-ui/react-label";
+import { getUserByEmail, createUserAccount } from "~/modules/user";
+import { ROUTES } from "~/routes";
+import { assertIsPost, isFormProcessing } from "~/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);

@@ -13,8 +13,8 @@ import {
 	getAuthSession,
 } from "~/modules/auth";
 import { tryCreateUser, getUserByEmail } from "~/modules/user";
-import { assertIsPost, safeRedirect } from "~/utils";
 import { ROUTES } from "~/routes";
+import { assertIsPost, safeRedirect } from "~/utils";
 
 // imagine a user go back after OAuth login success or type this URL
 // we don't want him to fall in a black hole 👽

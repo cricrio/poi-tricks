@@ -28,7 +28,6 @@ export const updateSavedTrick = async ({
 	trickId: string;
 	category?: string;
 }) => {
-	console.log(userId, trickId, category);
 	const saved = await db.savedTrick.findFirst({
 		where: {
 			trickId: { equals: trickId },

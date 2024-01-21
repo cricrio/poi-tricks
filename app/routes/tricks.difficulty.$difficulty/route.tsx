@@ -3,14 +3,14 @@ import { useLoaderData, useParams } from "@remix-run/react";
 
 import type { TrickDifficulty } from "~/database/";
 import { Grid } from "~/modules/trick/components/grid";
+import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { TrickCard } from "~/modules/trick/components/trick-card";
+import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 import { Header } from "~/modules/ui/header";
 import { Main } from "~/modules/ui/main";
 import { getRequiredParam } from "~/utils";
 
 import { getTricksAndCountByDifficulty } from "./queries";
-import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
-import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const difficulty = getRequiredParam(

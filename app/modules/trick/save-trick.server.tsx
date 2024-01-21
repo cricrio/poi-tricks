@@ -1,5 +1,5 @@
-import { getAuthSession } from "../auth";
 import { getUserSavedTricks } from "./service.server";
+import { getAuthSession } from "../auth";
 
 export async function getUserSavedTricksLoader(
 	request: Request,

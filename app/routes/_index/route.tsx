@@ -1,14 +1,15 @@
-import { LoaderFunctionArgs, json } from "@remix-run/node";
+import type { LoaderFunctionArgs} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
+import { getAuthSession } from "~/modules/auth/session.server";
 import { Avatar } from "~/modules/creator/";
 import { Grid, NotConnectedDialog, TrickCard } from "~/modules/trick/";
+import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
+import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 import { Header, Main } from "~/modules/ui/";
 
 import { getFirstCreators, getTricksByDifficulties } from "./queries";
-import { getAuthSession } from "~/modules/auth/session.server";
-import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
-import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
 	const authSession = await getAuthSession(request);
