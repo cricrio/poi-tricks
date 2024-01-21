@@ -2,6 +2,8 @@ import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
 
 import type { TrickDifficulty } from "~/database/";
+import { getAuthSession } from "~/modules/auth";
+import { NotConnectedDialog } from "~/modules/trick";
 import { Grid } from "~/modules/trick/components/grid";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { TrickCard } from "~/modules/trick/components/trick-card";
@@ -17,13 +19,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 		params,
 		"difficulty",
 	) as TrickDifficulty;
+	const session = await getAuthSession(request);
 	const { tricks, count } = await getTricksAndCountByDifficulty(difficulty);
 	const savedTricks = await getUserSavedTricksLoader(request);
-	return json({ tricks, count, savedTricks });
+	return json({ tricks, count, savedTricks, connected: !!session });
 }
 
 export default function DifficultyPage() {
-	const { tricks, count, savedTricks } = useLoaderData<typeof loader>();
+	const { tricks, count, savedTricks, connected } =
+		useLoaderData<typeof loader>();
 	const { difficulty } = useParams();
 	return (
 		<Main>
@@ -40,10 +44,14 @@ export default function DifficultyPage() {
 						creators={trick?.creators ?? []}
 						key={trick.id}
 					>
-						<SaveTrickButton
-							trickId={trick.id}
-							category={savedTricks[trick.id] ?? undefined}
-						/>
+						{connected ? (
+							<SaveTrickButton
+								trickId={trick.id}
+								category={savedTricks[trick.id] ?? undefined}
+							/>
+						) : (
+							<NotConnectedDialog />
+						)}
 					</TrickCard>
 				))}
 			</Grid>
