@@ -17,6 +17,7 @@ import {
 } from "~/modules/auth";
 import { assertIsPost, isFormProcessing, tw } from "~/utils";
 import { ROUTES } from "~/routes";
+import { Label } from "~/modules/ui";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
@@ -132,12 +133,12 @@ export default function ResetPassword() {
 			<div className="mx-auto w-full max-w-md px-8">
 				<Form ref={zo.ref} method="post" className="space-y-6" replace>
 					<div>
-						<label
+						<Label
 							htmlFor={zo.fields.password()}
-							className="block text-sm font-medium text-gray-700"
+							className="block text-sm font-mediumtext-gray-700"
 						>
 							{t("register.password")}
-						</label>
+						</Label>
 						<div className="mt-1">
 							<input
 								data-test-id="password"
@@ -158,12 +159,12 @@ export default function ResetPassword() {
 						</div>
 					</div>
 					<div>
-						<label
+						<Label
 							htmlFor={zo.fields.confirmPassword()}
-							className="block text-sm font-medium text-gray-700"
+							className="block text-sm font-mediumtext-gray-700"
 						>
 							{t("register.confirmPassword")}
-						</label>
+						</Label>
 						<div className="mt-1">
 							<input
 								data-test-id="confirmPassword"

@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { i18nextServer } from "~/integrations/i18n";
 import { getAuthSession, sendResetPasswordLink } from "~/modules/auth";
+import { Label } from "~/modules/ui";
 import { ROUTES } from "~/routes";
 import { assertIsPost, isFormProcessing, tw } from "~/utils";
 
@@ -79,12 +80,12 @@ export default function ForgotPassword() {
 						replace
 					>
 						<div>
-							<label
+							<Label
 								htmlFor={zo.fields.email()}
-								className="block text-sm font-medium text-gray-700"
+								className="block text-sm font-mediumtext-gray-700"
 							>
 								{t("register.email")}
-							</label>
+							</Label>
 							<div className="mt-1">
 								<input
 									data-test-id="email"

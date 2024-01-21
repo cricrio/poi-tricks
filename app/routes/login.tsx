@@ -20,6 +20,7 @@ import {
 } from "~/modules/auth";
 import { assertIsPost, isFormProcessing } from "~/utils";
 import { ROUTES } from "~/routes";
+import { Input, Label } from "~/modules/ui";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
@@ -94,13 +95,13 @@ export default function LoginPage() {
 					<div>
 						<label
 							htmlFor={zo.fields.email()}
-							className="block text-sm font-medium text-gray-700"
+							className="block text-sm font-medium"
 						>
 							{t("login.email")}
 						</label>
 
 						<div className="mt-1">
-							<input
+							<Input
 								data-test-id="email"
 								required
 								autoFocus={true}
@@ -122,14 +123,14 @@ export default function LoginPage() {
 					</div>
 
 					<div>
-						<label
+						<Label
 							htmlFor={zo.fields.password()}
-							className="block text-sm font-medium text-gray-700"
+							className="block text-sm font-medium"
 						>
 							{t("register.password")}
-						</label>
+						</Label>
 						<div className="mt-1">
-							<input
+							<Input
 								data-test-id="password"
 								name={zo.fields.password()}
 								type="password"
@@ -172,7 +173,7 @@ export default function LoginPage() {
 						</div>
 					</div>
 					<div className="flex items-center justify-center">
-						<div className="text-center text-sm text-gray-500">
+						<div className="text-center text-sm text-gray-300">
 							{t("login.dontHaveAccount")}{" "}
 							<Link
 								className="text-blue-500 underline"
@@ -192,7 +193,7 @@ export default function LoginPage() {
 							<div className="w-full border-t border-gray-300" />
 						</div>
 						<div className="relative flex justify-center text-sm">
-							<span className="bg-white px-2 text-gray-500">
+							<span className="bg-white p-2 text-gray-600 rounded">
 								{t("login.orContinueWith")}
 							</span>
 						</div>

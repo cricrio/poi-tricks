@@ -4,6 +4,7 @@ import { useFetcher } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 
 import type { action } from "~/routes/send-magic-link";
+import { Input } from "~/modules/ui";
 
 export function ContinueWithEmailForm() {
 	const ref = React.useRef<HTMLFormElement>(null);
@@ -23,12 +24,8 @@ export function ContinueWithEmailForm() {
 	}, [isSuccessFull]);
 
 	return (
-		<sendMagicLink.Form
-			method="post"
-			action="/send-magic-link"
-			ref={ref}
-		>
-			<input
+		<sendMagicLink.Form method="post" action="/send-magic-link" ref={ref}>
+			<Input
 				type="email"
 				name="email"
 				id="magic-link"

@@ -20,6 +20,8 @@ import {
 import { getUserByEmail, createUserAccount } from "~/modules/user";
 import { assertIsPost, isFormProcessing } from "~/utils";
 import { ROUTES } from "~/routes";
+import { Input } from "~/modules/ui";
+import { Label } from "@radix-ui/react-label";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const authSession = await getAuthSession(request);
@@ -81,7 +83,6 @@ export async function action({ request }: ActionFunctionArgs) {
 	});
 }
 
-
 export const meta: MetaFunction<typeof loader> = ({ data }) => [
 	{
 		title: data?.title,
@@ -101,14 +102,11 @@ export default function Join() {
 			<div className="mx-auto w-full max-w-md px-8">
 				<Form ref={zo.ref} method="post" className="space-y-6" replace>
 					<div>
-						<label
-							htmlFor={zo.fields.email()}
-							className="block text-sm font-medium text-gray-700"
-						>
+						<Label htmlFor={zo.fields.email()} className="block">
 							{t("register.email")}
-						</label>
+						</Label>
 						<div className="mt-1">
-							<input
+							<Input
 								data-test-id="email"
 								required
 								autoFocus={true}
@@ -130,14 +128,11 @@ export default function Join() {
 					</div>
 
 					<div>
-						<label
-							htmlFor={zo.fields.password()}
-							className="block text-sm font-medium text-gray-700"
-						>
+						<Label htmlFor={zo.fields.password()} className="block">
 							{t("register.password")}
-						</label>
+						</Label>
 						<div className="mt-1">
-							<input
+							<Input
 								data-test-id="password"
 								name={zo.fields.password()}
 								type="password"
@@ -170,7 +165,7 @@ export default function Join() {
 						{t("register.action")}
 					</button>
 					<div className="flex items-center justify-center">
-						<div className="text-center text-sm text-gray-500">
+						<div className="text-center text-sm text-gray-300">
 							{t("register.alreadyHaveAnAccount")}{" "}
 							<Link
 								className="text-blue-500 underline"
