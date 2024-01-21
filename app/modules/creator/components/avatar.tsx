@@ -12,7 +12,9 @@ export const Avatar: React.FC<Props> = (props: Props) => {
 	return (
 		<A size={size}>
 			<AvatarImage src={src} />
-			<AvatarFallback>{name.slice(0, 1)}</AvatarFallback>
+			<AvatarFallback className="bg-slate-200 text-slate-800">
+				{name.slice(0, 1)}
+			</AvatarFallback>
 		</A>
 	);
 };
