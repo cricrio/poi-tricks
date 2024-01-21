@@ -1,15 +1,16 @@
 import { Avatar as A, AvatarFallback, AvatarImage } from "~/modules/ui/";
 
-interface Props {
+type Props = {
 	src: string;
 	name: string;
-}
+	size?: "sm" | "lg" | "default";
+};
 
 export const Avatar: React.FC<Props> = (props: Props) => {
-	const { src, name } = props;
+	const { src, size, name } = props;
 
 	return (
-		<A>
+		<A size={size}>
 			<AvatarImage src={src} />
 			<AvatarFallback>{name.slice(0, 1)}</AvatarFallback>
 		</A>

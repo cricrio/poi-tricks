@@ -43,7 +43,7 @@ export default function Index() {
 							<Avatar
 								name={creator.name}
 								src={creator.picture}
-								width="w-36"
+								size="lg"
 							/>
 							<Link
 								className="max-w-44 justify-self-end text-center text-xl capitalize"
