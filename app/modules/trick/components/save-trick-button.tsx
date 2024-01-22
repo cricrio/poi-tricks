@@ -18,7 +18,9 @@ export function SaveTrickButton({ trickId, category }: Props) {
 				name="category"
 				value={category ? "" : "Saved"}
 			/>
-			<Button type="submit">{category || "Save"}</Button>
+			<Button type="submit" className="min-w-20">
+				{category || "Save"}
+			</Button>
 		</savedTrick.Form>
 	);
 }
