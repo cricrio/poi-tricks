@@ -20,6 +20,8 @@ import { useChangeLanguage } from "remix-i18next";
 import { i18nextServer } from "~/integrations/i18n";
 
 import { LogoutButton, getAuthSession } from "./modules/auth";
+import { Avatar } from "./modules/creator";
+import { tryGetUserById } from "./modules/user";
 import globalStyle from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getBrowserEnv } from "./utils/env";
@@ -45,15 +47,18 @@ export const meta: MetaFunction = () => [
 export const loader: LoaderFunction = async ({ request }) => {
 	const locale = await i18nextServer.getLocale(request);
 	const session = await getAuthSession(request);
+	const user = await tryGetUserById(session?.userId);
+
 	return json({
 		locale,
 		env: getBrowserEnv(),
+		user,
 		connected: Boolean(session?.userId),
 	});
 };
 
 export default function App() {
-	const { env, locale, connected } = useLoaderData<typeof loader>();
+	const { env, locale, connected, user } = useLoaderData<typeof loader>();
 	const { i18n } = useTranslation();
 
 	useChangeLanguage(locale);
@@ -75,7 +80,10 @@ export default function App() {
 						PoiTricks
 					</Link>
 					{connected ? (
-						<LogoutButton />
+						<div className="flex items-center gap-5">
+							<LogoutButton />
+							<Avatar name={user?.email} src={user?.picture} />
+						</div>
 					) : (
 						<Link to="/login">Login</Link>
 					)}

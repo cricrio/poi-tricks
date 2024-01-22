@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+
 import type { User } from "~/database";
 import { db } from "~/database";
 import type { AuthSession } from "~/modules/auth";
@@ -8,17 +10,30 @@ import {
 } from "~/modules/auth";
 
 export async function getUserByEmail(email: User["email"]) {
-	return db.user.findUnique({ where: { email: email.toLowerCase() } });
+	return db.user.findUnique({ where: { email: email?.toLowerCase() } });
 }
 
-async function createUser({
-	email,
-	userId,
-}: Pick<AuthSession, "userId" | "email">) {
+export async function tryGetUserById(id?: string) {
+	if (!id) return null;
+	return db.user.findUnique({ where: { id } });
+}
+
+const getGravatorImageUrl = (email: string) => {
+	const hash = createHash("sha256")
+		.update(email.trim().toLowerCase())
+		.digest("hex");
+	return `https://www.gravatar.com/avatar/${hash}?d=identicon`;
+};
+
+async function createUser(
+	{ email, userId }: Pick<AuthSession, "userId" | "email">,
+	picture: string,
+) {
 	return db.user
 		.create({
 			data: {
 				email,
+				picture,
 				id: userId,
 			},
 		})
@@ -26,14 +41,17 @@ async function createUser({
 		.catch(() => null);
 }
 
-export async function tryCreateUser({
-	email,
-	userId,
-}: Pick<AuthSession, "userId" | "email">) {
-	const user = await createUser({
-		userId,
-		email,
-	});
+export async function tryCreateUser(
+	{ email, userId }: Pick<AuthSession, "userId" | "email">,
+	picture: string,
+) {
+	const user = await createUser(
+		{
+			userId,
+			email,
+		},
+		picture,
+	);
 
 	// user account created and have a session but unable to store in User table
 	// we should delete the user account to allow retry create account again
@@ -63,7 +81,8 @@ export async function createUserAccount(
 		return null;
 	}
 
-	const user = await tryCreateUser(authSession);
+	const picture = getGravatorImageUrl(email);
+	const user = await tryCreateUser(authSession, picture);
 
 	if (!user) return null;
 
