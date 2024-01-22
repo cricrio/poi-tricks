@@ -61,8 +61,8 @@ model User {
 model Video {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt  DateTime @default(now()) @db.Timestamptz(6)
-  externalId String?
-  source     String?
+  externalId String
+  source     String   @default("others")
   trickId    String?  @db.Uuid
   title      String   @default("")
   creatorId  String?  @db.Uuid
