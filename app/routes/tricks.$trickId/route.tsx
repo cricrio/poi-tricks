@@ -72,14 +72,16 @@ export default function TrickPage() {
 							</Badge>
 						))}
 				</div>
-				<div className="mb-10 lg:hidden">
-					<h2 className="mb-4 text-2xl">Prerequisites</h2>
-					<div className="flex flex-col gap-2">
-						{trick.prerequisites?.map((trick) => (
-							<TrickPreview key={trick.id} {...trick} />
-						))}
+				{trick?.prerequisites?.length > 0 && (
+					<div className="mb-10 lg:hidden">
+						<h2 className="mb-4 text-2xl">Prerequisites</h2>
+						<div className="flex flex-col gap-2">
+							{trick.prerequisites.map((trick) => (
+								<TrickPreview key={trick.id} {...trick} />
+							))}
+						</div>
 					</div>
-				</div>
+				)}
 				<div className="flex flex-col gap-2">
 					{trick.videos?.map((v) =>
 						v.source === "youtube" ? (
@@ -99,30 +101,32 @@ export default function TrickPage() {
 					)}
 				</div>
 			</div>
-			<div className="hidden lg:block">
-				<h2 className="mb-6 text-2xl">Prerequisites</h2>
-				<div className="flex flex-col gap-4">
-					{trick.prerequisites?.map((trick) => (
-						<TrickCard
-							key={trick.id}
-							preview={trick.preview}
-							id={trick.id}
-							name={trick.name}
-							types={trick.types ?? []}
-							creators={trick.creators ?? []}
-						>
-							{connected ? (
-								<SaveTrickButton
-									trickId={trick.id}
-									category={savedTricks[trick.id]}
-								/>
-							) : (
-								<NotConnectedDialog />
-							)}
-						</TrickCard>
-					))}
+			{trick.prerequisites?.length > 0 && (
+				<div className="hidden lg:block">
+					<h2 className="mb-6 text-2xl">Prerequisites</h2>
+					<div className="flex flex-col gap-4">
+						{trick.prerequisites?.map((trick) => (
+							<TrickCard
+								key={trick.id}
+								preview={trick.preview}
+								id={trick.id}
+								name={trick.name}
+								types={trick.types ?? []}
+								creators={trick.creators ?? []}
+							>
+								{connected ? (
+									<SaveTrickButton
+										trickId={trick.id}
+										category={savedTricks[trick.id]}
+									/>
+								) : (
+									<NotConnectedDialog />
+								)}
+							</TrickCard>
+						))}
+					</div>
 				</div>
-			</div>
+			)}
 		</Main>
 	);
 }
