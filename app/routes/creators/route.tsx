@@ -1,7 +1,7 @@
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
-import { CreatorGrid, Avatar, CreatorCard } from "~/modules/creator";
+import { CreatorGrid, CreatorCard } from "~/modules/creator";
 import { Header, Main } from "~/modules/ui";
 
 import { getCreators } from "./queries";
