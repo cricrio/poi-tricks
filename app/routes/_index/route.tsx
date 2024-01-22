@@ -3,8 +3,8 @@ import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
 import { getAuthSession } from "~/modules/auth/session.server";
-import { Avatar } from "~/modules/creator/";
-import { Grid, NotConnectedDialog, TrickCard } from "~/modules/trick/";
+import { Avatar, CreatorGrid } from "~/modules/creator/";
+import { TrickGrid, NotConnectedDialog, TrickCard } from "~/modules/trick/";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 import { Header, Main } from "~/modules/ui/";
@@ -35,7 +35,7 @@ export default function Index() {
 		<Main>
 			<section>
 				<Header href="/creators">Featuring ({creators.count})</Header>
-				<Grid>
+				<CreatorGrid>
 					{creators.data?.map((creator) => (
 						<div
 							className="flex flex-col items-center gap-2"
@@ -54,14 +54,14 @@ export default function Index() {
 							</Link>
 						</div>
 					))}
-				</Grid>
+				</CreatorGrid>
 			</section>
 			{tricksByDifficulties.map(({ difficulty, tricks, count }) => (
 				<section className="my-16" key={difficulty}>
 					<Header href={`/tricks/difficulty/${difficulty}`}>
 						{difficulty} ({count})
 					</Header>
-					<Grid>
+					<TrickGrid>
 						{tricks?.map((trick) => (
 							<TrickCard
 								preview={trick.preview}
@@ -81,7 +81,7 @@ export default function Index() {
 								)}
 							</TrickCard>
 						))}
-					</Grid>
+					</TrickGrid>
 				</section>
 			))}
 		</Main>

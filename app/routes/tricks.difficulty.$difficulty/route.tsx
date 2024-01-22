@@ -4,7 +4,7 @@ import { useLoaderData, useParams } from "@remix-run/react";
 import type { TrickDifficulty } from "~/database/";
 import { getAuthSession } from "~/modules/auth";
 import { NotConnectedDialog } from "~/modules/trick";
-import { Grid } from "~/modules/trick/components/grid";
+import { TrickGrid } from "~/modules/trick/components/grid";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { TrickCard } from "~/modules/trick/components/trick-card";
 import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
@@ -34,7 +34,7 @@ export default function DifficultyPage() {
 			<Header>
 				{difficulty} ({count})
 			</Header>
-			<Grid>
+			<TrickGrid>
 				{tricks.map((trick) => (
 					<TrickCard
 						preview={trick.preview}
@@ -54,7 +54,7 @@ export default function DifficultyPage() {
 						)}
 					</TrickCard>
 				))}
-			</Grid>
+			</TrickGrid>
 		</Main>
 	);
 }
