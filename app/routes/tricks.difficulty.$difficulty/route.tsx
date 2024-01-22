@@ -3,11 +3,13 @@ import { useLoaderData, useParams } from "@remix-run/react";
 
 import type { TrickDifficulty } from "~/database/";
 import { getAuthSession } from "~/modules/auth";
-import { NotConnectedDialog } from "~/modules/trick";
-import { TrickGrid } from "~/modules/trick/components/grid";
-import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
-import { TrickCard } from "~/modules/trick/components/trick-card";
-import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
+import {
+	NotConnectedDialog,
+	TrickGrid,
+	SaveTrickButton,
+	TrickCard,
+	getUserSavedTricksLoader,
+} from "~/modules/trick";
 import { Header } from "~/modules/ui/header";
 import { Main } from "~/modules/ui/main";
 import { getRequiredParam } from "~/utils";

@@ -8,8 +8,8 @@ import {
 	NotConnectedDialog,
 	TrickCard,
 	TrickGrid,
+	SaveTrickButton,
 } from "~/modules/trick";
-import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { Main } from "~/modules/ui";
 import { getRequiredParam } from "~/utils";
 

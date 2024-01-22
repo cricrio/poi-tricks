@@ -4,8 +4,12 @@ import { useLoaderData } from "@remix-run/react";
 
 import { getAuthSession } from "~/modules/auth/session.server";
 import { CreatorCard, CreatorGrid } from "~/modules/creator/";
-import { TrickGrid, NotConnectedDialog, TrickCard } from "~/modules/trick/";
-import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
+import {
+	TrickGrid,
+	NotConnectedDialog,
+	TrickCard,
+	SaveTrickButton,
+} from "~/modules/trick/";
 import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 import { Header, Main } from "~/modules/ui/";
 

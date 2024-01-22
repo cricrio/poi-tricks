@@ -1,12 +1,15 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
+import { json, type ActionFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
 import { getAuthSession } from "~/modules/auth";
 import { updateSavedTrick } from "~/modules/trick";
+import { assertIsPost } from "~/utils";
 
 export async function action({
 	request,
 }: ActionFunctionArgs): Promise<Response> {
+	assertIsPost(request);
+
 	const authSession = await getAuthSession(request);
 	const userId = authSession?.userId;
 
@@ -19,5 +22,5 @@ export async function action({
 	const category = body.get("category") as string;
 
 	await updateSavedTrick({ userId, trickId, category });
-	return new Response("ok", { status: 200 });
+	return json({ error: null });
 }
