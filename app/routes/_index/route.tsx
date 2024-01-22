@@ -1,9 +1,9 @@
 import type { LoaderFunctionArgs} from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 
 import { getAuthSession } from "~/modules/auth/session.server";
-import { Avatar, CreatorGrid } from "~/modules/creator/";
+import { CreatorCard, CreatorGrid } from "~/modules/creator/";
 import { TrickGrid, NotConnectedDialog, TrickCard } from "~/modules/trick/";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
@@ -37,22 +37,7 @@ export default function Index() {
 				<Header href="/creators">Featuring ({creators.count})</Header>
 				<CreatorGrid>
 					{creators.data?.map((creator) => (
-						<div
-							className="flex flex-col items-center gap-2"
-							key={creator.id}
-						>
-							<Avatar
-								name={creator.name}
-								src={creator.picture}
-								size="lg"
-							/>
-							<Link
-								className="max-w-44 justify-self-end text-center text-xl capitalize"
-								to={`/creators/${creator.id}`}
-							>
-								{creator.name}
-							</Link>
-						</div>
+						<CreatorCard key={creator.id} {...creator} />
 					))}
 				</CreatorGrid>
 			</section>
