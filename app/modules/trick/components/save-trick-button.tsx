@@ -16,7 +16,7 @@ export function SaveTrickButton({ trickId, category }: Props) {
 			<input
 				type="hidden"
 				name="category"
-				value={category ? undefined : "Saved"}
+				value={category ? "" : "Saved"}
 			/>
 			<Button type="submit">{category || "Save"}</Button>
 		</savedTrick.Form>

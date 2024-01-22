@@ -26,7 +26,7 @@ export const updateSavedTrick = async ({
 }: {
 	userId: string;
 	trickId: string;
-	category?: string;
+	category: string | null;
 }) => {
 	const saved = await db.savedTrick.findFirst({
 		where: {
