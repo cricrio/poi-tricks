@@ -1,9 +1,9 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 import { getAuthSession } from "~/modules/auth";
 import { AvatarGroup, Avatar } from "~/modules/creator";
-import { NotConnectedDialog, TrickCard } from "~/modules/trick";
+import { NotConnectedDialog, TrickCard, TrickPreview } from "~/modules/trick";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { YoutubeEmbed } from "~/modules/trick/components/youtube-embed";
 import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
@@ -57,9 +57,9 @@ export default function TrickPage() {
 				</div>
 				<div className="mb-6 flex flex-wrap items-center gap-2 lg:mb-10">
 					<Badge asChild className="bg-sky-400 capitalize text-white">
-						<a href={`/tricks/difficulty/${trick.difficulty}`}>
+						<Link to={`/tricks/difficulty/${trick.difficulty}`}>
 							{trick.difficulty}
-						</a>
+						</Link>
 					</Badge>
 					{trick.types &&
 						trick.types.length > 0 &&
@@ -76,16 +76,7 @@ export default function TrickPage() {
 					<h2 className="mb-4 text-2xl">Prerequisites</h2>
 					<div className="flex flex-col gap-2">
 						{trick.prerequisites?.map((trick) => (
-							<a
-								href={`/tricks/${trick.id}`}
-								className="block"
-								key={trick.id}
-							>
-								{trick.name}
-								<div className="badge badge-secondary ml-2 capitalize">
-									{trick.difficulty}
-								</div>
-							</a>
+							<TrickPreview key={trick.id} {...trick} />
 						))}
 					</div>
 				</div>
