@@ -8,7 +8,6 @@ export function YoutubeEmbed({ externalId }: Props) {
 				title={"YouTube video player"}
 				className="aspect-video w-full max-w-2xl rounded-2xl"
 				src={`https://www.youtube.com/embed/${externalId}`}
-				allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 			/>
 		</div>
 	);
