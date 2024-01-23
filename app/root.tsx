@@ -20,10 +20,13 @@ import { useChangeLanguage } from "remix-i18next";
 import { i18nextServer } from "~/integrations/i18n";
 
 import { LogoutButton, getAuthSession } from "./modules/auth";
-import { Avatar } from "./modules/creator";
 import type { UserWithSavedTrick } from "./modules/user";
-import { UserProvider, tryGetUserByIdWithSavedTricks } from "./modules/user";
-import { UserShield } from "./modules/user/components/user-shield";
+import {
+	UserProvider,
+	tryGetUserByIdWithSavedTricks,
+	UserShield,
+	Avatar,
+} from "./modules/user";
 import globalStyle from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getBrowserEnv } from "./utils/env";
@@ -88,8 +91,8 @@ export default function App() {
 								<div className="flex items-center gap-5">
 									<LogoutButton />
 									<Avatar
-										name={user?.email}
-										src={user?.picture}
+										name={user.email}
+										src={user.picture}
 									/>
 								</div>
 							)}

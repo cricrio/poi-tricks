@@ -11,7 +11,7 @@ import {
 import { Header } from "~/modules/ui/header";
 import { Main } from "~/modules/ui/main";
 import type { UserWithSavedTrick } from "~/modules/user";
-import { UserShield } from "~/modules/user/components/user-shield";
+import { UserShield } from "~/modules/user";
 import { getRequiredParam } from "~/utils";
 
 import { getTricksAndCountByDifficulty } from "./queries";

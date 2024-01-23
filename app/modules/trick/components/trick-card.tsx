@@ -1,24 +1,16 @@
-import type { Creator } from "@prisma/client";
+import type { Creator, Trick } from "@prisma/client";
 import { Link } from "@remix-run/react";
 
-import { Avatar } from "~/modules/creator/components/avatar";
-import { AvatarGroup } from "~/modules/creator/components/avatar-group";
+import { CreatorGroup } from "~/modules/creator";
 import { Badge } from "~/modules/ui/badge";
 import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
 
 import { PreviewImage } from "./preview-image";
 
-
-type CreatorProps = Pick<Creator, "id" | "name" | "picture">;
-
-interface Props {
-	id: string;
-	name: string;
-	preview: string | null;
-	types: string[];
-	creators?: Array<CreatorProps>;
-	children?: React.ReactNode;
-}
+type Props = Trick & {
+	creators: Array<Creator>;
+	children: React.ReactNode;
+};
 
 export const TrickCard: React.FC<Props> = (props: Props) => {
 	const { name, id, preview, types, creators, children } = props;
@@ -41,32 +33,7 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 			</figure>
 			<CardHeader>
 				<div className="flex justify-between">
-					<div className="flex items-center gap-4">
-						<AvatarGroup>
-							{creators?.map((creator) => (
-								<Avatar
-									key={creator.id}
-									src={creator.picture}
-									name={creator.name}
-								/>
-							))}
-						</AvatarGroup>
-						<div>
-							{creators?.map((creator, index) => (
-								<div key={creator.id}>
-									<Link
-										to={`/creators/${creator.id}`}
-										className="capitalize"
-									>
-										{creator.name}
-									</Link>
-									{index < creators.length - 1 && (
-										<span className="mr-1">,</span>
-									)}
-								</div>
-							))}
-						</div>
-					</div>
+					<CreatorGroup creators={creators} />
 					{children}
 				</div>
 				<Link to={`/tricks/${id}`}>

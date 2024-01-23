@@ -10,7 +10,7 @@ import {
 } from "~/modules/trick";
 import { Main } from "~/modules/ui";
 import type { UserWithSavedTrick } from "~/modules/user";
-import { UserShield } from "~/modules/user/components/user-shield";
+import { UserShield } from "~/modules/user";
 import { getRequiredParam } from "~/utils";
 
 import { getCreator } from "./queries";

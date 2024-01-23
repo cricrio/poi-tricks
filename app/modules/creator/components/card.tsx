@@ -1,8 +1,7 @@
 import { Link } from "@remix-run/react";
 
 import type { Creator } from "~/database";
-
-import { Avatar } from "./avatar";
+import { Avatar } from "~/modules/user/";
 
 type Props = Pick<Creator, "name" | "picture" | "id">;
 export function CreatorCard({ name, picture, id }: Props) {

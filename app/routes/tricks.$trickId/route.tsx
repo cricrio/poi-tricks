@@ -1,7 +1,7 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
-import { AvatarGroup, Avatar } from "~/modules/creator";
+import { CreatorGroup } from "~/modules/creator";
 import {
 	NotConnectedDialog,
 	PreviewImage,
@@ -13,7 +13,7 @@ import { VideoPlayer } from "~/modules/trick/components/video-player";
 import { YoutubeEmbed } from "~/modules/trick/components/youtube-embed";
 import { Main, Badge, Header } from "~/modules/ui";
 import type { UserWithSavedTrick } from "~/modules/user";
-import { UserShield } from "~/modules/user/components/user-shield";
+import { UserShield } from "~/modules/user";
 import { getRequiredParam } from "~/utils";
 
 import { getTrick } from "./queries";
@@ -38,20 +38,7 @@ export default function TrickPage() {
 				<section className="flex flex-col space-y-4">
 					<h1 className="text-3xl">{trick.name}</h1>
 					<div className="flex items-center gap-4">
-						<AvatarGroup>
-							{trick.creators?.map((creator) => (
-								<Avatar
-									key={creator.id}
-									src={creator.picture}
-									name={creator.name}
-								/>
-							))}
-						</AvatarGroup>
-						<div>
-							{trick.creators
-								?.map((creator) => creator.name)
-								.join(", ")}
-						</div>
+						<CreatorGroup creators={trick.creators} />
 						<UserShield notConnected={<NotConnectedDialog />}>
 							{(user: UserWithSavedTrick) => (
 								<SaveTrickButton
