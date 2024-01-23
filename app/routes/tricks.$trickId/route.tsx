@@ -4,6 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { AvatarGroup, Avatar } from "~/modules/creator";
 import { NotConnectedDialog, TrickCard, TrickPreview } from "~/modules/trick";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
+import { VideoPlayer } from "~/modules/trick/components/video-player";
 import { YoutubeEmbed } from "~/modules/trick/components/youtube-embed";
 import { Main, Badge } from "~/modules/ui";
 import type { UserWithSavedTrick } from "~/modules/user";
@@ -89,13 +90,7 @@ export default function TrickPage() {
 								externalId={v.externalId}
 							/>
 						) : (
-							<video
-								key={v.id}
-								controls
-								className="aspect-video w-full max-w-2xl"
-							>
-								<source src={v.externalId} />
-							</video>
+							<VideoPlayer key={v.id} src={v.externalId} />
 						),
 					)}
 				</div>
