@@ -13,11 +13,6 @@ export async function getUserByEmail(email: User["email"]) {
 	return db.user.findUnique({ where: { email: email?.toLowerCase() } });
 }
 
-export async function tryGetUserById(id?: string) {
-	if (!id) return null;
-	return db.user.findUnique({ where: { id } });
-}
-
 const getGravatorImageUrl = (email: string) => {
 	const hash = createHash("sha256")
 		.update(email.trim().toLowerCase())

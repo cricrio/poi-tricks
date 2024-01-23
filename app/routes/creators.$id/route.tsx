@@ -1,24 +1,22 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { getAuthSession } from "~/modules/auth";
 import { CreatorCard } from "~/modules/creator";
 import {
-	getUserSavedTricksLoader,
 	NotConnectedDialog,
 	TrickCard,
 	TrickGrid,
 	SaveTrickButton,
 } from "~/modules/trick";
 import { Main } from "~/modules/ui";
+import type { UserWithSavedTrick } from "~/modules/user";
+import { UserShield } from "~/modules/user/components/user-shield";
 import { getRequiredParam } from "~/utils";
 
 import { getCreator } from "./queries";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
 	const id = getRequiredParam(params, "id");
-	const session = await getAuthSession(request);
-	const savedTricks = await getUserSavedTricksLoader(request);
 
 	const creator = await getCreator(id);
 
@@ -26,11 +24,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 		throw new Response("Not Found", { status: 404 });
 	}
 
-	return json({ creator, savedTricks, connected: !!session });
+	return json({ creator });
 }
 
 export default function CreatorPage() {
-	const { creator, savedTricks, connected } = useLoaderData<typeof loader>();
+	const { creator } = useLoaderData<typeof loader>();
 	return (
 		<Main>
 			<div className="mb-8 flex flex-col items-center">
@@ -39,14 +37,14 @@ export default function CreatorPage() {
 			<TrickGrid>
 				{creator.tricks.map((trick) => (
 					<TrickCard key={trick.id} {...trick}>
-						{connected ? (
-							<SaveTrickButton
-								trickId={trick.id}
-								category={savedTricks[trick.id]}
-							/>
-						) : (
-							<NotConnectedDialog />
-						)}
+						<UserShield notConnected={<NotConnectedDialog />}>
+							{(user: UserWithSavedTrick) => (
+								<SaveTrickButton
+									category={user.savedTricks[trick.id]}
+									trickId={trick.id}
+								/>
+							)}
+						</UserShield>
 					</TrickCard>
 				))}
 			</TrickGrid>

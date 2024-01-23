@@ -21,7 +21,9 @@ import { i18nextServer } from "~/integrations/i18n";
 
 import { LogoutButton, getAuthSession } from "./modules/auth";
 import { Avatar } from "./modules/creator";
-import { tryGetUserById } from "./modules/user";
+import type { UserWithSavedTrick } from "./modules/user";
+import { UserProvider, tryGetUserByIdWithSavedTricks } from "./modules/user";
+import { UserShield } from "./modules/user/components/user-shield";
 import globalStyle from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getBrowserEnv } from "./utils/env";
@@ -47,18 +49,17 @@ export const meta: MetaFunction = () => [
 export const loader: LoaderFunction = async ({ request }) => {
 	const locale = await i18nextServer.getLocale(request);
 	const session = await getAuthSession(request);
-	const user = await tryGetUserById(session?.userId);
+	const user = await tryGetUserByIdWithSavedTricks(session?.userId);
 
 	return json({
 		locale,
 		env: getBrowserEnv(),
 		user,
-		connected: Boolean(session?.userId),
 	});
 };
 
 export default function App() {
-	const { env, locale, connected, user } = useLoaderData<typeof loader>();
+	const { env, locale, user } = useLoaderData<typeof loader>();
 	const { i18n } = useTranslation();
 
 	useChangeLanguage(locale);
@@ -75,28 +76,35 @@ export default function App() {
 				<Links />
 			</head>
 			<body className="h-full">
-				<div className="flex justify-between p-8">
-					<Link to="/" className="text-2xl">
-						PoiTricks
-					</Link>
-					{connected ? (
-						<div className="flex items-center gap-5">
-							<LogoutButton />
-							<Avatar name={user?.email} src={user?.picture} />
-						</div>
-					) : (
-						<Link to="/login">Login</Link>
-					)}
-				</div>
-				<Outlet />
-				<ScrollRestoration />
-				<script
-					dangerouslySetInnerHTML={{
-						__html: `window.env = ${JSON.stringify(env)}`,
-					}}
-				/>
-				<Scripts />
-				<LiveReload />
+				<UserProvider user={user}>
+					<div className="flex justify-between p-8">
+						<Link to="/" className="text-2xl">
+							PoiTricks
+						</Link>
+						<UserShield
+							notConnected={<Link to="/login">Login</Link>}
+						>
+							{(user: UserWithSavedTrick) => (
+								<div className="flex items-center gap-5">
+									<LogoutButton />
+									<Avatar
+										name={user?.email}
+										src={user?.picture}
+									/>
+								</div>
+							)}
+						</UserShield>
+					</div>
+					<Outlet />
+					<ScrollRestoration />
+					<script
+						dangerouslySetInnerHTML={{
+							__html: `window.env = ${JSON.stringify(env)}`,
+						}}
+					/>
+					<Scripts />
+					<LiveReload />
+				</UserProvider>
 			</body>
 		</html>
 	);

@@ -1,31 +1,30 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 
-import { getAuthSession } from "~/modules/auth";
 import { AvatarGroup, Avatar } from "~/modules/creator";
 import { NotConnectedDialog, TrickCard, TrickPreview } from "~/modules/trick";
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { YoutubeEmbed } from "~/modules/trick/components/youtube-embed";
-import { getUserSavedTricksLoader } from "~/modules/trick/save-trick.server";
 import { Main, Badge } from "~/modules/ui";
+import type { UserWithSavedTrick } from "~/modules/user";
+import { UserShield } from "~/modules/user/components/user-shield";
 import { getRequiredParam } from "~/utils";
 
 import { getTrick } from "./queries";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
 	const id = getRequiredParam(params, "trickId");
 	const trick = await getTrick(id);
-	const savedTricks = await getUserSavedTricksLoader(request);
-	const session = await getAuthSession(request);
+
 	if (!trick) {
 		throw new Response("Not Found", { status: 404 });
 	}
 
-	return json({ trick, savedTricks, connected: !!session });
+	return json({ trick });
 }
 
 export default function TrickPage() {
-	const { trick, connected, savedTricks } = useLoaderData<typeof loader>();
+	const { trick } = useLoaderData<typeof loader>();
 
 	return (
 		<Main className="grid grid-cols-1 lg:grid-cols-[3fr_1fr]">
@@ -46,14 +45,14 @@ export default function TrickPage() {
 							?.map((creator) => creator.name)
 							.join(", ")}
 					</div>
-					{connected ? (
-						<SaveTrickButton
-							trickId={trick.id}
-							category={savedTricks[trick.id]}
-						/>
-					) : (
-						<NotConnectedDialog />
-					)}
+					<UserShield notConnected={<NotConnectedDialog />}>
+						{(user: UserWithSavedTrick) => (
+							<SaveTrickButton
+								category={user.savedTricks[trick.id]}
+								trickId={trick.id}
+							/>
+						)}
+					</UserShield>
 				</div>
 				<div className="mb-6 flex flex-wrap items-center gap-2 lg:mb-10">
 					<Badge asChild className="bg-sky-400 capitalize text-white">
@@ -114,14 +113,18 @@ export default function TrickPage() {
 								types={trick.types ?? []}
 								creators={trick.creators ?? []}
 							>
-								{connected ? (
-									<SaveTrickButton
-										trickId={trick.id}
-										category={savedTricks[trick.id]}
-									/>
-								) : (
-									<NotConnectedDialog />
-								)}
+								<UserShield
+									notConnected={<NotConnectedDialog />}
+								>
+									{(user: UserWithSavedTrick) => (
+										<SaveTrickButton
+											category={
+												user.savedTricks[trick.id]
+											}
+											trickId={trick.id}
+										/>
+									)}
+								</UserShield>
 							</TrickCard>
 						))}
 					</div>

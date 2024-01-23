@@ -2,34 +2,32 @@ import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
 
 import type { TrickDifficulty } from "~/database/";
-import { getAuthSession } from "~/modules/auth";
 import {
 	NotConnectedDialog,
 	TrickGrid,
 	SaveTrickButton,
 	TrickCard,
-	getUserSavedTricksLoader,
 } from "~/modules/trick";
 import { Header } from "~/modules/ui/header";
 import { Main } from "~/modules/ui/main";
+import type { UserWithSavedTrick } from "~/modules/user";
+import { UserShield } from "~/modules/user/components/user-shield";
 import { getRequiredParam } from "~/utils";
 
 import { getTricksAndCountByDifficulty } from "./queries";
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
 	const difficulty = getRequiredParam(
 		params,
 		"difficulty",
 	) as TrickDifficulty;
-	const session = await getAuthSession(request);
 	const { tricks, count } = await getTricksAndCountByDifficulty(difficulty);
-	const savedTricks = await getUserSavedTricksLoader(request);
-	return json({ tricks, count, savedTricks, connected: !!session });
+
+	return json({ tricks, count });
 }
 
 export default function DifficultyPage() {
-	const { tricks, count, savedTricks, connected } =
-		useLoaderData<typeof loader>();
+	const { tricks, count } = useLoaderData<typeof loader>();
 	const { difficulty } = useParams();
 	return (
 		<Main>
@@ -46,14 +44,14 @@ export default function DifficultyPage() {
 						creators={trick?.creators ?? []}
 						key={trick.id}
 					>
-						{connected ? (
-							<SaveTrickButton
-								trickId={trick.id}
-								category={savedTricks[trick.id] ?? undefined}
-							/>
-						) : (
-							<NotConnectedDialog />
-						)}
+						<UserShield notConnected={<NotConnectedDialog />}>
+							{(user: UserWithSavedTrick) => (
+								<SaveTrickButton
+									category={user.savedTricks[trick.id]}
+									trickId={trick.id}
+								/>
+							)}
+						</UserShield>
 					</TrickCard>
 				))}
 			</TrickGrid>
