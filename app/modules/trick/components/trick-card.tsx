@@ -39,7 +39,6 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 				<Link to={`/tricks/${id}`}>
 					<CardTitle className="py-3">{name}</CardTitle>
 				</Link>
-
 				<div className="flex flex-wrap gap-2">
 					{types &&
 						types.length > 0 &&

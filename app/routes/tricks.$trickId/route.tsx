@@ -35,9 +35,9 @@ export default function TrickPage() {
 	return (
 		<Main className="grid grid-cols-1 lg:grid-cols-[3fr_1fr]">
 			<div className="@md:ml-52 flex flex-col space-y-6">
-				<section className="flex flex-col space-y-4">
+				<section className="inline-flex flex-col space-y-4 self-start">
 					<h1 className="text-3xl">{trick.name}</h1>
-					<div className="flex items-center gap-4">
+					<div className="flex items-center justify-between gap-4">
 						<CreatorGroup creators={trick.creators} />
 						<UserShield notConnected={<NotConnectedDialog />}>
 							{(user: UserWithSavedTrick) => (
