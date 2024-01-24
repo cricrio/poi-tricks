@@ -44,14 +44,7 @@ export default function Index() {
 					</Header>
 					<TrickGrid>
 						{tricks?.map((trick) => (
-							<TrickCard
-								preview={trick.preview}
-								id={trick.id}
-								name={trick.name}
-								types={trick.types ?? []}
-								creators={trick?.creators ?? []}
-								key={trick.id}
-							>
+							<TrickCard {...trick} key={trick.id}>
 								<UserShield
 									notConnected={<NotConnectedDialog />}
 								>

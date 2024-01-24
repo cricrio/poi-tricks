@@ -110,14 +110,7 @@ export default function TrickPage() {
 					<h2 className="mb-6 text-2xl">Prerequisites</h2>
 					<div className="flex flex-col gap-4">
 						{trick.prerequisites?.map((trick) => (
-							<TrickCard
-								key={trick.id}
-								preview={trick.preview}
-								id={trick.id}
-								name={trick.name}
-								types={trick.types ?? []}
-								creators={trick.creators ?? []}
-							>
+							<TrickCard key={trick.id} {...trick}>
 								<UserShield
 									notConnected={<NotConnectedDialog />}
 								>

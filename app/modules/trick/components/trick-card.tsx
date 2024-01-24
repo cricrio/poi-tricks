@@ -7,13 +7,13 @@ import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
 
 import { PreviewImage } from "./preview-image";
 
-type Props = Pick<Trick, "id" | "name" | "types" | "preview"> & {
+type Props = Pick<Trick, "id" | "name" | "types" | "preview" | "difficulty"> & {
 	creators: Array<Pick<Creator, "id" | "name" | "picture">>;
 	children: React.ReactNode;
 };
 
 export const TrickCard: React.FC<Props> = (props: Props) => {
-	const { name, id, preview, types, creators, children } = props;
+	const { name, id, preview, difficulty, types, creators, children } = props;
 
 	return (
 		<Card>
@@ -40,6 +40,9 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 					<CardTitle className="py-3">{name}</CardTitle>
 				</Link>
 				<div className="flex flex-wrap gap-2">
+					<Badge className="bg-sky-400 capitalize text-white">
+						{difficulty}
+					</Badge>
 					{types &&
 						types.length > 0 &&
 						types.map((type) => (
