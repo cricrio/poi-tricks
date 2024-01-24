@@ -1,4 +1,4 @@
-import { db } from "~/database";
+import { db, trickFragment, creatorFragment } from "~/database";
 
 export async function getSavedTricks(userId: string) {
 	const savedTricks = await db.savedTrick.findMany({
@@ -7,12 +7,9 @@ export async function getSavedTricks(userId: string) {
 			category: true,
 			trick: {
 				select: {
-					id: true,
-					preview: true,
-					types: true,
-					name: true,
+					...trickFragment,
 					creators: {
-						select: { id: true, name: true, picture: true },
+						select: creatorFragment,
 					},
 				},
 			},
