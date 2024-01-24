@@ -7,8 +7,8 @@ import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
 
 import { PreviewImage } from "./preview-image";
 
-type Props = Trick & {
-	creators: Array<Creator>;
+type Props = Pick<Trick, "id" | "name" | "types" | "preview"> & {
+	creators: Array<Pick<Creator, "id" | "name" | "picture">>;
 	children: React.ReactNode;
 };
 
