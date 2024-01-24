@@ -7,20 +7,27 @@ import {
 	TrickGrid,
 	SaveTrickButton,
 	TrickCard,
+	difficulties,
 } from "~/modules/trick";
 import { Header } from "~/modules/ui/header";
 import { Main } from "~/modules/ui/main";
 import type { UserWithSavedTrick } from "~/modules/user";
 import { UserShield } from "~/modules/user";
-import { getRequiredParam } from "~/utils";
+import { badRequest, getRequiredParam } from "~/utils";
 
 import { getTricksAndCountByDifficulty } from "./queries";
+
+
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const difficulty = getRequiredParam(
 		params,
 		"difficulty",
 	) as TrickDifficulty;
+
+	if (!difficulties.includes(difficulty)) {
+		throw badRequest("Invalid difficulty");
+	}
 	const { tricks, count } = await getTricksAndCountByDifficulty(difficulty);
 
 	return json({ tricks, count });

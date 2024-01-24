@@ -19,7 +19,7 @@ import { getRequiredParam } from "~/utils";
 import { getTrick } from "./queries";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-	const id = getRequiredParam(params, "trickId");
+	const id = getRequiredParam(params, "trickId", "uuid");
 	const trick = await getTrick(id);
 
 	if (!trick) {

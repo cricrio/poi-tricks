@@ -11,17 +11,17 @@ import {
 import { Main } from "~/modules/ui";
 import type { UserWithSavedTrick } from "~/modules/user";
 import { UserShield } from "~/modules/user";
-import { getRequiredParam } from "~/utils";
+import { getRequiredParam, notFound } from "~/utils";
 
 import { getCreator } from "./queries";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-	const id = getRequiredParam(params, "id");
+	const id = getRequiredParam(params, "id", "uuid");
 
 	const creator = await getCreator(id);
 
 	if (!creator) {
-		throw new Response("Not Found", { status: 404 });
+		throw notFound("Creator not found");
 	}
 
 	return json({ creator });

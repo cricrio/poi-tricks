@@ -1,3 +1,5 @@
+import { isUUID } from "./is-uuid";
+
 export function getCurrentPath(request: Request) {
 	return new URL(request.url).pathname;
 }
@@ -27,22 +29,27 @@ export function notFound(message: string) {
 	return new Response(message, { status: 404 });
 }
 
-function notAllowedMethod(message: string) {
+export function notAllowedMethod(message: string) {
 	return new Response(message, { status: 405 });
 }
 
-function badRequest(message: string) {
+export function badRequest(message: string) {
 	return new Response(message, { status: 400 });
 }
 
 export function getRequiredParam(
 	params: Record<string, string | undefined>,
 	key: string,
+	type?: "uuid",
 ) {
 	const value = params[key];
 
 	if (!value) {
 		throw badRequest(`Missing required request param "${key}"`);
+	}
+
+	if (type === "uuid" && !isUUID(value)) {
+		throw badRequest(`${key} must be a valid UUID`);
 	}
 
 	return value;

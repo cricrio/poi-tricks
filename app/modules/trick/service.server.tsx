@@ -1,4 +1,12 @@
+import type { TrickDifficulty } from "~/database";
 import { db } from "~/database";
+
+export const difficulties: TrickDifficulty[] = [
+	"beginner",
+	"intermediate",
+	"advanced",
+	"others",
+];
 
 export const updateSavedTrick = async ({
 	userId,

@@ -1,12 +1,6 @@
-import type { Prisma, TrickDifficulty } from "~/database";
+import type { Prisma } from "~/database";
 import { db } from "~/database";
-
-const difficulties: TrickDifficulty[] = [
-	"beginner",
-	"intermediate",
-	"advanced",
-	"others",
-];
+import { difficulties } from "~/modules/trick";
 
 function getTricks(where: Prisma.TrickWhereInput) {
 	return db.trick.findMany({
