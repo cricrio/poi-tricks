@@ -46,6 +46,7 @@ model SavedTrick {
   id       String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user     User   @relation(fields: [userId], references: [id])
   trick    Trick  @relation(fields: [trickId], references: [id])
+  createdAt  DateTime        @default(now()) @db.Timestamptz(6)
   category String
   userId   String @db.Uuid
   trickId  String @db.Uuid

@@ -90,10 +90,12 @@ export default function App() {
 							{(user: UserWithSavedTrick) => (
 								<div className="flex items-center gap-5">
 									<LogoutButton />
-									<Avatar
-										name={user.email}
-										src={user.picture}
-									/>
+									<Link to={`/me`}>
+										<Avatar
+											name={user.email}
+											src={user.picture}
+										/>
+									</Link>
 								</div>
 							)}
 						</UserShield>
