@@ -91,10 +91,7 @@ export default function App() {
 								<div className="flex items-center gap-5">
 									<LogoutButton />
 									<Link to={`/me`}>
-										<Avatar
-											name={user.email}
-											src={user.picture}
-										/>
+										<Avatar {...user} />
 									</Link>
 								</div>
 							)}

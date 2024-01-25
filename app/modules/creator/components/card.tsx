@@ -4,15 +4,15 @@ import type { Creator } from "~/database";
 import { Avatar } from "~/modules/user/";
 
 type Props = Pick<Creator, "name" | "picture" | "id">;
-export function CreatorCard({ name, picture, id }: Props) {
+export function CreatorCard(creator: Props) {
 	return (
 		<Link
-			to={`/creators/${id}`}
+			to={`/creators/${creator.id}`}
 			className="flex flex-col items-center gap-2"
 		>
-			<Avatar src={picture} name={name} size="lg" />
+			<Avatar {...creator} size="lg" />
 			<div className="max-w-44 justify-self-end text-center text-xl capitalize">
-				{name}
+				{creator.name}
 			</div>
 		</Link>
 	);

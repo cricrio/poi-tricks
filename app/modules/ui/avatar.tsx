@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
-import type { VariantProps } from "class-variance-authority";
+import type { VariantProps as ClassVariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 
 import { cn } from "~/utils/utils"
@@ -22,9 +22,11 @@ const avatarVariants = cva(
 	},
 );
 
+
 type AvatarElement = React.ElementRef<typeof AvatarPrimitive.Root>;
+export type VariantProps = ClassVariantProps<typeof avatarVariants>;
 type AvatarProps = React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> &
-	VariantProps<typeof avatarVariants>; 
+	VariantProps; 
 
 const Avatar = React.forwardRef<AvatarElement, AvatarProps>(
 	({ className, size = "default", ...props }, ref) => (
