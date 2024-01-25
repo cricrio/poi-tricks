@@ -11,6 +11,7 @@ import {
 import { Header, Main } from "~/modules/ui/";
 import type { UserWithSavedTrick } from "~/modules/user";
 import { UserShield } from "~/modules/user";
+import { ROUTES } from "~/routes";
 
 import { getFirstCreators, getTricksByDifficulties } from "./queries";
 
@@ -30,7 +31,9 @@ export default function Index() {
 	return (
 		<Main>
 			<section>
-				<Header href="/creators">Featuring ({creators.count})</Header>
+				<Header to={ROUTES.creators()}>
+					Featuring ({creators.count})
+				</Header>
 				<CreatorGrid>
 					{creators.data?.map((creator) => (
 						<CreatorCard key={creator.id} {...creator} />
@@ -39,7 +42,7 @@ export default function Index() {
 			</section>
 			{tricksByDifficulties.map(({ difficulty, tricks, count }) => (
 				<section className="my-16" key={difficulty}>
-					<Header href={`/tricks/difficulty/${difficulty}`}>
+					<Header to={ROUTES.tricksByDifficulty({ difficulty })}>
 						{difficulty} ({count})
 					</Header>
 					<TrickGrid>

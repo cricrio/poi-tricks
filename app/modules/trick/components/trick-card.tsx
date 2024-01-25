@@ -4,6 +4,7 @@ import { Link } from "@remix-run/react";
 import { CreatorGroup } from "~/modules/creator";
 import { Badge } from "~/modules/ui/badge";
 import { Card, CardHeader, CardTitle } from "~/modules/ui/card";
+import { ROUTES } from "~/routes";
 
 import { PreviewImage } from "./preview-image";
 
@@ -18,7 +19,7 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 	return (
 		<Card>
 			<figure className="overflow-hidden rounded-t-xl">
-				<Link to={`/tricks/${id}`} className="flex-1">
+				<Link to={ROUTES.trick({ id })} className="flex-1">
 					{
 						//quick fix add a default image if no image
 						preview && (
@@ -36,7 +37,7 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 					<CreatorGroup creators={creators} />
 					{children}
 				</div>
-				<Link to={`/tricks/${id}`}>
+				<Link to={ROUTES.trick({ id })}>
 					<CardTitle className="py-3">{name}</CardTitle>
 				</Link>
 				<div className="flex flex-wrap gap-2">

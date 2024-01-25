@@ -27,6 +27,7 @@ import {
 	UserShield,
 	Avatar,
 } from "./modules/user";
+import { ROUTES } from "./routes";
 import globalStyle from "./styles/global.css";
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getBrowserEnv } from "./utils/env";
@@ -81,7 +82,7 @@ export default function App() {
 			<body className="h-full">
 				<UserProvider user={user}>
 					<div className="flex justify-between p-8">
-						<Link to="/" className="text-2xl">
+						<Link to={ROUTES.home()} className="text-2xl">
 							PoiTricks
 						</Link>
 						<UserShield
@@ -90,7 +91,7 @@ export default function App() {
 							{(user: UserWithSavedTrick) => (
 								<div className="flex items-center gap-5">
 									<LogoutButton />
-									<Link to={`/me`}>
+									<Link to={ROUTES.me()}>
 										<Avatar {...user} />
 									</Link>
 								</div>

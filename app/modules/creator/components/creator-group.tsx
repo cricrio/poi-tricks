@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react";
 
 import type { Creator } from "~/database";
 import { Avatar, AvatarGroup } from "~/modules/user";
+import { ROUTES } from "~/routes";
 
 type Props = {
 	creators: Array<Pick<Creator, "id" | "name" | "picture">>;
@@ -19,7 +20,7 @@ export function CreatorGroup({ creators }: Props) {
 				{creators?.map((creator, index) => (
 					<div key={creator.id}>
 						<Link
-							to={`/creators/${creator.id}`}
+							to={ROUTES.creator(creator)}
 							className="capitalize"
 						>
 							{creator.name}

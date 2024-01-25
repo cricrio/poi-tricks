@@ -1,10 +1,10 @@
 interface Props {
-	href?: string;
+	to?: string;
 	children: React.ReactNode;
 }
 
 export const Header: React.FC<Props> = (props: Props) => {
-	const { href, children } = props;
+	const { to: href, children } = props;
 	const h2 = <h2 className="pb-1 text-2xl capitalize">{children}</h2>;
 	return (
 		<header className="mb-4 flex items-center justify-between">
