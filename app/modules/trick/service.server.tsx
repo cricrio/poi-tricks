@@ -1,12 +1,30 @@
-import type { TrickDifficulty } from "~/database";
-import { db } from "~/database";
+import { db, trickFragment, creatorFragment, videoFragment } from "~/database";
 
-export const difficulties: TrickDifficulty[] = [
-	"beginner",
-	"intermediate",
-	"advanced",
-	"others",
-];
+export async function getTrickById(id: string) {
+	const trick = await db.trick.findFirst({
+		where: { id },
+		select: {
+			...trickFragment,
+			videos: {
+				select: {
+					...videoFragment,
+				},
+			},
+			creators: {
+				select: {
+					...creatorFragment,
+				},
+			},
+			prerequisites: {
+				select: {
+					...trickFragment,
+					creators: { select: creatorFragment },
+				},
+			},
+		},
+	});
+	return trick;
+}
 
 export const updateSavedTrick = async ({
 	userId,

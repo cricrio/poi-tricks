@@ -3,6 +3,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 
 import { CreatorGroup } from "~/modules/creator";
 import {
+	getTrickById,
 	NotConnectedDialog,
 	PreviewImage,
 	TrickCard,
@@ -11,16 +12,15 @@ import {
 import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { VideoPlayer } from "~/modules/trick/components/video-player";
 import { YoutubeEmbed } from "~/modules/trick/components/youtube-embed";
-import { Main, Badge, Header } from "~/modules/ui";
+import { Main, Badge, Header, Button } from "~/modules/ui";
 import type { UserWithSavedTrick } from "~/modules/user";
 import { UserShield } from "~/modules/user";
+import { ROUTES } from "~/routes";
 import { getRequiredParam } from "~/utils";
-
-import { getTrick } from "./queries";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const id = getRequiredParam(params, "trickId", "uuid");
-	const trick = await getTrick(id);
+	const trick = await getTrickById(id);
 
 	if (!trick) {
 		throw new Response("Not Found", { status: 404 });
@@ -34,9 +34,14 @@ export default function TrickPage() {
 
 	return (
 		<Main className="grid grid-cols-1 lg:grid-cols-[3fr_1fr]">
-			<div className="@md:ml-52 flex flex-col space-y-6">
+			<div className="@md:ml-52 flex flex-col space-y-10">
 				<section className="inline-flex flex-col space-y-4 self-start">
-					<h1 className="text-3xl">{trick.name}</h1>
+					<header className="flex justify-between">
+						<h1 className="text-3xl">{trick.name}</h1>
+						<Button variant="outline" asChild>
+							<Link to={ROUTES.editTrick(trick)}>Edit</Link>
+						</Button>
+					</header>
 					<div className="flex items-center justify-between gap-4">
 						<CreatorGroup creators={trick.creators} />
 						<UserShield notConnected={<NotConnectedDialog />}>
@@ -53,7 +58,11 @@ export default function TrickPage() {
 							asChild
 							className="bg-sky-400 capitalize text-white"
 						>
-							<Link to={`/tricks/difficulty/${trick.difficulty}`}>
+							<Link
+								to={ROUTES.tricksByDifficulty({
+									difficulty: trick.difficulty,
+								})}
+							>
 								{trick.difficulty}
 							</Link>
 						</Badge>

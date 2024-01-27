@@ -3,7 +3,7 @@ import { SUPABASE_URL } from "~/utils";
 interface Props {
 	src: string;
 	name: string;
-	className: string;
+	className?: string;
 }
 
 const bucket = `${SUPABASE_URL}/storage/v1/object/public/preview/`;
