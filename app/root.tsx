@@ -29,15 +29,9 @@ import {
 } from "./modules/user";
 import { ROUTES } from "./routes";
 import globalStyle from "./styles/global.css";
-import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { getBrowserEnv } from "./utils/env";
 
 export const links: LinksFunction = () => [
-	{
-		rel: "stylesheet preload prefetch",
-		href: tailwindStylesheetUrl,
-		as: "style",
-	},
 	{
 		rel: "stylesheet preload prefetch",
 		href: globalStyle,
