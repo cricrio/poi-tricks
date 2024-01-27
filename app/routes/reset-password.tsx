@@ -24,7 +24,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const t = await i18nextServer.getFixedT(request, "auth");
 	const title = t("register.changePassword");
 
-	if (authSession) return redirect(ROUTES.home);
+	if (authSession) return redirect(ROUTES.home());
 
 	return json({ title });
 }
