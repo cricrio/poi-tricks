@@ -10,7 +10,7 @@ import { commitAuthSession, requireAuthSession } from "~/modules/auth";
 import {
 	createUserContibution,
 	diffContribution,
-} from "~/modules/contributions/service.server";
+} from "~/modules/contribution/service.server";
 import { getTrickById } from "~/modules/trick";
 import { TrickGeneralInformationForm } from "~/modules/trick/components/general-information-form";
 import { PreviewInput } from "~/modules/trick/components/preview-input";
