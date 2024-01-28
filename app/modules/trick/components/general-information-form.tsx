@@ -20,14 +20,19 @@ export function TrickGeneralInformationForm({ trick }: Props) {
 	const trickFetcher = useFetcher();
 
 	return (
-		<trickFetcher.Form method="POST" className="mb-4 space-y-3">
+		<trickFetcher.Form method="post" className="mb-4 space-y-3">
 			<div>
 				<Label htmlFor="name">Name</Label>
-				<Input type="text" name="name" defaultValue={trick.name} />
+				<Input
+					type="text"
+					name="name"
+					id="name"
+					defaultValue={trick.name}
+				/>
 			</div>
 			<div>
 				<Label htmlFor="difficulty">Difficulty</Label>
-				<Select defaultValue={trick.difficulty}>
+				<Select defaultValue={trick.difficulty} name="difficulty">
 					<SelectTrigger>
 						<SelectValue placeholder="Select a difficulty" />
 					</SelectTrigger>

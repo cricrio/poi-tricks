@@ -40,24 +40,26 @@ model Trick {
   prerequisites Trick[]         @relation("Prerequisite")
   next          Trick[]         @relation("Prerequisite")
   savedTricks   SavedTrick[]
+  contributions Contribution[]
 }
 
 model SavedTrick {
-  id       String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user     User   @relation(fields: [userId], references: [id])
-  trick    Trick  @relation(fields: [trickId], references: [id])
-  createdAt  DateTime        @default(now()) @db.Timestamptz(6)
-  category String
-  userId   String @db.Uuid
-  trickId  String @db.Uuid
+  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  trick     Trick    @relation(fields: [trickId], references: [id])
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  category  String
+  userId    String   @db.Uuid
+  trickId   String   @db.Uuid
 }
 
 model User {
-  id          String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt   DateTime     @default(now()) @db.Timestamptz(6)
-  email       String       @unique
-  picture     String?
-  savedTricks SavedTrick[]
+  id            String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt     DateTime       @default(now()) @db.Timestamptz(6)
+  email         String         @unique
+  picture       String?
+  savedTricks   SavedTrick[]
+  contributions Contribution[]
 }
 
 model Video {
@@ -70,6 +72,25 @@ model Video {
   creatorId  String?  @db.Uuid
   creator    Creator? @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   trick      Trick?   @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum ContributionStatus {
+  waiting
+  rejected
+  approved
+  cancelled
+}
+
+
+model Contribution {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  trickId   String?  @db.Uuid
+  status ContributionStatus  @default(waiting) 
+  userId    String   @db.Uuid
+  trick     Trick?   @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  data      Json
 }
 
 enum TrickDifficulty {

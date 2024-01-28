@@ -8,7 +8,7 @@ import { Button, Label } from "~/modules/ui";
 import { PreviewImage } from "./preview-image";
 
 type PreviewInputProps = {
-	trick: Pick<Trick, "id" | "name" | "difficulty" | "types">;
+	trick: Pick<Trick, "id" | "name" | "preview" | "difficulty" | "types">;
 };
 export function PreviewInput({ trick }: PreviewInputProps) {
 	const [preview, setPreview] = React.useState<string | null>(null);

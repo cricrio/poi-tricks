@@ -3,12 +3,25 @@ import React from "react";
 import { json } from "@remix-run/node";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { parseFormAny } from "react-zorm";
+import { z } from "zod";
 
+import { commitAuthSession, requireAuthSession } from "~/modules/auth";
+import {
+	createUserContibution,
+	diffContribution,
+} from "~/modules/contributions/service.server";
 import { getTrickById } from "~/modules/trick";
 import { TrickGeneralInformationForm } from "~/modules/trick/components/general-information-form";
 import { PreviewInput } from "~/modules/trick/components/preview-input";
 import { Header, Main } from "~/modules/ui";
 import { assertIsPost, getRequiredParam } from "~/utils";
+
+const NewContributionShema = z.object({
+	name: z.string(),
+	difficulty: z.string(),
+	types: z.string(),
+});
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const id = getRequiredParam(params, "trickId", "uuid");
@@ -23,15 +36,41 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export async function action({ params, request }: ActionFunctionArgs) {
 	assertIsPost(request);
-
+	const authSession = await requireAuthSession(request);
 	const id = getRequiredParam(params, "trickId", "uuid");
 	const trick = await getTrickById(id);
-
 	if (!trick) {
 		throw new Response("Not Found", { status: 404 });
 	}
+	const form = await request.formData();
 
-	return json({ trick });
+	const formData = await NewContributionShema.safeParseAsync(
+		parseFormAny(form),
+	);
+	if (!formData.success) {
+		return json(
+			{
+				errors: formData.error,
+			},
+			{
+				status: 400,
+				headers: {
+					"Set-Cookie": await commitAuthSession(request, {
+						authSession,
+					}),
+				},
+			},
+		);
+	}
+	const contribution = diffContribution(trick, formData.data);
+
+	const result = await createUserContibution(
+		id,
+		authSession.userId,
+		contribution,
+	);
+
+	return json({ contribution: result });
 }
 
 export default function EditTrick() {
