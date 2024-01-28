@@ -35,6 +35,7 @@ model Trick {
   preview       String          @default("")
   difficulty    TrickDifficulty
   types         String[]
+  tags          Tag[]
   videos        Video[]
   creators      Creator[]
   prerequisites Trick[]         @relation("Prerequisite")
@@ -81,16 +82,22 @@ enum ContributionStatus {
   cancelled
 }
 
-
 model Contribution {
+  id        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime           @default(now()) @db.Timestamptz(6)
+  trickId   String?            @db.Uuid
+  status    ContributionStatus @default(waiting)
+  userId    String             @db.Uuid
+  trick     Trick?             @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user      User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  data      Json
+}
+
+model Tag {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
-  trickId   String?  @db.Uuid
-  status ContributionStatus  @default(waiting) 
-  userId    String   @db.Uuid
-  trick     Trick?   @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  data      Json
+  name      String
+  tricks     Trick[]   
 }
 
 enum TrickDifficulty {
