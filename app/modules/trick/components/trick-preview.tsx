@@ -12,7 +12,7 @@ export function TrickPreview({ id, name, difficulty }: Props) {
 			<Link to={ROUTES.trick({ id })} className="block">
 				{name}
 			</Link>
-			<Badge asChild className="bg-sky-400 capitalize text-white">
+			<Badge asChild className="bg-sky-400  normal-case text-white">
 				<Link to={ROUTES.tricksByDifficulty({ difficulty })}>
 					{difficulty}
 				</Link>

@@ -56,7 +56,7 @@ export default function TrickPage() {
 					<div className="flex flex-wrap items-center gap-2">
 						<Badge
 							asChild
-							className="bg-sky-400 capitalize text-white"
+							className="bg-sky-400  normal-case text-white"
 						>
 							<Link
 								to={ROUTES.tricksByDifficulty({

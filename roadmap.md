@@ -10,7 +10,8 @@
 - [] Moderate contributions page
 
 ## Individual tasks
-- [] (current) Improve tags 
+- [x] CRUD for tags
+- [] Use tags instead of types
 - [] Block redirection on config tag page if a input is modified
 - [] Errors boundaries and 404 pages
 - [] Decide whether to use username or name.

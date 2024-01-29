@@ -21,7 +21,7 @@ export function CreatorGroup({ creators }: Props) {
 					<div key={creator.id}>
 						<Link
 							to={ROUTES.creator(creator)}
-							className="capitalize"
+							className=" normal-case"
 						>
 							{creator.name}
 						</Link>

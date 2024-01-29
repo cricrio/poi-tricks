@@ -41,7 +41,7 @@ export const TrickCard: React.FC<Props> = (props: Props) => {
 					<CardTitle className="py-3">{name}</CardTitle>
 				</Link>
 				<div className="flex flex-wrap gap-2">
-					<Badge className="bg-sky-400 capitalize text-white">
+					<Badge className="bg-sky-400  normal-case text-white">
 						{difficulty}
 					</Badge>
 					{types &&

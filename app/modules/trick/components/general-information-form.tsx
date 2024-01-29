@@ -40,7 +40,7 @@ export function TrickGeneralInformationForm({ trick }: Props) {
 						<SelectGroup>
 							{difficulties.map((difficulty) => (
 								<SelectItem value={difficulty} key={difficulty}>
-									<span className="capitalize">
+									<span className=" normal-case">
 										{difficulty}
 									</span>
 								</SelectItem>

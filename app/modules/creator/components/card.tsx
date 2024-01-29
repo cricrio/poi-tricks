@@ -12,7 +12,7 @@ export function CreatorCard(creator: Props) {
 			className="flex flex-col items-center gap-2"
 		>
 			<Avatar {...creator} size="lg" />
-			<div className="max-w-44 justify-self-end text-center text-xl capitalize">
+			<div className="max-w-44 justify-self-end text-center text-xl normal-case">
 				{creator.name}
 			</div>
 		</Link>
