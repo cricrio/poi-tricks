@@ -17,6 +17,13 @@ export async function updateTag(tagId: string, name: string) {
 	return tag;
 }
 
+export async function deleteTag(tagId: string) {
+	const tag = await db.tag.delete({
+		where: { id: tagId },
+	});
+	return tag;
+}
+
 export async function getAllTags() {
 	const tags = await db.tag.findMany({
 		orderBy: {

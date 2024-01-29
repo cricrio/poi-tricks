@@ -20,3 +20,6 @@
 - [] Use i18n
 - [] Add error boundary
 - [] Improve join workflows
+- [] Prevent tag suppression if used in trick
+- [] Natural sort with prisma (at this time Z is before a)
+- [] Log everything action, keep track of every actions (CRUD des tags)
