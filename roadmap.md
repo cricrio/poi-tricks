@@ -12,6 +12,8 @@
 ## Individual tasks
 - [x] CRUD for tags
 - [] Use tags instead of types
+- [] Update import script to use tags instead of types
+- [] Mono repo architecture with pnnpm then move import script inside it 
 - [] Block redirection on config tag page if a input is modified
 - [] Errors boundaries and 404 pages
 - [] Decide whether to use username or name.
