@@ -1,4 +1,4 @@
-import { db } from "~/database";
+import { db, tagFragment } from "~/database";
 
 export async function createTag(name: string) {
 	const tag = await db.tag.create({
@@ -26,6 +26,9 @@ export async function deleteTag(tagId: string) {
 
 export async function getAllTags() {
 	const tags = await db.tag.findMany({
+		select: {
+			...tagFragment,
+		},
 		orderBy: {
 			name: "asc",
 		},

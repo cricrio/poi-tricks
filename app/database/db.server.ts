@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TrickDifficulty } from "@prisma/client";
 
 import { NODE_ENV } from "../utils/env";
 export type {
@@ -6,8 +6,16 @@ export type {
 	Trick,
 	Creator,
 	Prisma,
+	Tag,
 	TrickDifficulty,
+	Contribution,
 } from "@prisma/client";
+
+export const trickDifficulties = Object.keys(
+	TrickDifficulty,
+) as TrickDifficulty[];
+
+export const trickDifficultyEnum = TrickDifficulty;
 
 let db: PrismaClient;
 

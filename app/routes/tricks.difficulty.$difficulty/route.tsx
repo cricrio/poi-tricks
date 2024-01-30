@@ -1,13 +1,12 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
 
-import type { TrickDifficulty } from "~/database/";
+import { trickDifficulties, type TrickDifficulty } from "~/database/";
 import {
 	NotConnectedDialog,
 	TrickGrid,
 	SaveTrickButton,
 	TrickCard,
-	difficulties,
 } from "~/modules/trick";
 import { Header } from "~/modules/ui/header";
 import { Main } from "~/modules/ui/main";
@@ -17,15 +16,13 @@ import { badRequest, getRequiredParam } from "~/utils";
 
 import { getTricksAndCountByDifficulty } from "./queries";
 
-
-
 export async function loader({ params }: LoaderFunctionArgs) {
 	const difficulty = getRequiredParam(
 		params,
 		"difficulty",
 	) as TrickDifficulty;
 
-	if (!difficulties.includes(difficulty)) {
+	if (!trickDifficulties.includes(difficulty)) {
 		throw badRequest("Invalid difficulty");
 	}
 	const { tricks, count } = await getTricksAndCountByDifficulty(difficulty);

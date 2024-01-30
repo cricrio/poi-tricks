@@ -1,11 +1,20 @@
 import type { Prisma } from "~/database";
-import { db } from "~/database";
-import { difficulties } from "~/modules/trick";
+import {
+	db,
+	trickFragment,
+	creatorFragment,
+	tagFragment,
+	trickDifficulties,
+} from "~/database";
 
 function getTricks(where: Prisma.TrickWhereInput) {
 	return db.trick.findMany({
 		where,
-		include: { creators: true },
+		select: {
+			...trickFragment,
+			creators: { select: creatorFragment },
+			tags: { select: tagFragment },
+		},
 		take: 6,
 	});
 }
@@ -18,13 +27,13 @@ function countTricks(where: Prisma.TrickWhereInput) {
 
 export async function getTricksByDifficulties() {
 	const result = await Promise.all(
-		difficulties.map((difficulty) => {
+		trickDifficulties.map((difficulty) => {
 			const where = { difficulty: { equals: difficulty } };
 			return Promise.all([getTricks(where), countTricks(where)]);
 		}),
 	);
 
-	return difficulties
+	return trickDifficulties
 		.map((difficulty, index) => {
 			const [tricks, count] = result[index];
 			return {

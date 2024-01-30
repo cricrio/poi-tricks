@@ -1,6 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 
-import type { Trick } from "~/database";
+import { trickDifficulties, type Tag, type Trick } from "~/database";
+import { TagsInput } from "~/modules/tag/components/tags-input";
 import { Button, Input, Label } from "~/modules/ui";
 import {
 	Select,
@@ -11,11 +12,12 @@ import {
 	SelectValue,
 } from "~/modules/ui/select";
 
-import { difficulties } from "../service.shared";
-
 type Props = {
-	trick: Pick<Trick, "id" | "name" | "difficulty" | "types">;
+	trick: Pick<Trick, "id" | "name" | "difficulty"> & {
+		tags: Array<Pick<Tag, "id" | "name">>;
+	};
 };
+
 export function TrickGeneralInformationForm({ trick }: Props) {
 	const trickFetcher = useFetcher();
 
@@ -38,7 +40,7 @@ export function TrickGeneralInformationForm({ trick }: Props) {
 					</SelectTrigger>
 					<SelectContent>
 						<SelectGroup>
-							{difficulties.map((difficulty) => (
+							{trickDifficulties.map((difficulty) => (
 								<SelectItem value={difficulty} key={difficulty}>
 									<span className=" normal-case">
 										{difficulty}
@@ -49,12 +51,8 @@ export function TrickGeneralInformationForm({ trick }: Props) {
 					</SelectContent>
 				</Select>
 				<div>
-					<Label htmlFor="types">Types</Label>
-					<Input
-						type="text"
-						name="types"
-						defaultValue={trick.types?.join(", ")}
-					/>
+					<Label htmlFor="tags">Tags</Label>
+					<TagsInput value={trick.tags} name="tags[]" />
 				</div>
 			</div>
 			<Button variant="outline" type="submit" className="shrink-0 grow-0">

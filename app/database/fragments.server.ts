@@ -3,7 +3,6 @@ export const trickFragment = {
 	name: true,
 	preview: true,
 	difficulty: true,
-	types: true,
 };
 
 export const videoFragment = {
@@ -16,4 +15,9 @@ export const creatorFragment = {
 	id: true,
 	name: true,
 	picture: true,
+};
+
+export const tagFragment = {
+	id: true,
+	name: true,
 };

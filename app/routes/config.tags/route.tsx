@@ -6,15 +6,15 @@ import { useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { requireAuthSession } from "~/modules/auth";
-import { DeleteTagForm } from "~/modules/tags";
-import { CreateTagForm } from "~/modules/tags/components/create-tag-form";
-import { UpdateTagForm } from "~/modules/tags/components/update-tag-form";
+import { DeleteTagForm } from "~/modules/tag";
+import { CreateTagForm } from "~/modules/tag/forms/create-tag";
+import { UpdateTagForm } from "~/modules/tag/forms/update-tag";
 import {
 	createTag,
 	deleteTag,
 	getAllTags,
 	updateTag,
-} from "~/modules/tags/service.server";
+} from "~/modules/tag/service.server";
 import { Button, Header, Main } from "~/modules/ui";
 import { assertIsPost } from "~/utils";
 import { cn } from "~/utils/utils";

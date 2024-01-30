@@ -34,7 +34,6 @@ model Trick {
   name          String
   preview       String          @default("")
   difficulty    TrickDifficulty
-  types         String[]
   tags          Tag[]
   videos        Video[]
   creators      Creator[]

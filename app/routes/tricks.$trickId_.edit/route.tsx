@@ -11,9 +11,13 @@ import {
 	createUserContibution,
 	diffContribution,
 } from "~/modules/contribution/service.server";
-import { getTrickById } from "~/modules/trick";
-import { TrickGeneralInformationForm } from "~/modules/trick/components/general-information-form";
-import { PreviewInput } from "~/modules/trick/components/preview-input";
+import { getAllTags } from "~/modules/tag";
+import { TagProvider } from "~/modules/tag/context";
+import {
+	getTrickById,
+	PreviewInput,
+	TrickGeneralInformationForm,
+} from "~/modules/trick";
 import { Header, Main } from "~/modules/ui";
 import { assertIsPost, getRequiredParam } from "~/utils";
 
@@ -31,7 +35,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		throw new Response("Not Found", { status: 404 });
 	}
 
-	return json({ trick });
+	const tags = await getAllTags();
+	return json({ trick, tags });
 }
 
 export async function action({ params, request }: ActionFunctionArgs) {
@@ -74,18 +79,20 @@ export async function action({ params, request }: ActionFunctionArgs) {
 }
 
 export default function EditTrick() {
-	const { trick } = useLoaderData<typeof loader>();
+	const { trick, tags } = useLoaderData<typeof loader>();
 	return (
 		<Main className="md:max-w-3xl">
-			<h1 className="mb-4 text-3xl">Edit Trick</h1>
-			<section>
-				<Header>General informations</Header>
-				<TrickGeneralInformationForm trick={trick} />
-			</section>
-			<section>
-				<Header>Preview</Header>
-				<PreviewInput trick={trick} />
-			</section>
+			<TagProvider tags={tags}>
+				<h1 className="mb-4 text-3xl">Edit Trick</h1>
+				<section>
+					<Header>General informations</Header>
+					<TrickGeneralInformationForm trick={trick} />
+				</section>
+				<section>
+					<Header>Preview</Header>
+					<PreviewInput trick={trick} />
+				</section>
+			</TagProvider>
 		</Main>
 	);
 }

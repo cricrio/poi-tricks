@@ -1,4 +1,10 @@
-import { db, trickFragment, creatorFragment, videoFragment } from "~/database";
+import {
+	db,
+	trickFragment,
+	creatorFragment,
+	tagFragment,
+	videoFragment,
+} from "~/database";
 
 export async function getTrickById(id: string) {
 	const trick = await db.trick.findFirst({
@@ -8,6 +14,11 @@ export async function getTrickById(id: string) {
 			videos: {
 				select: {
 					...videoFragment,
+				},
+			},
+			tags: {
+				select: {
+					...tagFragment,
 				},
 			},
 			creators: {
