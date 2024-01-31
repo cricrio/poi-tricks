@@ -1,3 +1,5 @@
+import { ROUTES } from "~/routes";
+
 import {
 	isGet,
 	getCurrentPath,
@@ -98,6 +100,6 @@ describe(safeRedirect.name, () => {
 	});
 
 	it("should return destination path", () => {
-		expect(safeRedirect("/notes")).toBe("/notes");
+		expect(safeRedirect(ROUTES.home())).toBe(ROUTES.home());
 	});
 });

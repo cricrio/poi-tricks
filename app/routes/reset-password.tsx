@@ -90,7 +90,7 @@ export async function action({ request }: ActionFunctionArgs) {
 		);
 	}
 
-	return redirect("/notes", {
+	return redirect(ROUTES.home(), {
 		headers: {
 			"Set-Cookie": await commitAuthSession(request, {
 				authSession,
