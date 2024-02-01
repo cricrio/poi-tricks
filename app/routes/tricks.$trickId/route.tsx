@@ -36,7 +36,7 @@ export default function TrickPage() {
 		<Main className="grid grid-cols-1 lg:grid-cols-[3fr_1fr]">
 			<div className="@md:ml-52 flex flex-col space-y-10">
 				<section className="inline-flex flex-col space-y-4 self-start">
-					<header className="flex justify-between">
+					<header className="flex items-center justify-between gap-2">
 						<h1 className="text-3xl">{trick.name}</h1>
 						<Button variant="outline" asChild>
 							<Link to={ROUTES.editTrick(trick)}>Edit</Link>
@@ -66,14 +66,14 @@ export default function TrickPage() {
 								{trick.difficulty}
 							</Link>
 						</Badge>
-						{trick.types &&
-							trick.types.length > 0 &&
-							trick.types.map((type: string) => (
+						{trick.tags &&
+							trick.tags.length > 0 &&
+							trick.tags.map((tag) => (
 								<Badge
 									className="bg-fuchsia-500 text-white"
-									key={type}
+									key={tag.id}
 								>
-									{type}
+									{tag.name}
 								</Badge>
 							))}
 					</div>

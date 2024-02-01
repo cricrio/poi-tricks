@@ -2,30 +2,29 @@ import React from "react";
 
 import { json } from "@remix-run/node";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { parseFormAny } from "react-zorm";
+import { useActionData, useLoaderData } from "@remix-run/react";
+import { all, inputFromForm, mdf, mergeObjects, map } from "domain-functions";
+import { aC } from "vitest/dist/reporters-trlZlObr";
 import { z } from "zod";
 
-import { commitAuthSession, requireAuthSession } from "~/modules/auth";
+import { requireAuthSession } from "~/modules/auth";
 import {
 	createUserContibution,
 	diffContribution,
 } from "~/modules/contribution/service.server";
+import { difference, parseTrick } from "~/modules/contribution/utils.server";
 import { getAllTags } from "~/modules/tag";
 import { TagProvider } from "~/modules/tag/context";
 import {
 	getTrickById,
 	PreviewInput,
 	TrickGeneralInformationForm,
+	validate,
 } from "~/modules/trick";
 import { Header, Main } from "~/modules/ui";
 import { assertIsPost, getRequiredParam } from "~/utils";
 
-const NewContributionShema = z.object({
-	name: z.string(),
-	difficulty: z.string(),
-	types: z.string(),
-});
+import { getTrickByIdForContribution } from "./service.server";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const id = getRequiredParam(params, "trickId", "uuid");
@@ -43,43 +42,33 @@ export async function action({ params, request }: ActionFunctionArgs) {
 	assertIsPost(request);
 	const authSession = await requireAuthSession(request);
 	const id = getRequiredParam(params, "trickId", "uuid");
-	const trick = await getTrickById(id);
+
+	const trick = await getTrickByIdForContribution(id);
+	const form = validate(await request.formData());
+
+	if (!form.success) {
+		throw new Response(JSON.stringify(form.error), { status: 400 });
+	}
+	const contributions = difference(trick, form.data);
+	console.log(JSON.stringify(contributions, null, 2));
+	// console.log(JSON.stringify(res, null, 2));
 	if (!trick) {
 		throw new Response("Not Found", { status: 404 });
 	}
-	const form = await request.formData();
 
-	const formData = await NewContributionShema.safeParseAsync(
-		parseFormAny(form),
-	);
-	if (!formData.success) {
-		return json(
-			{
-				errors: formData.error,
-			},
-			{
-				status: 400,
-				headers: {
-					"Set-Cookie": await commitAuthSession(request, {
-						authSession,
-					}),
-				},
-			},
-		);
-	}
-	const contribution = diffContribution(trick, formData.data);
+	// const result = await createUserContibution(
+	// 	id,
+	// 	authSession.userId,
+	// 	contribution,
+	// );
 
-	const result = await createUserContibution(
-		id,
-		authSession.userId,
-		contribution,
-	);
-
-	return json({ contribution: result });
+	// return json({ contribution: result });
 }
 
 export default function EditTrick() {
 	const { trick, tags } = useLoaderData<typeof loader>();
+	const actionData = useActionData<typeof action>();
+	console.log(actionData);
 	return (
 		<Main className="md:max-w-3xl">
 			<TagProvider tags={tags}>

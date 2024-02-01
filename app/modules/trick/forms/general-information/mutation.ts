@@ -1,6 +1,6 @@
 import { makeDomainFunction } from "domain-functions";
 
-import { schema } from "./schema";
+import { schema } from "./form";
 
 const mutation = makeDomainFunction(schema)(
 	async (values) =>

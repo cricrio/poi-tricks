@@ -1,7 +1,10 @@
 import { useFetcher } from "@remix-run/react";
+import { z } from "zod";
 
-import { trickDifficulties, type Tag, type Trick } from "~/database";
+import type { Tag, Trick } from "~/database";
+import { trickDifficulties, trickDifficultyEnum } from "~/database";
 import { TagsInput } from "~/modules/tag/components/tags-input";
+import { useTags } from "~/modules/tag/context";
 import { Button, Input, Label } from "~/modules/ui";
 import {
 	Select,
@@ -14,13 +17,25 @@ import {
 
 type Props = {
 	trick: Pick<Trick, "id" | "name" | "difficulty"> & {
-		tags: Array<Pick<Tag, "id" | "name">>;
+		tags: Array<Tag>;
 	};
 };
 
+const schema = z.object({
+	name: z.string(),
+	difficulty: z.nativeEnum(trickDifficultyEnum),
+	tags: z.array(z.string()),
+});
+
+export type UserContribution = z.infer<typeof schema>;
+
+export function validate(formData: FormData) {
+	return schema.safeParse(formData);
+}
+
 export function TrickGeneralInformationForm({ trick }: Props) {
 	const trickFetcher = useFetcher();
-
+	const tags = useTags();
 	return (
 		<trickFetcher.Form method="post" className="mb-4 space-y-3">
 			<div>
@@ -52,10 +67,10 @@ export function TrickGeneralInformationForm({ trick }: Props) {
 				</Select>
 				<div>
 					<Label htmlFor="tags">Tags</Label>
-					<TagsInput value={trick.tags} name="tags[]" />
+					<TagsInput value={trick.tags} name="tags" tags={tags} />
 				</div>
 			</div>
-			<Button variant="outline" type="submit" className="shrink-0 grow-0">
+			<Button type="submit" className="shrink-0 grow-0">
 				Submit
 			</Button>
 		</trickFetcher.Form>
