@@ -3,10 +3,10 @@ import { useLoaderData } from "@remix-run/react";
 
 import { CreatorCard, CreatorGrid } from "~/modules/creator/";
 import {
-	TrickGrid,
-	NotConnectedDialog,
-	TrickCard,
-	SaveTrickButton,
+    TrickGrid,
+    NotConnectedDialog,
+    TrickCard,
+    SaveTrickButton,
 } from "~/modules/trick/";
 import { Header, Main } from "~/modules/ui/";
 import type { UserWithSavedTrick } from "~/modules/user";
@@ -16,55 +16,55 @@ import { ROUTES } from "~/routes";
 import { getFirstCreators, getTricksByDifficulties } from "./queries";
 
 export const loader = async () => {
-	const [tricksByDifficulties, creators] = await Promise.all([
-		getTricksByDifficulties(),
-		getFirstCreators(),
-	]);
+    const [tricksByDifficulties, creators] = await Promise.all([
+        getTricksByDifficulties(),
+        getFirstCreators(),
+    ]);
 
-	return json({
-		tricksByDifficulties,
-		creators,
-	});
+    return json({
+        tricksByDifficulties,
+        creators,
+    });
 };
 export default function Index() {
-	const { tricksByDifficulties, creators } = useLoaderData<typeof loader>();
-	return (
-		<Main>
-			<section>
-				<Header to={ROUTES.creators()}>
-					Featuring ({creators.count})
-				</Header>
-				<CreatorGrid>
-					{creators.data?.map((creator) => (
-						<CreatorCard key={creator.id} {...creator} />
-					))}
-				</CreatorGrid>
-			</section>
-			{tricksByDifficulties.map(({ difficulty, tricks, count }) => (
-				<section className="my-16" key={difficulty}>
-					<Header to={ROUTES.tricksByDifficulty({ difficulty })}>
-						{difficulty} ({count})
-					</Header>
-					<TrickGrid>
-						{tricks?.map((trick) => (
-							<TrickCard {...trick} key={trick.id}>
-								<UserShield
-									notConnected={<NotConnectedDialog />}
-								>
-									{(user: UserWithSavedTrick) => (
-										<SaveTrickButton
-											category={
-												user.savedTricks[trick.id]
-											}
-											trickId={trick.id}
-										/>
-									)}
-								</UserShield>
-							</TrickCard>
-						))}
-					</TrickGrid>
-				</section>
-			))}
-		</Main>
-	);
+    const { tricksByDifficulties, creators } = useLoaderData<typeof loader>();
+    return (
+        <Main>
+            <section>
+                <Header to={ROUTES.creators()}>
+                    Featuring ({creators.count})
+                </Header>
+                <CreatorGrid>
+                    {creators.data?.map((creator) => (
+                        <CreatorCard key={creator.id} {...creator} />
+                    ))}
+                </CreatorGrid>
+            </section>
+            {tricksByDifficulties.map(({ difficulty, tricks, count }) => (
+                <section className="my-16" key={difficulty}>
+                    <Header to={ROUTES.tricksByDifficulty({ difficulty })}>
+                        {difficulty} ({count})
+                    </Header>
+                    <TrickGrid>
+                        {tricks?.map((trick) => (
+                            <TrickCard {...trick} key={trick.id}>
+                                <UserShield
+                                    notConnected={<NotConnectedDialog />}
+                                >
+                                    {(user: UserWithSavedTrick) => (
+                                        <SaveTrickButton
+                                            category={
+                                                user.savedTricks[trick.id]
+                                            }
+                                            trickId={trick.id}
+                                        />
+                                    )}
+                                </UserShield>
+                            </TrickCard>
+                        ))}
+                    </TrickGrid>
+                </section>
+            ))}
+        </Main>
+    );
 }

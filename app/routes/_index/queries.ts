@@ -1,54 +1,54 @@
 import type { Prisma } from "~/database";
 import {
-	db,
-	trickFragment,
-	creatorFragment,
-	tagFragment,
-	trickDifficulties,
+    db,
+    trickFragment,
+    creatorFragment,
+    tagFragment,
+    trickDifficulties,
 } from "~/database";
 
 function getTricks(where: Prisma.TrickWhereInput) {
-	return db.trick.findMany({
-		where,
-		select: {
-			...trickFragment,
-			creators: { select: creatorFragment },
-			tags: { select: tagFragment },
-		},
-		take: 6,
-	});
+    return db.trick.findMany({
+        where,
+        select: {
+            ...trickFragment,
+            creators: { select: creatorFragment },
+            tags: { select: tagFragment },
+        },
+        take: 6,
+    });
 }
 
 function countTricks(where: Prisma.TrickWhereInput) {
-	return db.trick.count({
-		where,
-	});
+    return db.trick.count({
+        where,
+    });
 }
 
 export async function getTricksByDifficulties() {
-	const result = await Promise.all(
-		trickDifficulties.map((difficulty) => {
-			const where = { difficulty: { equals: difficulty } };
-			return Promise.all([getTricks(where), countTricks(where)]);
-		}),
-	);
+    const result = await Promise.all(
+        trickDifficulties.map((difficulty) => {
+            const where = { difficulty: { equals: difficulty } };
+            return Promise.all([getTricks(where), countTricks(where)]);
+        }),
+    );
 
-	return trickDifficulties
-		.map((difficulty, index) => {
-			const [tricks, count] = result[index];
-			return {
-				difficulty,
-				tricks,
-				count,
-			};
-		})
-		.filter((item) => item.tricks.length > 0);
+    return trickDifficulties
+        .map((difficulty, index) => {
+            const [tricks, count] = result[index];
+            return {
+                difficulty,
+                tricks,
+                count,
+            };
+        })
+        .filter((item) => item.tricks.length > 0);
 }
 
 export async function getFirstCreators() {
-	const [data, count] = await Promise.all([
-		db.creator.findMany({ take: 8 }),
-		db.creator.count(),
-	]);
-	return { data, count };
+    const [data, count] = await Promise.all([
+        db.creator.findMany({ take: 8 }),
+        db.creator.count(),
+    ]);
+    return { data, count };
 }

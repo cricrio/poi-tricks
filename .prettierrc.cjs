@@ -1,5 +1,5 @@
 /** @type {import("prettier").Options} */
 module.exports = {
-	tabWidth: 4,
-	useTabs: true,
+    tabWidth: 4,
+    useTabs: false,
 };

@@ -9,8 +9,8 @@ process.env.SUPABASE_URL = "https://supabase-project.supabase.co";
 process.env.SERVER_URL = "http://localhost:3000";
 
 if (typeof window !== "undefined") {
-	// @ts-expect-error missing vitest type
-	window.happyDOM.settings.enableFileSystemHttpRequests = true;
+    // @ts-expect-error missing vitest type
+    window.happyDOM.settings.enableFileSystemHttpRequests = true;
 }
 
 installGlobals();

@@ -3,7 +3,6 @@ import { createContext, useContext } from "react";
 import type { Tag } from "~/database";
 import type { WithChildrenProps } from "~/types";
 
-
 const context = createContext<{ tags: Array<Tag> }>({ tags: [] });
 
 export function TagProvider({

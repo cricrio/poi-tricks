@@ -8,26 +8,26 @@ import { Header, Main } from "~/modules/ui";
 import { getSavedTricks } from "./queries";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-	const session = await requireAuthSession(request);
-	const savedTricks = await getSavedTricks(session.userId);
-	return json({ savedTricks });
+    const session = await requireAuthSession(request);
+    const savedTricks = await getSavedTricks(session.userId);
+    return json({ savedTricks });
 }
 
 export default function MePage() {
-	const { savedTricks } = useLoaderData<typeof loader>();
-	return (
-		<Main>
-			<Header>Saved tricks</Header>
-			<TrickGrid>
-				{savedTricks.map(({ category, trick }) => (
-					<TrickCard key={trick.id} {...trick}>
-						<SaveTrickButton
-							trickId={trick.id}
-							category={category}
-						/>
-					</TrickCard>
-				))}
-			</TrickGrid>
-		</Main>
-	);
+    const { savedTricks } = useLoaderData<typeof loader>();
+    return (
+        <Main>
+            <Header>Saved tricks</Header>
+            <TrickGrid>
+                {savedTricks.map(({ category, trick }) => (
+                    <TrickCard key={trick.id} {...trick}>
+                        <SaveTrickButton
+                            trickId={trick.id}
+                            category={category}
+                        />
+                    </TrickCard>
+                ))}
+            </TrickGrid>
+        </Main>
+    );
 }
