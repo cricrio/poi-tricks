@@ -6,21 +6,21 @@ import { updateSavedTrick } from "~/modules/trick";
 import { assertIsPost } from "~/utils";
 
 export async function action({
-	request,
+    request,
 }: ActionFunctionArgs): Promise<Response> {
-	assertIsPost(request);
+    assertIsPost(request);
 
-	const authSession = await getAuthSession(request);
-	const userId = authSession?.userId;
+    const authSession = await getAuthSession(request);
+    const userId = authSession?.userId;
 
-	const body = await request.formData();
-	const trickId = body.get("trickId") as string;
+    const body = await request.formData();
+    const trickId = body.get("trickId") as string;
 
-	invariant(userId, "userId is required");
-	invariant(trickId, "trickId is required");
+    invariant(userId, "userId is required");
+    invariant(trickId, "trickId is required");
 
-	const category = body.get("category") as string;
+    const category = body.get("category") as string;
 
-	await updateSavedTrick({ userId, trickId, category });
-	return json({ error: null });
+    await updateSavedTrick({ userId, trickId, category });
+    return json({ error: null });
 }

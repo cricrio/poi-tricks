@@ -8,13 +8,13 @@ type PartialTag = Pick<Tag, "id" | "name">;
 const context = createContext<{ tags: Array<PartialTag> } | null>(null);
 
 export function TagProvider({
-	tags,
-	children,
+    tags,
+    children,
 }: { tags: Array<PartialTag> } & WithChildrenProps) {
-	return <context.Provider value={{ tags }}>{children}</context.Provider>;
+    return <context.Provider value={{ tags }}>{children}</context.Provider>;
 }
 
 export function useTags() {
-	const contextValue = useContext(context);
-	return contextValue?.tags;
+    const contextValue = useContext(context);
+    return contextValue?.tags;
 }
