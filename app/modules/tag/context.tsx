@@ -6,13 +6,13 @@ import type { WithChildrenProps } from "~/types";
 const context = createContext<{ tags: Array<Tag> }>({ tags: [] });
 
 export function TagProvider({
-	tags,
-	children,
+    tags,
+    children,
 }: { tags: Array<Tag> } & WithChildrenProps) {
-	return <context.Provider value={{ tags }}>{children}</context.Provider>;
+    return <context.Provider value={{ tags }}>{children}</context.Provider>;
 }
 
 export function useTags() {
-	const contextValue = useContext(context);
-	return contextValue.tags;
+    const contextValue = useContext(context);
+    return contextValue.tags;
 }

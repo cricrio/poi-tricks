@@ -1,6 +1,6 @@
 import {
-	TrickDifficulty as Difficulty,
-	ContributionAction,
+    TrickDifficulty as Difficulty,
+    ContributionAction,
 } from "@prisma/client";
 import type { TrickDifficulty, Tag as DBTag } from "@prisma/client";
 export type {
