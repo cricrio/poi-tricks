@@ -3,28 +3,17 @@ import React from "react";
 import { json } from "@remix-run/node";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useActionData, useLoaderData } from "@remix-run/react";
-import { all, inputFromForm, mdf, mergeObjects, map } from "domain-functions";
-import { aC } from "vitest/dist/reporters-trlZlObr";
-import { z } from "zod";
 
 import { requireAuthSession } from "~/modules/auth";
-import {
-	createUserContibution,
-	diffContribution,
-} from "~/modules/contribution/service.server";
-import { difference, parseTrick } from "~/modules/contribution/utils.server";
-import { getAllTags } from "~/modules/tag";
-import { TagProvider } from "~/modules/tag/context";
+import { createContribution } from "~/modules/contribution";
+import { getAllTags, TagProvider } from "~/modules/tag";
 import {
 	getTrickById,
 	PreviewInput,
 	TrickGeneralInformationForm,
-	validate,
 } from "~/modules/trick";
 import { Header, Main } from "~/modules/ui";
 import { assertIsPost, getRequiredParam } from "~/utils";
-
-import { getTrickByIdForContribution } from "./service.server";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const id = getRequiredParam(params, "trickId", "uuid");
@@ -43,24 +32,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 	const authSession = await requireAuthSession(request);
 	const id = getRequiredParam(params, "trickId", "uuid");
 
-	const trick = await getTrickByIdForContribution(id);
-	const form = validate(await request.formData());
-
-	if (!form.success) {
-		throw new Response(JSON.stringify(form.error), { status: 400 });
-	}
-	const contributions = difference(trick, form.data);
-	console.log(JSON.stringify(contributions, null, 2));
-	// console.log(JSON.stringify(res, null, 2));
-	if (!trick) {
-		throw new Response("Not Found", { status: 404 });
-	}
-
-	// const result = await createUserContibution(
-	// 	id,
-	// 	authSession.userId,
-	// 	contribution,
-	// );
+	const contribution = createContribution(id, await request.formData());
 
 	// return json({ contribution: result });
 }

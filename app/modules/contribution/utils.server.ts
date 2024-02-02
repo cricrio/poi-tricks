@@ -1,3 +1,5 @@
+import type { Entries } from "type-fest";
+
 import type { Contribution } from "~/database";
 import { contributionActionEnum } from "~/database";
 
@@ -18,35 +20,31 @@ function differenceInArray(
 }
 
 export function addKey(
-	array: Omit<Contribution, "key">[],
+	array: Array<Pick<Contribution, "value" | "action">>,
 	key: Contribution["key"],
 ): Array<Pick<Contribution, "value" | "action" | "key">> {
 	return array.map((value) => ({ key, ...value }));
 }
 
-function difference(
-	initial: TrickForContribution,
-	updated: UserContribution,
-): Array<Pick<Contribution, "value" | "action" | "key">> {
-	return Object.entries(updated).reduce(
+function difference(trick: TrickForContribution, userInput: UserContribution) {
+	const entries = Object.entries(userInput) as Entries<UserContribution>;
+	return entries.reduce(
 		(
-			acc: Array<Pick<Contribution, "value" | "action" | "key">>,
+			acc: { key: string; action: string; value: string | string[] }[],
 			[key, value],
 		) => {
-			if (initial[key] === value) {
+			if (trick[key] === value) {
 				return acc;
 			}
 
-			if (Array.isArray(initial[key])) {
-				const diff = differenceInArray(
-					initial[key] as string[],
-					value as string[],
-				);
-				const aaa = addKey(diff, key);
-				return [...acc, ...addKey(diff, key)];
+			if (typeof trick[key] === "string") {
+				return [...acc, { key, action: "update", value }];
 			}
-
-			return [...acc, { key, action: "update", value }];
+			const diff = differenceInArray(
+				trick[key] as string[],
+				value as string[],
+			);
+			return [...acc, ...addKey(diff, key)];
 		},
 		[],
 	);

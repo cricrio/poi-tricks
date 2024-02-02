@@ -1,8 +1,5 @@
-import type { Tag } from "@prisma/client";
-
 import { db } from "~/database";
 
-type BaseTrick = Awaited<ReturnType<typeof get>>;
 type TrickForContribution = Awaited<
 	ReturnType<typeof getTrickByIdForContribution>
 >;
@@ -19,9 +16,7 @@ async function get(id: string) {
 	return trick;
 }
 
-async function getTrickByIdForContribution(
-	id: string,
-): Promise<Omit<BaseTrick, "tags"> & { tags: Array<Tag["id"]> }> {
+async function getTrickByIdForContribution(id: string) {
 	const trick = await get(id);
 	return {
 		...trick,

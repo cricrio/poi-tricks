@@ -1,14 +1,17 @@
+import type { TrickForContribution } from "./service.server";
 import { addKey, difference, differenceInArray } from "./utils.server";
+import type { UserContribution } from "../trick";
 
 describe(addKey.name, () => {
-	it("should add key to object", () => {
-		expect(addKey([{ a: 1 }, { b: 2 }], "c")).toEqual([
-			{ a: 1, key: "c" },
-			{ b: 2, key: "c" },
-		]);
+	it("should add the key to each element in the array", () => {
+		const before = ["a", "b", "c"];
+		const after = ["a", "b", "c", "d"];
+		const key = "d";
+		const expected = [{ key, value: "d", action: "add" }];
+		const actual = addKey(differenceInArray(before, after), key);
+		expect(actual).toEqual(expected);
 	});
 });
-
 describe(differenceInArray.name, () => {
 	it("should return difference between two arrays", () => {
 		expect(differenceInArray(["a", "b", "d"], ["b", "c", "z"])).toEqual([
@@ -19,61 +22,38 @@ describe(differenceInArray.name, () => {
 		]);
 	});
 });
-
 describe(difference.name, () => {
-	it("should return only updated tags", () => {
-		expect(
-			difference(
-				{
-					name: "John",
-					tags: ["a", "b", "d"],
-				},
-				{
-					name: "John",
-					tags: ["b", "c", "z"],
-				},
-			),
-		).toEqual([
-			{ action: "remove", value: "a", key: "tags" },
-			{ action: "remove", value: "d", key: "tags" },
-			{ action: "add", value: "c", key: "tags" },
-			{ action: "add", value: "z", key: "tags" },
-		]);
+	it("should return an empty array when the initial and updated objects are the same", () => {
+		const initial: TrickForContribution = {
+			name: "test trick",
+			tags: ["tag1", "tag2"],
+			difficulty: "basics",
+		};
+		const updated: UserContribution = {
+			name: "test trick",
+			tags: ["tag1", "tag2"],
+			difficulty: "basics",
+		};
+		const result = difference(initial, updated);
+		expect(result).toEqual([]);
 	});
-	it("should return only updated name", () => {
-		expect(
-			difference(
-				{
-					name: "John",
-					tags: ["a", "b", "d"],
-				},
-				{
-					name: "Paul",
-					tags: ["a", "b", "d"],
-				},
-			),
-		).toEqual([{ value: "Paul", action: "update", key: "name" }]);
-	});
-	it("should return all updated fields", () => {
-		expect(
-			difference(
-				{
-					name: "John",
-					tags: ["a", "b", "d"],
-					difficulty: "hard",
-				},
-				{
-					name: "Paul",
-					tags: ["b", "c", "z"],
-					difficulty: "hard",
-				},
-			),
-		).toEqual([
-			{ value: "Paul", action: "update", key: "name" },
-			{ action: "remove", value: "a", key: "tags" },
-			{ action: "remove", value: "d", key: "tags" },
-			{ action: "add", value: "c", key: "tags" },
-			{ action: "add", value: "z", key: "tags" },
+
+	it("should return an array of changes when the initial and updated objects are different", () => {
+		const initial: TrickForContribution = {
+			name: "test trick",
+			tags: ["tag1", "tag2"],
+			difficulty: "basics",
+		};
+		const updated: UserContribution = {
+			name: "new trick",
+			tags: ["tag1", "tag3"],
+			difficulty: "basics",
+		};
+		const result = difference(initial, updated);
+		expect(result).toEqual([
+			{ key: "name", action: "update", value: "new trick" },
+			{ key: "tags", action: "remove", value: "tag2" },
+			{ key: "tags", action: "add", value: "tag3" },
 		]);
 	});
 });
