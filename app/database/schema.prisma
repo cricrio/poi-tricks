@@ -40,7 +40,6 @@ model Trick {
   prerequisites Trick[]         @relation("Prerequisite")
   next          Trick[]         @relation("Prerequisite")
   savedTricks   SavedTrick[]
-  contributions Contribution[]
 }
 
 model SavedTrick {
@@ -81,22 +80,29 @@ enum ContributionStatus {
   cancelled
 }
 
+enum ContributionAction {
+  add
+  remove
+  update
+}
+
 model Contribution {
   id        String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime           @default(now()) @db.Timestamptz(6)
-  trickId   String?            @db.Uuid
-  status    ContributionStatus @default(waiting)
+  entity    String
+  entityId  String
+  key       String
+  value     String
+  action    ContributionAction
+  author    User               @relation(fields: [userId], references: [id])
   userId    String             @db.Uuid
-  trick     Trick?             @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user      User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  data      Json
 }
 
 model Tag {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   name      String
-  tricks     Trick[]   
+  tricks    Trick[]
 }
 
 enum TrickDifficulty {
