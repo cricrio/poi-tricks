@@ -1,9 +1,10 @@
 import {
-    db,
-    trickFragment,
-    creatorFragment,
-    tagFragment,
-    videoFragment,
+	db,
+	trickFragment,
+	creatorFragment,
+	tagFragment,
+	videoFragment,
+	type Trick,
 } from "~/database";
 
 export async function getTrickById(id: string) {
@@ -73,3 +74,15 @@ export const updateSavedTrick = async ({
         });
     }
 };
+
+export function updateTrick(
+	trickId: Trick["id"],
+	data: Pick<Trick, "difficulty" | "name" | "preview">,
+) {
+	return db.trick.update({
+		where: {
+			id: trickId,
+		},
+		data,
+	});
+}

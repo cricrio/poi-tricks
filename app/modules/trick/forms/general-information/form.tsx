@@ -22,9 +22,10 @@ type Props = {
 };
 
 const schema = z.object({
-    name: z.string(),
-    difficulty: z.nativeEnum(trickDifficultyEnum),
-    tags: z.array(z.string()),
+	name: z.string(),
+	difficulty: z.nativeEnum(trickDifficultyEnum),
+	tags: z.array(z.string()),
+	preview: z.string(),
 });
 
 export type UserContribution = z.infer<typeof schema>;

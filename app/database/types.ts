@@ -12,10 +12,11 @@ export type {
     Contribution,
 } from "@prisma/client";
 
-export type Tag = Pick<DBTag, "id" | "name">;
+type Tag = Pick<DBTag, "id" | "name">;
 const trickDifficulties = Object.keys(Difficulty) as TrickDifficulty[];
 
 const trickDifficultyEnum = Difficulty;
 const contributionActionEnum = ContributionAction;
 
+export type { Tag, ContributionAction };
 export { trickDifficulties, trickDifficultyEnum, contributionActionEnum };
