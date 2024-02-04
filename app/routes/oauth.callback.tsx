@@ -21,7 +21,7 @@ import { assertIsPost, safeRedirect } from "~/utils";
 export async function loader({ request }: LoaderFunctionArgs) {
     const authSession = await getAuthSession(request);
 
-    if (authSession) return redirect(ROUTES.home);
+    if (authSession) return redirect(ROUTES.home());
 
     return json({});
 }
@@ -98,7 +98,7 @@ export default function LoginCallback() {
     const error = useActionData<typeof action>();
     const fetcher = useFetcher();
     const [searchParams] = useSearchParams();
-    const redirectTo = searchParams.get("redirectTo") ?? ROUTES.home;
+    const redirectTo = searchParams.get("redirectTo") ?? ROUTES.home();
 
     useEffect(() => {
         const {

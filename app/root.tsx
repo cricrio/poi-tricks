@@ -59,7 +59,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function App() {
     const { env, locale, user } = useLoaderData<typeof loader>();
     const { i18n } = useTranslation();
-
     useChangeLanguage(locale);
 
     return (
@@ -80,7 +79,9 @@ export default function App() {
                             PoiTricks
                         </Link>
                         <UserShield
-                            notConnected={<Link to="/login">Login</Link>}
+                            notConnected={
+                                <Link to={ROUTES.login()}>Login</Link>
+                            }
                         >
                             {(user: UserWithSavedTrick) => (
                                 <div className="flex items-center gap-5">
