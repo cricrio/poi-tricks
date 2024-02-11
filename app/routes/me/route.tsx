@@ -5,29 +5,44 @@ import { requireAuthSession } from "~/modules/auth";
 import { TrickCard, TrickGrid, SaveTrickButton } from "~/modules/trick";
 import { Header, Main } from "~/modules/ui";
 
-import { getSavedTricks } from "./queries";
+import { getSavedTricks, getUserDraftedTricks } from "./queries";
 
 export async function loader({ request }: LoaderFunctionArgs) {
     const session = await requireAuthSession(request);
-    const savedTricks = await getSavedTricks(session.userId);
-    return json({ savedTricks });
+    const [savedTricks, draftedTricks] = await Promise.all([
+        getSavedTricks(session.userId),
+        getUserDraftedTricks(session.userId),
+    ]);
+    return json({ savedTricks, draftedTricks });
 }
 
 export default function MePage() {
-    const { savedTricks } = useLoaderData<typeof loader>();
+    const { savedTricks, draftedTricks } = useLoaderData<typeof loader>();
     return (
         <Main>
-            <Header>Saved tricks</Header>
-            <TrickGrid>
-                {savedTricks.map(({ category, trick }) => (
-                    <TrickCard key={trick.id} {...trick}>
-                        <SaveTrickButton
-                            trickId={trick.id}
-                            category={category}
-                        />
-                    </TrickCard>
-                ))}
-            </TrickGrid>
+            {draftedTricks.length > 0 && (
+                <section>
+                    <Header>Drafts</Header>
+                    <TrickGrid>
+                        {draftedTricks.map((trick) => (
+                            <TrickCard key={trick.id} {...trick}></TrickCard>
+                        ))}
+                    </TrickGrid>
+                </section>
+            )}
+            <section>
+                <Header>Saved tricks</Header>
+                <TrickGrid>
+                    {savedTricks.map(({ category, trick }) => (
+                        <TrickCard key={trick.id} {...trick}>
+                            <SaveTrickButton
+                                trickId={trick.id}
+                                category={category}
+                            />
+                        </TrickCard>
+                    ))}
+                </TrickGrid>
+            </section>
         </Main>
     );
 }

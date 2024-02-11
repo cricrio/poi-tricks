@@ -1,3 +1,5 @@
+import type { User } from "@prisma/client";
+
 export const trickFragment = {
     id: true,
     name: true,
@@ -21,3 +23,24 @@ export const tagFragment = {
     id: true,
     name: true,
 };
+
+// where condition to filter the tricks
+export function whereUserDraft(userId?: User["id"]) {
+    return userId
+        ? {
+              OR: [
+                  {
+                      draft: true,
+                      creator: {
+                          id: userId,
+                      },
+                  },
+                  {
+                      draft: false,
+                  },
+              ],
+          }
+        : {
+              draft: false,
+          };
+}

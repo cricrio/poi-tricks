@@ -9,7 +9,7 @@ import {
 
 function getTricks(where: Prisma.TrickWhereInput) {
     return db.trick.findMany({
-        where,
+        where: { ...where, draft: false },
         select: {
             ...trickFragment,
             creators: { select: creatorFragment },
@@ -21,7 +21,7 @@ function getTricks(where: Prisma.TrickWhereInput) {
 
 function countTricks(where: Prisma.TrickWhereInput) {
     return db.trick.count({
-        where,
+        where: { ...where, draft: false },
     });
 }
 

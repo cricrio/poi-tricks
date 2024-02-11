@@ -3,13 +3,11 @@ import {
     trickFragment,
     creatorFragment,
     tagFragment,
-    type TrickDifficultyEnum,
+    type TrickDifficulty,
 } from "~/database";
 
-export async function getTricksAndCountByDifficulty(
-    difficulty: TrickDifficultyEnum,
-) {
-    const where = { difficulty: { equals: difficulty } };
+export async function getTricksAndCountByDifficulty(difficulty: TrickDifficulty) {
+    const where = { difficulty, draft: false };
     const [tricks, count] = await Promise.all([
         db.trick.findMany({
             where,
