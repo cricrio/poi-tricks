@@ -23,41 +23,79 @@ describe(differenceInArray.name, () => {
 	});
 });
 describe(difference.name, () => {
-	it("should return an empty array when the initial and updated objects are the same", () => {
-		const initial: TrickForContribution = {
-			name: "test trick",
-			tags: ["tag1", "tag2"],
-			difficulty: "basics",
-			preview: "test preview",
-		};
-		const updated: UserContribution = {
-			name: "test trick",
-			tags: ["tag1", "tag2"],
-			difficulty: "basics",
-			preview: "tt",
-		};
-		const result = difference(initial, updated);
-		expect(result).toEqual([]);
-	});
+    it("should return an empty array when the initial and updated objects are the same", () => {
+        const initial: TrickForContribution = {
+            name: "test trick",
+            tags: ["tag1", "tag2"],
+            difficulty: "basics",
+            preview: "test preview",
+        };
+        const updated: UserContribution = {
+            name: "test trick",
+            tags: ["tag1", "tag2"],
+            difficulty: "basics",
+            preview: "test preview",
+        };
+        const result = difference(updated, initial);
+        expect(result).toEqual([]);
+    });
 
-	it("should return an array of changes when the initial and updated objects are different", () => {
-		const initial: TrickForContribution = {
-			name: "test trick",
-			tags: ["tag1", "tag2"],
-			difficulty: "basics",
-			preview: "tt",
-		};
-		const updated: UserContribution = {
-			name: "new trick",
-			tags: ["tag1", "tag3"],
-			difficulty: "basics",
-			preview: "tt",
-		};
-		const result = difference(initial, updated);
-		expect(result).toEqual([
-			{ key: "name", action: "update", value: "new trick" },
-			{ key: "tags", action: "remove", value: "tag2" },
-			{ key: "tags", action: "add", value: "tag3" },
-		]);
-	});
+    it("should return an array of changes when the initial and updated objects are different", () => {
+        const initial: TrickForContribution = {
+            name: "test trick",
+            tags: ["tag1", "tag2"],
+            difficulty: "basics",
+            preview: "tt",
+        };
+        const updated: UserContribution = {
+            name: "new trick",
+            tags: ["tag1", "tag3"],
+            difficulty: "basics",
+            preview: "tt",
+        };
+        const result = difference(updated, initial);
+        expect(result).toEqual([
+            { key: "name", action: "update", value: "new trick" },
+            { key: "tags", action: "remove", value: "tag2" },
+            { key: "tags", action: "add", value: "tag3" },
+        ]);
+    });
+
+    it("use-case: remove all tags", () => {
+        const initial: TrickForContribution = {
+            name: "test trick",
+            tags: ["tag1", "tag2"],
+            difficulty: "basics",
+            preview: "tt",
+        };
+        const updated: UserContribution = {
+            name: "test trick",
+            tags: [""],
+            difficulty: "basics",
+            preview: "tt",
+        };
+        const result = difference(updated, initial);
+        expect(result).toEqual([
+            { key: "tags", action: "remove", value: "tag1" },
+            { key: "tags", action: "remove", value: "tag2" },
+        ]);
+    });
+
+    it("use-case: only changing order of tags", () => {
+        const initial: TrickForContribution = {
+            name: "test trick",
+            tags: ["tag1", "tag2"],
+            difficulty: "basics",
+            preview: "tt",
+        };
+        const updated: UserContribution = {
+            name: "test trick",
+            tags: ["tag2", "tag1"],
+            difficulty: "basics",
+            preview: "tt",
+        };
+        const result = difference(updated, initial);
+        expect(result).toEqual([]);
+    });
 });
+

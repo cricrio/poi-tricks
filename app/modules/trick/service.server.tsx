@@ -1,15 +1,21 @@
-import {
-	db,
-	trickFragment,
-	creatorFragment,
-	tagFragment,
-	videoFragment,
-	type Trick,
-} from "~/database";
+import type { Except } from "type-fest";
 
-export async function getTrickById(id: string) {
+import {
+    db,
+    trickFragment,
+    creatorFragment,
+    tagFragment,
+    videoFragment,
+    whereUserDraft,
+} from "~/database";
+import type { Tag, User, Trick, Prisma } from "~/database";
+
+export async function getTrickById(id: string, userId?: User["id"]) {
     const trick = await db.trick.findFirst({
-        where: { id },
+        where: {
+            id,
+            ...whereUserDraft(userId),
+        },
         select: {
             ...trickFragment,
             videos: {
@@ -76,13 +82,36 @@ export const updateSavedTrick = async ({
 };
 
 export function updateTrick(
-	trickId: Trick["id"],
-	data: Pick<Trick, "difficulty" | "name" | "preview">,
+    trickId: Trick["id"],
+    data: Except<Prisma.TrickCreateInput, "creator">,
 ) {
-	return db.trick.update({
-		where: {
-			id: trickId,
-		},
-		data,
-	});
+    return db.trick.update({
+        where: {
+            id: trickId,
+        },
+        data,
+    });
+}
+
+export async function createTrick(
+    trickInput: Except<Prisma.TrickCreateInput, "tags" | "creator">,
+    creatorId: User["id"],
+    tags?: Array<Tag["id"]>,
+) {
+    const trick = await db.trick.create({
+        data: {
+            ...trickInput,
+            creator: { connect: { id: creatorId } },
+            ...(tags && tags.length > 0
+                ? {
+                      tags: {
+                          connect: tags.map((id) => ({
+                              id,
+                          })),
+                      },
+                  }
+                : {}),
+        },
+    });
+    return trick;
 }

@@ -34,3 +34,4 @@
 -   [] Log everything action, keep track of every actions (CRUD des tags)
 -   [] Create a storybook to development and improve components in insulations
 -   [] Better handling of Prisma enum (TrickDifficulty)
+-   [] Fix broken test `thread 'tokio-runtime-worker' panicked` mallocs errors

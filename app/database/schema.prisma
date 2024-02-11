@@ -32,10 +32,13 @@ model Trick {
   id            String          @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt     DateTime        @default(now()) @db.Timestamptz(6)
   name          String
-  preview       String          @default("")
-  difficulty    TrickDifficulty
+  preview       String?          @default("")
+  difficulty    TrickDifficulty? @default(others)
+  draft         Boolean         @default(true)
   tags          Tag[]
   videos        Video[]
+  creator       User            @relation(fields: [creatorId], references: [id])
+  creatorId        String          @db.Uuid
   creators      Creator[]
   prerequisites Trick[]         @relation("Prerequisite")
   next          Trick[]         @relation("Prerequisite")
@@ -57,6 +60,7 @@ model User {
   createdAt     DateTime       @default(now()) @db.Timestamptz(6)
   email         String         @unique
   picture       String?
+  createdTricks Trick[]
   savedTricks   SavedTrick[]
   contributions Contribution[]
 }
@@ -94,8 +98,8 @@ model Contribution {
   key       String
   value     String
   action    ContributionAction
-  author    User               @relation(fields: [userId], references: [id])
-  userId    String             @db.Uuid
+  author    User               @relation(fields: [authorId], references: [id])
+  authorId    String             @db.Uuid
 }
 
 model Tag {

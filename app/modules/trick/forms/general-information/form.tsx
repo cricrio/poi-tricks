@@ -1,4 +1,5 @@
 import { useFetcher } from "@remix-run/react";
+import { parseFormAny } from "react-zorm";
 import { z } from "zod";
 
 import type { Tag, Trick } from "~/database";
@@ -16,22 +17,22 @@ import {
 } from "~/modules/ui/select";
 
 type Props = {
-    trick: Pick<Trick, "id" | "name" | "difficulty"> & {
+    trick?: Pick<Trick, "id" | "name" | "difficulty"> & {
         tags: Array<Tag>;
     };
 };
 
 const schema = z.object({
-	name: z.string(),
-	difficulty: z.nativeEnum(trickDifficultyEnum),
-	tags: z.array(z.string()),
-	preview: z.string(),
+    name: z.string(),
+    difficulty: z.nativeEnum(trickDifficultyEnum).optional(),
+    tags: z.array(z.string()).optional(),
+    preview: z.string().optional(),
 });
 
 export type UserContribution = z.infer<typeof schema>;
 
 export function validate(formData: FormData) {
-    return schema.safeParse(formData);
+    return schema.safeParse(parseFormAny(formData));
 }
 
 export function TrickGeneralInformationForm({ trick }: Props) {
@@ -45,12 +46,15 @@ export function TrickGeneralInformationForm({ trick }: Props) {
                     type="text"
                     name="name"
                     id="name"
-                    defaultValue={trick.name}
+                    defaultValue={trick?.name ?? ""}
                 />
             </div>
             <div>
                 <Label htmlFor="difficulty">Difficulty</Label>
-                <Select defaultValue={trick.difficulty} name="difficulty">
+                <Select
+                    defaultValue={trick?.difficulty ?? ""}
+                    name="difficulty"
+                >
                     <SelectTrigger>
                         <SelectValue placeholder="Select a difficulty" />
                     </SelectTrigger>
@@ -68,7 +72,11 @@ export function TrickGeneralInformationForm({ trick }: Props) {
                 </Select>
                 <div>
                     <Label htmlFor="tags">Tags</Label>
-                    <TagsInput value={trick.tags} name="tags" tags={tags} />
+                    <TagsInput
+                        value={trick?.tags ?? []}
+                        name="tags"
+                        tags={tags}
+                    />
                 </div>
             </div>
             <Button type="submit" className="shrink-0 grow-0">

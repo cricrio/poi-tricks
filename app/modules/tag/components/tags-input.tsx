@@ -67,21 +67,31 @@ function AddNewTagButton({ tags, onSelect }: AddNewTagButtonProps) {
 }
 
 export function TagsInput({ value, name, tags: allTags }: Props) {
-    const [selectedTags, setSelectedTags] = React.useState<Array<Tag>>([]);
+    const [selectedTags, setSelectedTags] = React.useState<Array<Tag>>(value);
 
     const tags = allTags.filter(
         (tag) => !selectedTags.some((p) => p.id === tag.id),
     );
+
+    const removeTag = (tagId: string) => () => {
+        setSelectedTags((t) => t.filter((p) => p.id !== tagId));
+    };
     return (
         <div className="flex flex-wrap items-center gap-2">
-            {[...value, ...selectedTags].map((tag, index) => (
+            {selectedTags.length === 0 && (
+                <input type="hidden" name={`${name}`} value={""} />
+            )}
+            {selectedTags.map((tag, index) => (
                 <div key={tag.id}>
                     <input
                         type="hidden"
                         name={`${name}[${index}]`}
                         value={tag.id}
                     />
-                    <Badge className="space-x-2 normal-case">
+                    <Badge
+                        className="space-x-2 normal-case"
+                        onClick={removeTag(tag.id)}
+                    >
                         <span>{tag.name}</span>
                         <TrashIcon className="size-4" />
                     </Badge>
