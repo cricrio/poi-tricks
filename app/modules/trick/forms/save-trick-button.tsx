@@ -8,6 +8,7 @@ import { Divider } from "~/modules/ui/divider";
 import { Label } from "~/modules/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "~/modules/ui/popover";
 import { RadioGroup, RadioGroupItem } from "~/modules/ui/radio-group";
+import { RESSOURCES } from "~/routes";
 import type { action } from "~/routes/save-trick";
 import type { WithChildrenProps } from "~/types";
 
@@ -57,7 +58,7 @@ export function SaveTrickButton({ trickId, category }: Props) {
                 <Divider />
                 <savedTrick.Form
                     method="post"
-                    action="/save-trick"
+                    action={RESSOURCES.saveTrick}
                     onChange={(event) => {
                         savedTrick.submit(event.currentTarget, {
                             method: "POST",
