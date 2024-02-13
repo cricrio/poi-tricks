@@ -1,4 +1,4 @@
-import { db, type Trick, type Prisma } from "~/database";
+import { db, type Trick, type Prisma, type User } from "~/database";
 
 type TrickForContribution = Prisma.PromiseReturnType<
     typeof getTrickByIdForContribution
@@ -19,12 +19,25 @@ async function get(id: string) {
 }
 
 async function getTrickByIdForContribution(id: Trick["id"]) {
-    console.log("getTrickByIdForContribution", id);
     const trick = await get(id);
     return {
         ...trick,
         tags: trick.tags.map(({ id }) => id),
     };
+}
+
+async function logPublishingTrick(trickId: Trick["id"], userId: User["id"]) {
+    const res = await db.contribution.create({
+        data: {
+            entity: "trick",
+            entityId: trickId,
+            authorId: userId,
+            action: "update",
+            key: "publish",
+            value: "true",
+        },
+    });
+    return res;
 }
 
 async function saveContributions(
@@ -37,4 +50,4 @@ async function saveContributions(
 }
 
 export type { TrickForContribution };
-export { getTrickByIdForContribution, saveContributions };
+export { getTrickByIdForContribution, saveContributions, logPublishingTrick };

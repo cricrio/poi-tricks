@@ -12,3 +12,8 @@ export const ROUTES = {
     editTrick: ({ id }: Required<Pick<Trick, "id">>) => `/tricks/${id}/edit`,
     me: () => "/me",
 };
+
+export const RESSOURCES = {
+    saveTrick: "/save-trick",
+    publishTrick: "/publish-trick",
+};

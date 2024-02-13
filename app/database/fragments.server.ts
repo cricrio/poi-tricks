@@ -5,6 +5,7 @@ export const trickFragment = {
     name: true,
     preview: true,
     difficulty: true,
+    draft: true,
 };
 
 export const videoFragment = {

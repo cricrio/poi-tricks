@@ -83,7 +83,7 @@ export const updateSavedTrick = async ({
 
 export function updateTrick(
     trickId: Trick["id"],
-    data: Except<Prisma.TrickCreateInput, "creator">,
+    data: Except<Prisma.TrickUpdateInput, "creator">,
 ) {
     return db.trick.update({
         where: {

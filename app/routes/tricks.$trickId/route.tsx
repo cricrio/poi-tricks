@@ -7,12 +7,13 @@ import {
     getTrickById,
     NotConnectedDialog,
     PreviewImage,
+    PublishTrickButton,
     TrickCard,
     TrickPreview,
 } from "~/modules/trick";
-import { SaveTrickButton } from "~/modules/trick/components/save-trick-button";
 import { VideoPlayer } from "~/modules/trick/components/video-player";
 import { YoutubeEmbed } from "~/modules/trick/components/youtube-embed";
+import { SaveTrickButton } from "~/modules/trick/forms/save-trick-button";
 import { Main, Badge, Header, Button } from "~/modules/ui";
 import type { UserWithSavedTrick } from "~/modules/user";
 import { UserShield } from "~/modules/user";
@@ -43,18 +44,20 @@ export default function TrickPage() {
                         <Button variant="outline" asChild>
                             <Link to={ROUTES.editTrick(trick)}>Edit</Link>
                         </Button>
+                        {trick.draft ? (
+                            <PublishTrickButton trickId={trick.id} />
+                        ) : (
+                            <UserShield notConnected={<NotConnectedDialog />}>
+                                {(user: UserWithSavedTrick) => (
+                                    <SaveTrickButton
+                                        category={user.savedTricks[trick.id]}
+                                        trickId={trick.id}
+                                    />
+                                )}
+                            </UserShield>
+                        )}
                     </header>
-                    <div className="flex items-center justify-between gap-4">
-                        <CreatorGroup creators={trick.creators} />
-                        <UserShield notConnected={<NotConnectedDialog />}>
-                            {(user: UserWithSavedTrick) => (
-                                <SaveTrickButton
-                                    category={user.savedTricks[trick.id]}
-                                    trickId={trick.id}
-                                />
-                            )}
-                        </UserShield>
-                    </div>
+                    <CreatorGroup creators={trick.creators} />
                     <div className="flex flex-wrap items-center gap-2">
                         <Badge
                             asChild
