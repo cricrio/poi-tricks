@@ -5,7 +5,7 @@ import { useLoaderData } from "@remix-run/react";
 import { requireAuthSession } from "~/modules/auth";
 import {
     createContributions,
-    generateTagsFromContributions,
+    getConnections,
     getTrickByIdForContribution,
     saveContributions,
     validateUserInput,
@@ -17,6 +17,7 @@ import {
     TrickGeneralInformationForm,
     updateTrick,
 } from "~/modules/trick";
+import { VideosForm } from "~/modules/trick/forms/add-video/form";
 import { Header, Main } from "~/modules/ui";
 import { assertIsPost, getRequiredParam } from "~/utils";
 
@@ -43,13 +44,22 @@ export async function action({ params, request }: ActionFunctionArgs) {
 
     const contributions = createContributions(
         trick,
-        userData,
+        { ...userData, id },
         authSession.userId,
     );
     await saveContributions(contributions);
+    const { connect, disconnect } = getConnections(
+        contributions.filter((c) => c.key === "tags"),
+    );
+
     const updatedTrick = await updateTrick(id, {
         ...userData,
-        tags: generateTagsFromContributions(contributions),
+        tags: {
+            connect: connect.map((id) => ({
+                id,
+            })),
+            disconnect: disconnect.map((id) => ({ id })),
+        },
     });
 
     return json({ trick: updatedTrick });
@@ -58,7 +68,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
 export default function EditTrick() {
     const { trick, tags } = useLoaderData<typeof loader>();
     return (
-        <Main className="md:max-w-3xl">
+        <Main className="space-y-4 md:max-w-3xl">
             <TagProvider tags={tags}>
                 <h1 className="mb-4 text-3xl">Edit Trick</h1>
                 <section>
@@ -68,6 +78,10 @@ export default function EditTrick() {
                 <section>
                     <Header>Preview</Header>
                     <PreviewInput trick={trick} />
+                </section>
+                <section className="space-y-2">
+                    <Header>Videos</Header>
+                    <VideosForm videos={trick.videos} />
                 </section>
             </TagProvider>
         </Main>

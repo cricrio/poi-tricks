@@ -21,25 +21,44 @@ export function PreviewInput({ trick }: PreviewInputProps) {
         }
     };
 
+    function getImage() {
+        if (preview) {
+            return (
+                <img
+                    src={preview}
+                    alt="trick preview"
+                    className="size-full rounded-lg object-fill"
+                />
+            );
+        }
+        if (trick.preview) {
+            <PreviewImage
+                src={trick.preview}
+                name={trick.name}
+                className="size-full rounded-lg object-fill"
+            />;
+        }
+        return <div className="padding-auto"></div>;
+    }
+
     return (
         <fetcher.Form method="POST" className="space-y-3">
-            <div className="relative">
-                {preview ? (
-                    <img
-                        src={preview}
-                        alt="trick preview"
-                        className="size-full rounded-lg object-fill"
-                    />
-                ) : (
-                    <PreviewImage
-                        src={trick.preview}
-                        name={trick.name}
-                        className="size-full rounded-lg object-fill"
-                    />
-                )}
-                <div className="absolute bottom-5 right-5">
+            <div className="relative aspect-video rounded-lg border border-white">
+                {getImage()}
+                <div className="absolute bottom-5 right-5 space-x-2">
+                    <Button
+                        variant="outline"
+                        onClick={() => setPreview(null)}
+                        disabled={!preview}
+                    >
+                        Reset
+                    </Button>
                     <Button asChild>
-                        <Label htmlFor="file">Change Preview</Label>
+                        <Label htmlFor="file">
+                            {trick.preview || preview
+                                ? "Change preview"
+                                : "Add a preview"}
+                        </Label>
                     </Button>
                     <input
                         id="file"
@@ -51,15 +70,8 @@ export function PreviewInput({ trick }: PreviewInputProps) {
                 </div>
             </div>
             <div className="flex gap-4">
-                <Button
-                    variant="outline"
-                    onClick={() => setPreview(null)}
-                    disabled={!preview}
-                >
-                    Reset
-                </Button>
-                <Button variant="outline" type="submit" disabled={!preview}>
-                    Submit {!preview ? "Disabled" : "Change"}
+                <Button type="submit" disabled={!preview}>
+                    Submit
                 </Button>
             </div>
         </fetcher.Form>

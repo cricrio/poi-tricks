@@ -115,3 +115,9 @@ export async function createTrick(
     });
     return trick;
 }
+
+export async function addVideo(video: Prisma.VideoCreateInput) {
+    return db.video.create({
+        data: video,
+    });
+}

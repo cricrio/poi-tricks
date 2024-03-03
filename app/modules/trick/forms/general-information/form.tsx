@@ -24,12 +24,11 @@ type Props = {
 
 const schema = z.object({
     name: z.string(),
-    difficulty: z.nativeEnum(trickDifficultyEnum).optional(),
-    tags: z.array(z.string()).optional(),
-    preview: z.string().optional(),
+    difficulty: z.nativeEnum(trickDifficultyEnum).nullable(),
+    tags: z.array(z.string()).nullable(),
+    preview: z.string().nullable(),
 });
 
-export type UserContribution = z.infer<typeof schema>;
 
 export function validate(formData: FormData) {
     return schema.safeParse(parseFormAny(formData));

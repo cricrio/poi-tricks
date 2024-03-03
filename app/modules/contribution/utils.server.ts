@@ -3,9 +3,6 @@ import type { Entries } from "type-fest";
 import { contributionActionEnum } from "~/database";
 import type { Contribution, ContributionAction } from "~/database";
 
-import type { TrickForContribution } from "./service.server";
-import type { UserContribution } from "../trick";
-
 function differenceInArray(
     before: string[],
     after: string[],
@@ -25,18 +22,15 @@ function differenceInArray(
     return [...removed, ...added];
 }
 
-export function addKey(
-    array: Array<Pick<Contribution, "value" | "action">>,
-    key: Contribution["key"],
-): Array<Pick<Contribution, "value" | "action" | "key">> {
+export function addKey<T, K>(array: Array<T>, key: K): Array<T & { key: K }> {
     return array.map((value) => ({ key, ...value }));
 }
 
-function difference(
-    userInput: UserContribution,
-    trick: TrickForContribution,
+function difference<T extends object>(
+    userInput: T,
+    trick: T,
 ): Array<Pick<Contribution, "value" | "action" | "key">> {
-    const entries = Object.entries(userInput) as Entries<UserContribution>;
+    const entries = Object.entries(userInput) as Entries<T>;
     return entries.reduce(
         (
             acc: { key: string; action: ContributionAction; value: string }[],

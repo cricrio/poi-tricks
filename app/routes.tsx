@@ -16,4 +16,7 @@ export const ROUTES = {
 export const RESSOURCES = {
     saveTrick: "/save-trick",
     publishTrick: "/publish-trick",
+    trick: ({ id }: Required<Pick<Trick, "id">>) => ({
+        addVideo: `/tricks/${id}/add-video`,
+    }),
 };

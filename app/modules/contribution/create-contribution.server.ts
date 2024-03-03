@@ -1,3 +1,5 @@
+import type { Merge } from "type-fest";
+
 import {
     contributionActionEnum,
     type Contribution,
@@ -6,9 +8,8 @@ import {
     type Trick,
     type User,
 } from "~/database";
-import { validate, type UserContribution } from "~/modules/trick";
+import { validate } from "~/modules/trick";
 
-import { type TrickForContribution } from "./service.server";
 import { difference } from "./utils.server";
 
 function validateUserInput(formData: FormData) {
@@ -32,35 +33,30 @@ function addTrickData(
     }));
 }
 
-function createContributions(
-    trick: TrickForContribution,
-    userInput: UserContribution,
+function createContributions<T extends { id: string }>(
+    trick: Merge<Partial<T>, { id: string }>,
+    userInput: T,
     authorId: User["id"],
 ): Prisma.ContributionCreateManyInput[] {
     return addTrickData(difference(userInput, trick), trick.id, authorId);
 }
 
-function generateTagsFromContributions(
-    contributions: Prisma.ContributionCreateManyInput[],
-) {
+function getConnections(contributions: Prisma.ContributionCreateManyInput[]) {
     return contributions.reduce<{
-        connect: Array<Pick<Tag, "id">>;
-        disconnect: Array<Pick<Tag, "id">>;
+        connect: string[];
+        disconnect: string[];
     }>(
         (acc, c) => {
-            if (c.key !== "tags") {
-                return acc;
-            }
             if (c.action === contributionActionEnum.remove) {
                 return {
                     ...acc,
-                    disconnect: [...acc.disconnect, { id: c.value }],
+                    disconnect: [...acc.disconnect, c.value],
                 };
             }
             if (c.action === contributionActionEnum.add) {
                 return {
                     ...acc,
-                    connect: [...acc.connect, { id: c.value }],
+                    connect: [...acc.connect, c.value],
                 };
             }
             return acc;
@@ -68,8 +64,5 @@ function generateTagsFromContributions(
         { connect: [], disconnect: [] },
     );
 }
-export {
-    createContributions,
-    validateUserInput,
-    generateTagsFromContributions,
-};
+
+export { createContributions, validateUserInput, getConnections };

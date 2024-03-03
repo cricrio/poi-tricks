@@ -1,36 +1,34 @@
-import type { TrickForContribution } from "./service.server";
 import { addKey, difference, differenceInArray } from "./utils.server";
-import type { UserContribution } from "../trick";
 
 describe(addKey.name, () => {
-	it("should add the key to each element in the array", () => {
-		const before = ["a", "b", "c"];
-		const after = ["a", "b", "c", "d"];
-		const key = "d";
-		const expected = [{ key, value: "d", action: "add" }];
-		const actual = addKey(differenceInArray(before, after), key);
-		expect(actual).toEqual(expected);
-	});
+    it("should add the key to each element in the array", () => {
+        const before = ["a", "b", "c"];
+        const after = ["a", "b", "c", "d"];
+        const key = "d";
+        const expected = [{ key, value: "d", action: "add" }];
+        const actual = addKey(differenceInArray(before, after), key);
+        expect(actual).toEqual(expected);
+    });
 });
 describe(differenceInArray.name, () => {
-	it("should return difference between two arrays", () => {
-		expect(differenceInArray(["a", "b", "d"], ["b", "c", "z"])).toEqual([
-			{ action: "remove", value: "a" },
-			{ action: "remove", value: "d" },
-			{ action: "add", value: "c" },
-			{ action: "add", value: "z" },
-		]);
-	});
+    it("should return difference between two arrays", () => {
+        expect(differenceInArray(["a", "b", "d"], ["b", "c", "z"])).toEqual([
+            { action: "remove", value: "a" },
+            { action: "remove", value: "d" },
+            { action: "add", value: "c" },
+            { action: "add", value: "z" },
+        ]);
+    });
 });
 describe(difference.name, () => {
     it("should return an empty array when the initial and updated objects are the same", () => {
-        const initial: TrickForContribution = {
+        const initial = {
             name: "test trick",
             tags: ["tag1", "tag2"],
             difficulty: "basics",
             preview: "test preview",
         };
-        const updated: UserContribution = {
+        const updated = {
             name: "test trick",
             tags: ["tag1", "tag2"],
             difficulty: "basics",
@@ -41,13 +39,13 @@ describe(difference.name, () => {
     });
 
     it("should return an array of changes when the initial and updated objects are different", () => {
-        const initial: TrickForContribution = {
+        const initial = {
             name: "test trick",
             tags: ["tag1", "tag2"],
             difficulty: "basics",
             preview: "tt",
         };
-        const updated: UserContribution = {
+        const updated = {
             name: "new trick",
             tags: ["tag1", "tag3"],
             difficulty: "basics",
@@ -62,13 +60,13 @@ describe(difference.name, () => {
     });
 
     it("use-case: remove all tags", () => {
-        const initial: TrickForContribution = {
+        const initial = {
             name: "test trick",
             tags: ["tag1", "tag2"],
             difficulty: "basics",
             preview: "tt",
         };
-        const updated: UserContribution = {
+        const updated = {
             name: "test trick",
             tags: [""],
             difficulty: "basics",
@@ -82,13 +80,13 @@ describe(difference.name, () => {
     });
 
     it("use-case: only changing order of tags", () => {
-        const initial: TrickForContribution = {
+        const initial = {
             name: "test trick",
             tags: ["tag1", "tag2"],
             difficulty: "basics",
             preview: "tt",
         };
-        const updated: UserContribution = {
+        const updated = {
             name: "test trick",
             tags: ["tag2", "tag1"],
             difficulty: "basics",
@@ -98,4 +96,3 @@ describe(difference.name, () => {
         expect(result).toEqual([]);
     });
 });
-

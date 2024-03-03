@@ -38,3 +38,4 @@
 - [ ] Better handling of Prisma enum (TrickDifficulty)
 - [ ] Fix broken test `thread 'tokio-runtime-worker' panicked` mallocs errors
 - [ ] Consider the use of `remix-flat-routes/`
+- [] Youtube preview download for the preview https://github.com/twarped/tattered-lead-archaeopteryx/ + https://github.com/ffmpegwasm/ffmpeg.wasm/tree/main/apps/react-vite-app

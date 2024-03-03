@@ -1,0 +1,43 @@
+{
+    "userAnswersFront": [
+        {
+            "text": "<b>1- SQL : <font face=\"Arial, sans-serif\"><font size=\"3\">Cr&#233;ez&#10;un requ&#234;te SQL afin de s&#233;lectionner l'ensemble des champs d'une&#10;table &#171;&#160;article&#160;&#187;.</font></font></b>&#10;",
+            "userAnswersDetailsFront": [
+                { "text": "SELECT * FROM 'article'" },
+                {},
+                {},
+                {},
+                {}
+            ],
+            "img": null
+        },
+        {
+            "text": "<b>2- SQL : <font face=\"Arial, sans-serif\"><font size=\"3\">Supposons&#10;une table auteur. Un auteur pouvant avoir &#233;crit plusieurs articles,&#10;mais un article n'&#233;tant associ&#233; qu'&#224; un seul auteur. &#192; quoi&#10;pourrait ressemble une requ&#234;te r&#233;cup&#233;rant l'ensemble des articles&#10;d'un auteur sp&#233;cifi&#233;.</font></font></b>&#10;",
+            "userAnswersDetailsFront": [
+                { "text": "SELECT * FROM 'author' WHERE authorId='authorId'" },
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
+            ],
+            "img": null
+        },
+        {
+            "text": "<b>3- Algorithme : <font face=\"Arial, sans-serif\">Faire&#10;un algorithme qui va chercher dans une base une liste de formations&#10;et qui les affiche en mettant devant &#171; formation &#187; si la dur&#233;e est&#10;inf&#233;rieure &#224; 10 et &#171; cursus &#187; sinon.</font></b>&#10;",
+            "userAnswersDetailsFront": [
+                {
+                    "text": "SELECT\n    CASE\n        WHEN duree < 10 THEN 'Formation'\n        ELSE 'Cursus'\n    END AS formation_ou_cursus,\n    nom\nFROM formations;"
+                },
+                {},
+                {},
+                {}
+            ],
+            "img": null
+        }
+    ],
+    "date": "2024-02-19T14:40:35.370Z",
+    "quizId": 535,
+    "total": 3
+}

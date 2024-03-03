@@ -10,6 +10,7 @@ export type {
     Trick,
     TrickDifficulty,
     Contribution,
+    Video,
 } from "@prisma/client";
 
 type Tag = Pick<DBTag, "id" | "name">;

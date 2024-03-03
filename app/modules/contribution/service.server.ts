@@ -40,6 +40,24 @@ async function logPublishingTrick(trickId: Trick["id"], userId: User["id"]) {
     return res;
 }
 
+async function logAddVideoToTrick(
+    trickId: Trick["id"],
+    userId: User["id"],
+    externalId: string,
+) {
+    const res = await db.contribution.create({
+        data: {
+            entity: "trick",
+            entityId: trickId,
+            authorId: userId,
+            action: "connect",
+            key: "video",
+            value: externalId,
+        },
+    });
+    return res;
+}
+
 async function saveContributions(
     contributions: Array<Prisma.ContributionCreateManyInput>,
 ) {
@@ -50,4 +68,9 @@ async function saveContributions(
 }
 
 export type { TrickForContribution };
-export { getTrickByIdForContribution, saveContributions, logPublishingTrick };
+export {
+    getTrickByIdForContribution,
+    saveContributions,
+    logPublishingTrick,
+    logAddVideoToTrick,
+};
