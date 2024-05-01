@@ -12,6 +12,10 @@ const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
         autoRefreshToken: false,
         persistSession: false,
     },
+    auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+    },
 });
 
 const prisma = new PrismaClient();
@@ -20,7 +24,11 @@ const email = "hello@supabase.com";
 
 const getUserId = async (): Promise<string> => {
     const userList = await supabaseAdmin.auth.admin.listUsers();
+    const userList = await supabaseAdmin.auth.admin.listUsers();
 
+    if (userList.error) {
+        throw userList.error;
+    }
     if (userList.error) {
         throw userList.error;
     }
@@ -28,7 +36,13 @@ const getUserId = async (): Promise<string> => {
     const existingUserId = userList.data.users.find(
         (user) => user.email === email,
     )?.id;
+    const existingUserId = userList.data.users.find(
+        (user) => user.email === email,
+    )?.id;
 
+    if (existingUserId) {
+        return existingUserId;
+    }
     if (existingUserId) {
         return existingUserId;
     }
@@ -38,11 +52,20 @@ const getUserId = async (): Promise<string> => {
         password: "supabase",
         email_confirm: true,
     });
+    const newUser = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password: "supabase",
+        email_confirm: true,
+    });
 
     if (newUser.error) {
         throw newUser.error;
     }
+    if (newUser.error) {
+        throw newUser.error;
+    }
 
+    return newUser.data.user.id;
     return newUser.data.user.id;
 };
 

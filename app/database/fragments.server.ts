@@ -12,9 +12,15 @@ export const videoFragment = {
     id: true,
     externalId: true,
     source: true,
+    id: true,
+    externalId: true,
+    source: true,
 };
 
 export const creatorFragment = {
+    id: true,
+    name: true,
+    picture: true,
     id: true,
     name: true,
     picture: true,

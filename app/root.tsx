@@ -2,9 +2,20 @@ import type {
     LinksFunction,
     LoaderFunction,
     MetaFunction,
+    LinksFunction,
+    LoaderFunction,
+    MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
+    Links,
+    Link,
+    LiveReload,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    useLoaderData,
     Links,
     Link,
     LiveReload,
@@ -26,6 +37,10 @@ import {
     tryGetUserByIdWithSavedTricks,
     UserShield,
     Avatar,
+    UserProvider,
+    tryGetUserByIdWithSavedTricks,
+    UserShield,
+    Avatar,
 } from "./modules/user";
 import { ROUTES } from "./routes";
 import globalStyle from "./styles/global.css";
@@ -37,9 +52,16 @@ export const links: LinksFunction = () => [
         href: globalStyle,
         as: "style",
     },
+    {
+        rel: "stylesheet preload prefetch",
+        href: globalStyle,
+        as: "style",
+    },
 ];
 
 export const meta: MetaFunction = () => [
+    { title: "PoiTricks" },
+    { name: "description", content: "PoiTricks" },
     { title: "PoiTricks" },
     { name: "description", content: "PoiTricks" },
 ];
@@ -48,7 +70,15 @@ export const loader: LoaderFunction = async ({ request }) => {
     const locale = await i18nextServer.getLocale(request);
     const session = await getAuthSession(request);
     const user = await tryGetUserByIdWithSavedTricks(session?.userId);
+    const locale = await i18nextServer.getLocale(request);
+    const session = await getAuthSession(request);
+    const user = await tryGetUserByIdWithSavedTricks(session?.userId);
 
+    return json({
+        locale,
+        env: getBrowserEnv(),
+        user,
+    });
     return json({
         locale,
         env: getBrowserEnv(),

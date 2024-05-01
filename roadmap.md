@@ -3,6 +3,7 @@
 ## Phase 1: Astro
 
 -   [x] Poi-trick with Astro
+-   [x] Poi-trick with Astro
 
 ## Phase 2: Contributions
 

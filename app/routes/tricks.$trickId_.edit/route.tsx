@@ -29,7 +29,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     if (!trick) {
         throw new Response("Not Found", { status: 404 });
     }
+    if (!trick) {
+        throw new Response("Not Found", { status: 404 });
+    }
 
+    const tags = await getAllTags();
+    return json({ trick, tags });
     const tags = await getAllTags();
     return json({ trick, tags });
 }

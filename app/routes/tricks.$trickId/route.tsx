@@ -28,11 +28,16 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     if (!trick) {
         throw new Response("Not Found", { status: 404 });
     }
+    if (!trick) {
+        throw new Response("Not Found", { status: 404 });
+    }
 
+    return json({ trick });
     return json({ trick });
 }
 
 export default function TrickPage() {
+    const { trick } = useLoaderData<typeof loader>();
     const { trick } = useLoaderData<typeof loader>();
 
     return (

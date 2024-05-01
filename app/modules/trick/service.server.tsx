@@ -81,7 +81,17 @@ export const updateSavedTrick = async ({
             data: { trickId, category, userId },
         });
     }
+    if (!saved && category) {
+        return db.savedTrick.create({
+            data: { trickId, category, userId },
+        });
+    }
 
+    if (saved && !category) {
+        return db.savedTrick.delete({
+            where: { id: saved.id },
+        });
+    }
     if (saved && !category) {
         return db.savedTrick.delete({
             where: { id: saved.id },
