@@ -1,3 +1,5 @@
+import type { ArrayValues } from "type-fest";
+
 import type { Prisma } from "~/database";
 import {
     db,
@@ -7,16 +9,52 @@ import {
     trickDifficulties,
 } from "~/database";
 
-function getTricks(where: Prisma.TrickWhereInput) {
-    return db.trick.findMany({
+type Trick = ArrayValues<Awaited<ReturnType<typeof getFirstTricks>>>;
+
+async function getFirstTricks(where: Prisma.TrickWhereInput) {
+    const tricks = await db.trick.findMany({
         where: { ...where, draft: false },
         select: {
             ...trickFragment,
-            creators: { select: creatorFragment },
             tags: { select: tagFragment },
+            videos: {
+                select: {
+                    creatorPlatform: {
+                        select: {
+                            creator: {
+                                select: creatorFragment,
+                            },
+                        },
+                    },
+                },
+            },
         },
         take: 6,
     });
+
+    return tricks;
+}
+
+async function getTricks(where: Prisma.TrickWhereInput) {
+    const tricks = await getFirstTricks(where);
+    return transformTricks(tricks);
+}
+function transformTricks(tricks: Trick[]) {
+    return tricks.map(extractCreators);
+}
+function extractCreators(trick: Trick) {
+    const creators = trick.videos
+        .map((v) => v?.creatorPlatform?.creator)
+        .reduce((acc, c) => {
+            if (acc.some((a) => a.id === c.id)) {
+                return acc;
+            }
+            return [...acc, c];
+        }, []);
+    return {
+        ...trick,
+        creators,
+    };
 }
 
 function countTricks(where: Prisma.TrickWhereInput) {
@@ -32,7 +70,6 @@ export async function getTricksByDifficulties() {
             return Promise.all([getTricks(where), countTricks(where)]);
         }),
     );
-
     return trickDifficulties
         .map((difficulty, index) => {
             const [tricks, count] = result[index];

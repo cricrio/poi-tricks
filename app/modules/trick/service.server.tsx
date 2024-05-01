@@ -8,7 +8,7 @@ import {
     videoFragment,
     whereUserDraft,
 } from "~/database";
-import type { Tag, User, Trick, Prisma } from "~/database";
+import type { Tag, User, Trick, Prisma, Video, Creator } from "~/database";
 
 export async function getTrickById(id: string, userId?: User["id"]) {
     const trick = await db.trick.findFirst({
@@ -21,6 +21,13 @@ export async function getTrickById(id: string, userId?: User["id"]) {
             videos: {
                 select: {
                     ...videoFragment,
+                    creatorPlatform: {
+                        select: {
+                            creator: {
+                                select: creatorFragment,
+                            },
+                        },
+                    },
                 },
             },
             tags: {
@@ -28,20 +35,30 @@ export async function getTrickById(id: string, userId?: User["id"]) {
                     ...tagFragment,
                 },
             },
-            creators: {
-                select: {
-                    ...creatorFragment,
-                },
-            },
             prerequisites: {
                 select: {
                     ...trickFragment,
-                    creators: { select: creatorFragment },
+                    videos: {
+                        select: {
+                            creatorPlatform: {
+                                select: {
+                                    creator: {
+                                        select: creatorFragment,
+                                    },
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
     });
-    return trick;
+    if (trick) {
+        return {
+            ...extractCreators(trick),
+            prerequisites: transformTricks(trick.prerequisites),
+        };
+    }
 }
 
 export const updateSavedTrick = async ({
@@ -120,4 +137,26 @@ export async function addVideo(video: Prisma.VideoCreateInput) {
     return db.video.create({
         data: video,
     });
+}
+
+export function transformTricks(tricks: Trick[]) {
+    return tricks.map(extractCreators);
+}
+export function extractCreators(trick: {
+    videos: Video[];
+    creators: Creator[];
+}) {
+    const creators = trick.videos
+        .map((v) => v?.creatorPlatform?.creator)
+        .reduce((acc: Creator[], c) => {
+            if (!c) return acc;
+            if (acc.some((a) => a.id === c.id)) {
+                return acc;
+            }
+            return [...acc, c];
+        }, []);
+    return {
+        ...trick,
+        creators,
+    };
 }

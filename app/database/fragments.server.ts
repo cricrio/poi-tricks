@@ -32,9 +32,9 @@ export function whereUserDraft(userId?: User["id"]) {
               OR: [
                   {
                       draft: true,
-                      creator: {
-                          id: userId,
-                      },
+                      //   creator: {
+                      //       id: userId,
+                      //   },
                   },
                   {
                       draft: false,

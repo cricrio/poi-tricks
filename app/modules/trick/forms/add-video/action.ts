@@ -1,14 +1,8 @@
 import { json, type ActionFunctionArgs } from "@remix-run/node";
 import { safeParseForm } from "react-zorm";
 
-import { db } from "~/database";
 import { requireAuthSession } from "~/modules/auth";
-import {
-    createContributions,
-    getConnections,
-    logAddVideoToTrick,
-    saveContributions,
-} from "~/modules/contribution";
+import { logAddVideoToTrick } from "~/modules/contribution";
 import { getCreatorAction } from "~/modules/creator/services/connect-create-creator-to-videos";
 import { assertIsPost, getRequiredParam } from "~/utils";
 

@@ -22,7 +22,7 @@ import { getRequiredParam } from "~/utils";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
     const session = await getAuthSession(request);
-    const id = getRequiredParam(params, "trickId", "uuid");
+    const id = getRequiredParam(params, "trickId");
     const trick = await getTrickById(id, session?.userId);
 
     if (!trick) {

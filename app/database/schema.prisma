@@ -14,8 +14,6 @@ model Creator {
   bio       String            @default("")
   picture   String            @default("")
   platforms CreatorPlatform[]
-  videos    Video[]
-  tricks    Trick[]
 }
 
 enum Platform {
@@ -23,29 +21,27 @@ enum Platform {
 }
 
 model CreatorPlatform {
-  id         BigInt   @id @default(autoincrement())
-  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  id         String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
   platform   Platform?
-  url        String?  @unique
-  externalId String?  @unique
-  creatorId  String?  @db.Uuid
-  creator    Creator? @relation(fields: [creatorId], references: [id])
+  url        String?   @unique
+  externalId String?   @unique
+  creatorId  String?   @db.Uuid
+  creator    Creator?  @relation(fields: [creatorId], references: [id])
+  videos     Video[]
 }
 
 model Trick {
-  id            String          @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt     DateTime        @default(now()) @db.Timestamptz(6)
+  id            String           @id @unique
+  createdAt     DateTime         @default(now()) @db.Timestamptz(6)
   name          String
   preview       String?          @default("")
   difficulty    TrickDifficulty? @default(others)
-  draft         Boolean         @default(true)
+  draft         Boolean          @default(true)
   tags          Tag[]
   videos        Video[]
-  creator       User            @relation(fields: [creatorId], references: [id])
-  creatorId        String          @db.Uuid
-  creators      Creator[]
-  prerequisites Trick[]         @relation("Prerequisite")
-  next          Trick[]         @relation("Prerequisite")
+  prerequisites Trick[]          @relation("Prerequisite")
+  next          Trick[]          @relation("Prerequisite")
   savedTricks   SavedTrick[]
 }
 
@@ -56,7 +52,7 @@ model SavedTrick {
   createdAt DateTime @default(now()) @db.Timestamptz(6)
   category  String
   userId    String   @db.Uuid
-  trickId   String   @db.Uuid
+  trickId   String
 }
 
 model User {
@@ -64,21 +60,20 @@ model User {
   createdAt     DateTime       @default(now()) @db.Timestamptz(6)
   email         String         @unique
   picture       String?
-  createdTricks Trick[]
   savedTricks   SavedTrick[]
   contributions Contribution[]
 }
 
 model Video {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt  DateTime @default(now()) @db.Timestamptz(6)
-  externalId String   @unique
-  source     String   @default("others")
-  trickId    String?  @db.Uuid
-  title      String   @default("")
-  creatorId  String?  @db.Uuid
-  creator    Creator? @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  trick      Trick?   @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt         DateTime         @default(now()) @db.Timestamptz(6)
+  externalId        String           @unique
+  source            String           @default("others")
+  trickId           String?
+  title             String           @default("")
+  trick             Trick?           @relation(fields: [trickId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorPlatform   CreatorPlatform? @relation(fields: [creatorPlatformId], references: [id])
+  creatorPlatformId String?          @db.Uuid
 }
 
 enum ContributionStatus {
@@ -106,13 +101,13 @@ model Contribution {
   value     String
   action    ContributionAction
   author    User               @relation(fields: [authorId], references: [id])
-  authorId    String             @db.Uuid
+  authorId  String             @db.Uuid
 }
 
 model Tag {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz(6)
-  name      String
+  name      String   @unique
   tricks    Trick[]
 }
 

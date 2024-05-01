@@ -1,0 +1,24 @@
+{
+    "name": "importer",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "main": "importer.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node src/importer.js",
+        "rename": "node --experimental-json-modules src/updatePreviewName.js"
+    },
+    "dependencies": {
+        "csv-parse": "^5.5.5",
+        "imagemin": "^8.0.1",
+        "imagemin-webp": "^8.0.0",
+        "jsdom": "^23.0.1",
+        "nanoid": "^5.0.7",
+        "remark-parse": "^10.0.2",
+        "to-vfile": "^8.0.0",
+        "unified": "^11.0.2"
+    },
+    "author": "",
+    "license": "ISC"
+}
