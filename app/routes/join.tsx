@@ -107,189 +107,78 @@ export default function Join() {
   const { t } = useTranslation("auth");
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
-        <Form ref={zo.ref} method="post" className="space-y-6" replace>
-          <div>
-            <Label htmlFor={zo.fields.email()} className="block">
-              {t("register.email")}
-            </Label>
-            <div className="mt-1">
-              <Input
-                data-test-id="email"
-                required
-                autoFocus={true}
-                name={zo.fields.email()}
-                type="email"
-                autoComplete="email"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                disabled={disabled}
-              />
-              {zo.errors.email()?.message && (
-                <div className="pt-1 text-red-700" id="email-error">
-                  {zo.errors.email()?.message}
-                </div>
-              )}
-            </div>
-          </div>
-          return (
-          <div className="flex min-h-full flex-col justify-center">
-            <div className="mx-auto w-full max-w-md px-8">
+      <div className="flex min-h-full flex-col justify-center">
+          <div className="mx-auto w-full max-w-md px-8">
               <Form ref={zo.ref} method="post" className="space-y-6" replace>
-                <div>
-                  <Label htmlFor={zo.fields.email()} className="block">
-                    {t("register.email")}
-                  </Label>
-                  <div className="mt-1">
-                    <Input
-                      data-test-id="email"
-                      required
-                      autoFocus={true}
-                      name={zo.fields.email()}
-                      type="email"
-                      autoComplete="email"
-                      className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                      disabled={disabled}
-                    />
-                    {zo.errors.email()?.message && (
-                      <div className="pt-1 text-red-700" id="email-error">
-                        {zo.errors.email()?.message}
+                  <div>
+                      <Label htmlFor={zo.fields.email()} className="block">
+                          {t("register.email")}
+                      </Label>
+                      <div className="mt-1">
+                          <Input
+                              data-test-id="email"
+                              required
+                              autoFocus={true}
+                              name={zo.fields.email()}
+                              type="email"
+                              autoComplete="email"
+                              className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                              disabled={disabled}
+                          />
+                          {zo.errors.email()?.message && (
+                              <div
+                                  className="pt-1 text-red-700"
+                                  id="email-error"
+                              >
+                                  {zo.errors.email()?.message}
+                              </div>
+                          )}
                       </div>
-                    )}
                   </div>
-                </div>
-
-                <div>
-                  <Label htmlFor={zo.fields.password()} className="block">
-                    {t("register.password")}
-                  </Label>
-                  <div className="mt-1">
-                    <Input
-                      data-test-id="password"
-                      name={zo.fields.password()}
-                      type="password"
-                      autoComplete="new-password"
-                      className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                  <input
+                      type="hidden"
+                      name={zo.fields.redirectTo()}
+                      value={redirectTo}
+                  />
+                  <button
+                      data-test-id="create-account"
+                      type="submit"
+                      className="w-full rounded bg-blue-500  px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
                       disabled={disabled}
-                    />
-                    {zo.errors.password()?.message && (
-                      <div className="pt-1 text-red-700" id="password-error">
-                        {zo.errors.password()?.message}
+                  >
+                      {t("register.action")}
+                  </button>
+                  <div className="flex items-center justify-center">
+                      <div className="text-center text-sm text-gray-300">
+                          {t("register.alreadyHaveAnAccount")}{" "}
+                          <Link
+                              className="text-blue-500 underline"
+                              to={{
+                                  pathname: "/login",
+                                  search: searchParams.toString(),
+                              }}
+                          >
+                              {t("register.login")}
+                          </Link>
                       </div>
-                    )}
                   </div>
-                </div>
-                <div>
-                  <Label htmlFor={zo.fields.password()} className="block">
-                    {t("register.password")}
-                  </Label>
-                  <div className="mt-1">
-                    <Input
-                      data-test-id="password"
-                      name={zo.fields.password()}
-                      type="password"
-                      autoComplete="new-password"
-                      className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                      disabled={disabled}
-                    />
-                    {zo.errors.password()?.message && (
-                      <div className="pt-1 text-red-700" id="password-error">
-                        {zo.errors.password()?.message}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <input
-                  type="hidden"
-                  name={zo.fields.redirectTo()}
-                  value={redirectTo}
-                />
-                <button
-                  data-test-id="create-account"
-                  type="submit"
-                  className="w-full rounded bg-blue-500  px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-                  disabled={disabled}
-                >
-                  {t("register.action")}
-                </button>
-                <div className="flex items-center justify-center">
-                  <div className="text-center text-sm text-gray-300">
-                    {t("register.alreadyHaveAnAccount")}{" "}
-                    <Link
-                      className="text-blue-500 underline"
-                      to={{
-                        pathname: "/login",
-                        search: searchParams.toString(),
-                      }}
-                    >
-                      {t("register.login")}
-                    </Link>
-                  </div>
-                </div>
               </Form>
               <div className="mt-6">
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300" />
+                  <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-gray-300" />
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                          <span className="bg-white px-2 text-gray-500">
+                              {t("register.orContinueWith")}
+                          </span>
+                      </div>
                   </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="bg-white px-2 text-gray-500">
-                      {t("register.orContinueWith")}
-                    </span>
+                  <div className="mt-6">
+                      <ContinueWithEmailForm />
                   </div>
-                </div>
-                <div className="mt-6">
-                  <ContinueWithEmailForm />
-                </div>
               </div>
-            </div>
           </div>
-          );
-          <input
-            type="hidden"
-            name={zo.fields.redirectTo()}
-            value={redirectTo}
-          />
-          <button
-            data-test-id="create-account"
-            type="submit"
-            className="w-full rounded bg-blue-500  px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-            disabled={disabled}
-          >
-            {t("register.action")}
-          </button>
-          <div className="flex items-center justify-center">
-            <div className="text-center text-sm text-gray-300">
-              {t("register.alreadyHaveAnAccount")}{" "}
-              <Link
-                className="text-blue-500 underline"
-                to={{
-                  pathname: "/login",
-                  search: searchParams.toString(),
-                }}
-              >
-                {t("register.login")}
-              </Link>
-            </div>
-          </div>
-        </Form>
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-white px-2 text-gray-500">
-                {t("register.orContinueWith")}
-              </span>
-            </div>
-          </div>
-          <div className="mt-6">
-            <ContinueWithEmailForm />
-          </div>
-        </div>
       </div>
-    </div>
   );
 }
