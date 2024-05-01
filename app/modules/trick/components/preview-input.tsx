@@ -13,15 +13,7 @@ type PreviewInputProps = {
 export function PreviewInput({ trick }: PreviewInputProps) {
     const [preview, setPreview] = React.useState<string | null>(null);
     const fetcher = useFetcher();
-    const [preview, setPreview] = React.useState<string | null>(null);
-    const fetcher = useFetcher();
 
-    const onImageChange = (event: React.FormEvent<HTMLInputElement>) => {
-        const element = event.currentTarget as HTMLInputElement;
-        if (element.files && element.files[0]) {
-            setPreview(URL.createObjectURL(element.files[0]));
-        }
-    };
     const onImageChange = (event: React.FormEvent<HTMLInputElement>) => {
         const element = event.currentTarget as HTMLInputElement;
         if (element.files && element.files[0]) {

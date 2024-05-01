@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import type {
     ActionFunctionArgs,
     LoaderFunctionArgs,
@@ -30,16 +28,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (authSession) return redirect(ROUTES.home());
 
     return json({ title });
-    return json({ title });
 }
 
 const LoginFormSchema = z.object({
-    email: z
-        .string()
-        .email("invalid-email")
-        .transform((email) => email.toLowerCase()),
-    password: z.string().min(8, "password-too-short"),
-    redirectTo: z.string().optional(),
     email: z
         .string()
         .email("invalid-email")

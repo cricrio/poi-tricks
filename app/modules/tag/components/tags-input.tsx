@@ -11,19 +11,10 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
 } from "~/modules/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "~/modules/ui/popover";
 
 type Props = {
-    value: Array<Tag>;
-    name: string;
-    tags: AddNewTagButtonProps["tags"];
     value: Array<Tag>;
     name: string;
     tags: AddNewTagButtonProps["tags"];

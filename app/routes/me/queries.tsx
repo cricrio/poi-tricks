@@ -1,4 +1,5 @@
 import { db, trickFragment, creatorFragment, type User } from "~/database";
+import { transformTricks } from "~/modules/trick";
 
 export async function getSavedTricks(userId: string) {
     const savedTricks = await db.savedTrick.findMany({
@@ -9,30 +10,21 @@ export async function getSavedTricks(userId: string) {
             trick: {
                 select: {
                     ...trickFragment,
-                    creators: {
-                        select: creatorFragment,
+                    videos: {
+                        select: {
+                            creatorPlatform: {
+                                select: {
+                                    creator: { select: creatorFragment },
+                                },
+                            },
+                        },
                     },
                 },
             },
         },
     });
-    return savedTricks;
-    const savedTricks = await db.savedTrick.findMany({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-        select: {
-            category: true,
-            trick: {
-                select: {
-                    ...trickFragment,
-                    creators: {
-                        select: creatorFragment,
-                    },
-                },
-            },
-        },
-    });
-    return savedTricks;
+
+    return transformTricks(savedTricks);
 }
 
 export async function getUserDraftedTricks(userId: User["id"]) {

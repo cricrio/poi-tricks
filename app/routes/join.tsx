@@ -1,29 +1,18 @@
-import * as React from "react";
-
 import { Label } from "@radix-ui/react-label";
-import type {
-    ActionFunctionArgs,
-    LoaderFunctionArgs,
-    MetaFunction,
-    ActionFunctionArgs,
-    LoaderFunctionArgs,
-    MetaFunction,
+import {
+    redirect,
+    json,
+    type LoaderFunctionArgs,
+    type ActionFunctionArgs,
+    type MetaFunction,
 } from "@remix-run/node";
-import { redirect, json } from "@remix-run/node";
 import { Form, Link, useNavigation, useSearchParams } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { parseFormAny, useZorm } from "react-zorm";
 import { z } from "zod";
 
 import { i18nextServer } from "~/integrations/i18n";
-import {
-    createAuthSession,
-    getAuthSession,
-    ContinueWithEmailForm,
-    createAuthSession,
-    getAuthSession,
-    ContinueWithEmailForm,
-} from "~/modules/auth";
+import { createAuthSession, getAuthSession } from "~/modules/auth";
 import { Input } from "~/modules/ui";
 import { getUserByEmail, createUserAccount } from "~/modules/user";
 import { ROUTES } from "~/routes";
@@ -47,12 +36,6 @@ const JoinFormSchema = z.object({
         .transform((email) => email.toLowerCase()),
     password: z.string().min(8, "password-too-short"),
     redirectTo: z.string().optional(),
-    email: z
-        .string()
-        .email("invalid-email")
-        .transform((email) => email.toLowerCase()),
-    password: z.string().min(8, "password-too-short"),
-    redirectTo: z.string().optional(),
 });
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -60,8 +43,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const result = await JoinFormSchema.safeParseAsync(parseFormAny(formData));
     assertIsPost(request);
-    const formData = await request.formData();
-    const result = await JoinFormSchema.safeParseAsync(parseFormAny(formData));
 
     if (!result.success) {
         return json(
@@ -81,9 +62,7 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     const { email, password, redirectTo } = result.data;
-    const { email, password, redirectTo } = result.data;
 
-    const existingUser = await getUserByEmail(email);
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
@@ -92,22 +71,9 @@ export async function action({ request }: ActionFunctionArgs) {
             { status: 400 },
         );
     }
-    if (existingUser) {
-        return json(
-            { errors: { email: "user-already-exist", password: null } },
-            { status: 400 },
-        );
-    }
 
     const authSession = await createUserAccount(email, password);
-    const authSession = await createUserAccount(email, password);
 
-    if (!authSession) {
-        return json(
-            { errors: { email: "unable-to-create-account", password: null } },
-            { status: 500 },
-        );
-    }
     if (!authSession) {
         return json(
             { errors: { email: "unable-to-create-account", password: null } },
@@ -126,18 +92,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => [
     {
         title: data?.title,
     },
-    {
-        title: data?.title,
-    },
 ];
 
 export default function Join() {
-    const zo = useZorm("NewQuestionWizardScreen", JoinFormSchema);
-    const [searchParams] = useSearchParams();
-    const redirectTo = searchParams.get("redirectTo") ?? undefined;
-    const navigation = useNavigation();
-    const disabled = isFormProcessing(navigation.state);
-    const { t } = useTranslation("auth");
     const zo = useZorm("NewQuestionWizardScreen", JoinFormSchema);
     const [searchParams] = useSearchParams();
     const redirectTo = searchParams.get("redirectTo") ?? undefined;

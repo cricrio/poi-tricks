@@ -1,4 +1,3 @@
-// For Remix, import it like this
 import {
     Form as FrameworkForm,
     useActionData,

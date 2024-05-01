@@ -14,12 +14,6 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
 } from "~/modules/ui/select";
 
 type Props = {

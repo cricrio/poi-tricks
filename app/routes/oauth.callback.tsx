@@ -8,12 +8,9 @@ import { z } from "zod";
 
 import { supabaseClient } from "~/integrations/supabase";
 import {
-    refreshAccessToken,
     commitAuthSession,
     getAuthSession,
     refreshAccessToken,
-    commitAuthSession,
-    getAuthSession,
 } from "~/modules/auth";
 import { tryCreateUser, getUserByEmail } from "~/modules/user";
 import { ROUTES } from "~/routes";
@@ -23,11 +20,9 @@ import { assertIsPost, safeRedirect } from "~/utils";
 // we don't want him to fall in a black hole 👽
 export async function loader({ request }: LoaderFunctionArgs) {
     const authSession = await getAuthSession(request);
-    const authSession = await getAuthSession(request);
 
     if (authSession) return redirect(ROUTES.home());
 
-    return json({});
     return json({});
 }
 
@@ -114,15 +109,6 @@ export default function LoginCallback() {
                 // this fragment url looks like https://.....#access_token=evxxxxxxxx&refresh_token=xxxxxx, and it's not readable server-side (Oauth security)
                 // supabase auth listener gives us a user session, based on what it founds in this fragment url
                 // we can't use it directly, client-side, because we can't access sessionStorage from here
-    useEffect(() => {
-        const {
-            data: { subscription },
-        } = supabaseClient.auth.onAuthStateChange((event, supabaseSession) => {
-            if (event === "SIGNED_IN") {
-                // supabase sdk has ability to read url fragment that contains your token after third party provider redirects you here
-                // this fragment url looks like https://.....#access_token=evxxxxxxxx&refresh_token=xxxxxx, and it's not readable server-side (Oauth security)
-                // supabase auth listener gives us a user session, based on what it founds in this fragment url
-                // we can't use it directly, client-side, because we can't access sessionStorage from here
 
                 // we should not trust what's happen client side
                 // so, we only pick the refresh token, and let's back-end getting user session from it
@@ -139,11 +125,6 @@ export default function LoginCallback() {
             }
         });
 
-        return () => {
-            // prevent memory leak. Listener stays alive 👨‍🎤
-            subscription.unsubscribe();
-        };
-    }, [fetcher, redirectTo]);
         return () => {
             // prevent memory leak. Listener stays alive 👨‍🎤
             subscription.unsubscribe();

@@ -1,21 +1,5 @@
-import type {
-    LinksFunction,
-    LoaderFunction,
-    MetaFunction,
-    LinksFunction,
-    LoaderFunction,
-    MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, type LinksFunction, type LoaderFunction } from "@remix-run/node";
 import {
-    Links,
-    Link,
-    LiveReload,
-    Meta,
-    Outlet,
-    Scripts,
-    ScrollRestoration,
-    useLoaderData,
     Links,
     Link,
     LiveReload,
@@ -33,10 +17,6 @@ import { i18nextServer } from "~/integrations/i18n";
 import { LogoutButton, getAuthSession } from "./modules/auth";
 import type { UserWithSavedTrick } from "./modules/user";
 import {
-    UserProvider,
-    tryGetUserByIdWithSavedTricks,
-    UserShield,
-    Avatar,
     UserProvider,
     tryGetUserByIdWithSavedTricks,
     UserShield,
@@ -67,9 +47,6 @@ export const meta: MetaFunction = () => [
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const locale = await i18nextServer.getLocale(request);
-    const session = await getAuthSession(request);
-    const user = await tryGetUserByIdWithSavedTricks(session?.userId);
     const locale = await i18nextServer.getLocale(request);
     const session = await getAuthSession(request);
     const user = await tryGetUserByIdWithSavedTricks(session?.userId);
