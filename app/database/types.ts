@@ -1,16 +1,16 @@
 import {
-    TrickDifficulty as Difficulty,
-    ContributionAction,
+  TrickDifficulty as Difficulty,
+  ContributionAction,
 } from "@prisma/client";
 import type { TrickDifficulty, Tag as DBTag } from "@prisma/client";
 export type {
-    User,
-    Creator,
-    Prisma,
-    Trick,
-    TrickDifficulty,
-    Contribution,
-    Video,
+  User,
+  Creator,
+  Prisma,
+  Trick,
+  TrickDifficulty,
+  Contribution,
+  Video,
 } from "@prisma/client";
 
 type Tag = Pick<DBTag, "id" | "name">;

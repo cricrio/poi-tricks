@@ -9,28 +9,28 @@ import { schema } from "~/modules/trick/forms/publish-trick-button";
 import { assertIsPost } from "~/utils";
 
 export async function action({ request }: ActionFunctionArgs) {
-    assertIsPost(request);
+  assertIsPost(request);
 
-    const authSession = await getAuthSession(request);
-    const userId = authSession?.userId;
-    invariant(userId, "userId is required");
+  const authSession = await getAuthSession(request);
+  const userId = authSession?.userId;
+  invariant(userId, "userId is required");
 
-    const body = await request.formData();
-    const validatedData = schema.safeParse(parseFormAny(body));
-    if (validatedData.success === false) {
-        return json(
-            {
-                errors: validatedData.error,
-            },
-            { status: 400 },
-        );
-    }
-    const { trickId } = validatedData.data;
-    invariant(trickId, "trickId is required");
+  const body = await request.formData();
+  const validatedData = schema.safeParse(parseFormAny(body));
+  if (validatedData.success === false) {
+    return json(
+      {
+        errors: validatedData.error,
+      },
+      { status: 400 },
+    );
+  }
+  const { trickId } = validatedData.data;
+  invariant(trickId, "trickId is required");
 
-    const updatedTrick = await updateTrick(trickId, { draft: false });
+  const updatedTrick = await updateTrick(trickId, { draft: false });
 
-    await logPublishingTrick(trickId, userId);
+  await logPublishingTrick(trickId, userId);
 
-    return json({ error: null, data: updatedTrick });
+  return json({ error: null, data: updatedTrick });
 }

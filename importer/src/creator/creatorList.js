@@ -9,7 +9,7 @@ class CreatorList {
   }
 
   add = (trickId) => (video) => {
-    if (video.source !== 'youtube') return;
+    if (video.source !== "youtube") return;
     const creator = video.creator;
     const existing = this.creators.find((c) => c.name === creator.name);
     if (!existing) {

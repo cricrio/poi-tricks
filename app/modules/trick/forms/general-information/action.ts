@@ -6,8 +6,8 @@ import { mutation } from "./mutation";
 import { schema } from "./schema";
 
 export const action: ActionFunction = async ({ request }) =>
-    formAction({
-        request,
-        schema,
-        mutation,
-    });
+  formAction({
+    request,
+    schema,
+    mutation,
+  });

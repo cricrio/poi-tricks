@@ -10,34 +10,30 @@ import { ROUTES } from "~/routes";
 import { assertIsPost } from "~/utils";
 
 export async function loader(args: LoaderFunctionArgs) {
-    await requireAuthSession(args.request);
-    const tags = await getAllTags();
-    return json({ tags });
+  await requireAuthSession(args.request);
+  const tags = await getAllTags();
+  return json({ tags });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    assertIsPost(request);
-    const authSession = await requireAuthSession(request);
-    const formData = await request.formData();
+  assertIsPost(request);
+  const authSession = await requireAuthSession(request);
+  const formData = await request.formData();
 
-    const userData = validateUserInput(formData);
-    const trick = await createTrick(
-        userData,
-        authSession.userId,
-        userData.tags,
-    );
+  const userData = validateUserInput(formData);
+  const trick = await createTrick(userData, authSession.userId, userData.tags);
 
-    return redirect(ROUTES.trick(trick));
+  return redirect(ROUTES.trick(trick));
 }
 
 export default function AddPage() {
-    const { tags } = useLoaderData<typeof loader>();
-    return (
-        <Main>
-            <Header>Create a new trick</Header>
-            <TagProvider tags={tags}>
-                <TrickGeneralInformationForm />
-            </TagProvider>
-        </Main>
-    );
+  const { tags } = useLoaderData<typeof loader>();
+  return (
+    <Main>
+      <Header>Create a new trick</Header>
+      <TagProvider tags={tags}>
+        <TrickGeneralInformationForm />
+      </TagProvider>
+    </Main>
+  );
 }

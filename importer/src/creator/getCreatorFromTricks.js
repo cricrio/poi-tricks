@@ -1,4 +1,4 @@
-import CreatorList from './creatorList.js';
+import CreatorList from "./creatorList.js";
 
 export const getCreatorFromTricks = (tricks) => {
   const creatorList = new CreatorList();

@@ -2,8 +2,8 @@
 
 ## Phase 1: Astro
 
--   [x] Poi-trick with Astro
--   [x] Poi-trick with Astro
+- [x] Poi-trick with Astro
+- [x] Poi-trick with Astro
 
 ## Phase 2: Contributions
 
@@ -20,8 +20,8 @@
 - [ ] Update import script to use tags instead of types
 - [ ] Remove prisma tags from database barrel roll. The database should not be needed to run the tests.
 - [ ] User management
-  -  [ ] Role management
-  -  [ ] List of users
+  - [ ] Role management
+  - [ ] List of users
 - [ ] Limit tags deletion to ADMIN role only
 - [ ] Mono repo architecture with pnnpm then move import script inside it
 - [ ] Block redirection on config tag page if a input is modified

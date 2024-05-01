@@ -7,20 +7,20 @@ import { RESSOURCES } from "~/routes";
 import type { action } from "~/routes/publish-trick";
 
 const schema = z.object({
-    trickId: z.string(),
+  trickId: z.string(),
 });
 
 type Props = {
-    trickId: Trick["id"];
+  trickId: Trick["id"];
 };
 function PublishTrickButton({ trickId }: Props) {
-    const fetcher = useFetcher<typeof action>();
-    return (
-        <fetcher.Form method="post" action={RESSOURCES.publishTrick}>
-            <input name="trickId" value={trickId} type="hidden" />
-            <Button type="submit">Publish</Button>
-        </fetcher.Form>
-    );
+  const fetcher = useFetcher<typeof action>();
+  return (
+    <fetcher.Form method="post" action={RESSOURCES.publishTrick}>
+      <input name="trickId" value={trickId} type="hidden" />
+      <Button type="submit">Publish</Button>
+    </fetcher.Form>
+  );
 }
 
 export { PublishTrickButton, schema };

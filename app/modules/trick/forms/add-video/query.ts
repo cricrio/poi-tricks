@@ -3,19 +3,19 @@ import type { Trick } from "@prisma/client";
 import { db } from "~/database";
 
 export async function getTrick(trickId: Trick["id"]) {
-    const trick = await db.trick.findFirstOrThrow({
+  const trick = await db.trick.findFirstOrThrow({
+    select: {
+      id: true,
+      videos: {
         select: {
-            id: true,
-            videos: {
-                select: {
-                    externalId: true,
-                },
-            },
+          externalId: true,
         },
-        where: {
-            id: trickId,
-        },
-    });
+      },
+    },
+    where: {
+      id: trickId,
+    },
+  });
 
-    return { ...trick, videos: trick.videos.map((v) => v.externalId) };
+  return { ...trick, videos: trick.videos.map((v) => v.externalId) };
 }

@@ -5,13 +5,13 @@ import type { UserWithSavedTrick } from "./types";
 const userContext = createContext<UserWithSavedTrick | null>(null);
 
 type UserProviderProps = {
-    user: UserWithSavedTrick;
-    children: React.ReactNode;
+  user: UserWithSavedTrick;
+  children: React.ReactNode;
 };
 export function UserProvider({ children, user }: UserProviderProps) {
-    return <userContext.Provider value={user}>{children}</userContext.Provider>;
+  return <userContext.Provider value={user}>{children}</userContext.Provider>;
 }
 
 export function useUser(): UserWithSavedTrick | null {
-    return useContext(userContext);
+  return useContext(userContext);
 }

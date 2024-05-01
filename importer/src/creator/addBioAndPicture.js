@@ -1,10 +1,10 @@
-import { JSDOM } from 'jsdom';
+import { JSDOM } from "jsdom";
 
 const parseMeta = (page, name) => {
   const node = page.window.document.querySelector(`meta[property="${name}"]`);
 
   if (node) {
-    return node.getAttribute('content');
+    return node.getAttribute("content");
   }
 };
 
@@ -14,8 +14,8 @@ const fetchBioAndPicture = async (url) => {
   const page = new JSDOM(text);
 
   const [picture, bio] = [
-    parseMeta(page, 'og:image'),
-    parseMeta(page, 'og:description'),
+    parseMeta(page, "og:image"),
+    parseMeta(page, "og:description"),
   ];
 
   return {

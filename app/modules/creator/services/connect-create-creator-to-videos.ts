@@ -4,40 +4,40 @@ import { fetchBioAndPicture } from "./get-creator-information";
 import { getMetadataFromNoembed } from "./get-metadata-from-noembed";
 
 async function getCreatorIdFromDB(externalId: string) {
-    const platform = await db.creatorPlatform.findFirst({
-        where: {
-            externalId,
-        },
-        select: {
-            creator: { select: { id: true } },
-        },
-    });
-    return platform?.creator?.id;
+  const platform = await db.creatorPlatform.findFirst({
+    where: {
+      externalId,
+    },
+    select: {
+      creator: { select: { id: true } },
+    },
+  });
+  return platform?.creator?.id;
 }
 
 async function getCreatorAction(
-    externalId: string,
+  externalId: string,
 ): Promise<Prisma.CreatorCreateNestedOneWithoutVideosInput> {
-    const metadata = await getMetadataFromNoembed(externalId);
-    const creatorId = await getCreatorIdFromDB(metadata.platform.externalId);
+  const metadata = await getMetadataFromNoembed(externalId);
+  const creatorId = await getCreatorIdFromDB(metadata.platform.externalId);
 
-    if (creatorId) {
-        return { connect: { id: creatorId } };
-    }
+  if (creatorId) {
+    return { connect: { id: creatorId } };
+  }
 
-    const creatorMetadata = await fetchBioAndPicture(metadata.platform.url);
+  const creatorMetadata = await fetchBioAndPicture(metadata.platform.url);
 
-    return {
+  return {
+    create: {
+      ...metadata.creator,
+      platforms: {
         create: {
-            ...metadata.creator,
-            platforms: {
-                create: {
-                    ...metadata.platform,
-                },
-            },
-            ...creatorMetadata,
+          ...metadata.platform,
         },
-    };
+      },
+      ...creatorMetadata,
+    },
+  };
 }
 
 export { getCreatorAction };

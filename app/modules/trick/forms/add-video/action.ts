@@ -10,32 +10,32 @@ import { schema } from "./schema";
 import { addVideo } from "../../service.server";
 
 async function validateUserInput(request: Request) {
-    const formData = await request.formData();
-    const validationResult = safeParseForm(schema, formData);
-    if (!validationResult.success) {
-        throw json(validationResult.error, 400);
-    }
-    return validationResult.data;
+  const formData = await request.formData();
+  const validationResult = safeParseForm(schema, formData);
+  if (!validationResult.success) {
+    throw json(validationResult.error, 400);
+  }
+  return validationResult.data;
 }
 
 async function action({ request, params }: ActionFunctionArgs) {
-    assertIsPost(request);
-    const session = await requireAuthSession(request);
-    const trickId = getRequiredParam(params, "trickId", "uuid");
-    const { externalId } = await validateUserInput(request);
+  assertIsPost(request);
+  const session = await requireAuthSession(request);
+  const trickId = getRequiredParam(params, "trickId", "uuid");
+  const { externalId } = await validateUserInput(request);
 
-    const creator = await getCreatorAction(externalId);
+  const creator = await getCreatorAction(externalId);
 
-    await addVideo({
-        trick: { connect: { id: trickId } },
-        externalId,
-        creator,
-        source: "youtube",
-    });
+  await addVideo({
+    trick: { connect: { id: trickId } },
+    externalId,
+    creator,
+    source: "youtube",
+  });
 
-    await logAddVideoToTrick(trickId, session.userId, externalId);
+  await logAddVideoToTrick(trickId, session.userId, externalId);
 
-    return json({ status: "ok" });
+  return json({ status: "ok" });
 }
 
 export { action };
