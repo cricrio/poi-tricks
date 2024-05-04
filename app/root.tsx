@@ -1,4 +1,9 @@
-import { json, type LinksFunction, type LoaderFunction } from "@remix-run/node";
+import {
+  json,
+  type LinksFunction,
+  type LoaderFunction,
+  type MetaFunction,
+} from "@remix-run/node";
 import {
   Links,
   Link,
@@ -32,16 +37,9 @@ export const links: LinksFunction = () => [
     href: globalStyle,
     as: "style",
   },
-  {
-    rel: "stylesheet preload prefetch",
-    href: globalStyle,
-    as: "style",
-  },
 ];
 
 export const meta: MetaFunction = () => [
-  { title: "PoiTricks" },
-  { name: "description", content: "PoiTricks" },
   { title: "PoiTricks" },
   { name: "description", content: "PoiTricks" },
 ];
@@ -51,11 +49,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const session = await getAuthSession(request);
   const user = await tryGetUserByIdWithSavedTricks(session?.userId);
 
-  return json({
-    locale,
-    env: getBrowserEnv(),
-    user,
-  });
   return json({
     locale,
     env: getBrowserEnv(),

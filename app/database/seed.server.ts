@@ -1,55 +1,10 @@
 /* eslint-disable no-console */
 import { PrismaClient, type TrickDifficulty } from "@prisma/client";
-import { createClient } from "@supabase/supabase-js";
 
 import creators from "../../.data/creators.json";
 import tricks from "../../.data/tricks.json";
-import { SUPABASE_SERVICE_ROLE, SUPABASE_URL } from "../utils/env";
-
-const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
 
 const prisma = new PrismaClient();
-
-const email = "hello@supabase.com";
-
-const getUserId = async (): Promise<string> => {
-  const userList = await supabaseAdmin.auth.admin.listUsers();
-
-  if (userList.error) {
-    throw userList.error;
-  }
-
-  const existingUserId = userList.data.users.find(
-    (user) => user.email === email,
-  )?.id;
-
-  if (existingUserId) {
-    return existingUserId;
-  }
-  if (existingUserId) {
-    return existingUserId;
-  }
-
-  const newUser = await supabaseAdmin.auth.admin.createUser({
-    email,
-    password: "supabase",
-    email_confirm: true,
-  });
-
-  if (newUser.error) {
-    throw newUser.error;
-  }
-  return newUser.data.user.id;
-};
 
 async function createCreators() {
   const savedCreators = [];
@@ -167,24 +122,11 @@ type SavedCreators = Awaited<ReturnType<typeof createCreators>>;
 async function seed() {
   try {
     const savedCreators = await createCreators();
-    const trickPromises = await createTricks(savedCreators);
+    await createTricks(savedCreators);
 
     linkPrerequisites();
 
-    // const successCount = trickPromises.filter(
-    //     (t) => t.status === "fulfilled",
-    // ).length;
-
-    // console.log(trickPromises.filter((p) => p.status === "rejected"));
-    // console.log(
-    //     `tricks success count: ${successCount} - error count: ${
-    //         trickPromises.length - successCount
-    //     }`,
-    // );
     console.log(`Database has been seeded. 🌱\n`);
-    // console.log(
-    //     `User added to your database 👇 \n🆔: ${user.id}\n📧: ${user.email}\n🔑: supabase`,
-    // );
   } catch (cause) {
     console.error(cause);
     throw new Error("Seed failed 🥲");
