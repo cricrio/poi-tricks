@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { PrismaClient, type TrickDifficulty } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
-import { error } from "domain-functions/types/composable/composable";
 
 import creators from "../../.data/creators.json";
 import tricks from "../../.data/tricks.json";
@@ -24,18 +23,11 @@ const email = "hello@supabase.com";
 
 const getUserId = async (): Promise<string> => {
   const userList = await supabaseAdmin.auth.admin.listUsers();
-  const userList = await supabaseAdmin.auth.admin.listUsers();
 
   if (userList.error) {
     throw userList.error;
   }
-  if (userList.error) {
-    throw userList.error;
-  }
 
-  const existingUserId = userList.data.users.find(
-    (user) => user.email === email,
-  )?.id;
   const existingUserId = userList.data.users.find(
     (user) => user.email === email,
   )?.id;
@@ -52,26 +44,17 @@ const getUserId = async (): Promise<string> => {
     password: "supabase",
     email_confirm: true,
   });
-  const newUser = await supabaseAdmin.auth.admin.createUser({
-    email,
-    password: "supabase",
-    email_confirm: true,
-  });
 
   if (newUser.error) {
     throw newUser.error;
   }
-  if (newUser.error) {
-    throw newUser.error;
-  }
-
-  return newUser.data.user.id;
   return newUser.data.user.id;
 };
 
 async function createCreators() {
-  const creatorsPromises = creators.map(async (creator) =>
-    prisma.creator.create({
+  const savedCreators = [];
+  for (const creator of creators) {
+    const c = await prisma.creator.create({
       data: {
         name: creator.name,
         picture: creator.picture,
@@ -88,9 +71,10 @@ async function createCreators() {
         id: true,
         platforms: true,
       },
-    }),
-  );
-  return await Promise.all(creatorsPromises);
+    });
+    savedCreators.push(c);
+  }
+  return savedCreators;
 }
 
 function getPlateformId(creatorExternalId: string, creators: SavedCreators) {

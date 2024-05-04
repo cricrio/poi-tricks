@@ -4,7 +4,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "run-s build:*",
-    "build:remix": "remix build",
+    "build:remix": "remix build .",
     "db:prepare-migration": "prisma migrate dev --create-only --skip-seed",
     "db:deploy-migration": "prisma migrate deploy",
     "dev": "remix dev",
@@ -14,7 +14,7 @@
     "setup": "run-s setup:db setup:seed",
     "setup:db": "prisma generate && prisma migrate deploy",
     "setup:seed": "prisma db seed",
-    "start": "remix-serve build",
+    "start": "remix-serve ./build/index.js",
     "start:ci": "dotenv -- remix-serve build",
     "test": "vitest",
     "test:cov": "vitest --coverage",
@@ -69,6 +69,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
+    "@flydotio/dockerfile": "^0.5.7",
     "@remix-run/dev": "^2.5.0",
     "@remix-run/eslint-config": "^2.5.0",
     "@tailwindcss/forms": "^0.5.7",

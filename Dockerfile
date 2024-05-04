@@ -1,56 +1,60 @@
-# base node image
-FROM node:18-bookworm-slim as base
+# syntax = docker/dockerfile:1
 
-# set for base and all layer that inherit from it
-ENV NODE_ENV production
+# Adjust NODE_VERSION as desired
+ARG NODE_VERSION=20.6.1
+FROM node:${NODE_VERSION}-slim as base
 
-# Install openssl for Prisma
-RUN apt-get update && apt-get install -y openssl
+LABEL fly_launch_runtime="Remix/Prisma"
 
-# Install all node_modules, including dev dependencies
-FROM base as deps
+# Remix/Prisma app lives here
+WORKDIR /app
 
-WORKDIR /myapp
-
-ADD package.json ./
-RUN npm install --production=false
-
-# Setup production node_modules
-FROM base as production-deps
-
-WORKDIR /myapp
-
-COPY --from=deps /myapp/node_modules /myapp/node_modules
-ADD package.json ./
-RUN npm prune --production
-
-# Build the app
-FROM base as build
-
-WORKDIR /myapp
-
-COPY --from=deps /myapp/node_modules /myapp/node_modules
-
-ADD /app/database/schema.prisma .
-RUN npx prisma generate
-
-ADD . .
-RUN npm run build
-
-# Finally, build the production image with minimal footprint
-FROM base
-
-ENV PORT="8080"
+# Set production environment
 ENV NODE_ENV="production"
 
-WORKDIR /myapp
 
-COPY --from=production-deps /myapp/node_modules /myapp/node_modules
-COPY --from=build /myapp/node_modules/.prisma /myapp/node_modules/.prisma
+# Throw-away build stage to reduce size of final image
+FROM base as build
 
-COPY --from=build /myapp/build /myapp/build
-COPY --from=build /myapp/public /myapp/public
-COPY --from=build /myapp/package.json /myapp/package.json
-COPY --from=build /myapp/start.sh /myapp/start.sh
+# Install packages needed to build node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
 
-ENTRYPOINT [ "./start.sh" ]
+# Install node modules
+COPY --link package-lock.json package.json ./
+
+ADD /app/database/schema.prisma app/database/schema.prisma
+
+#Keep alive the container for debugging purposes
+
+RUN ls -lisa 
+
+RUN npm ci --include=dev
+
+# Generate Prisma Client
+RUN npx prisma generate
+
+# Copy application code
+COPY --link . .
+
+# Build application
+RUN npm run build
+
+# Remove development dependencies
+RUN npm prune --omit=dev
+
+
+# Final stage for app image
+FROM base
+
+# Install packages needed for deployment
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y openssl && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copy built application
+COPY --from=build /app /app
+
+# Start the server by default, this can be overwritten at runtime
+EXPOSE 3000
+CMD [ "npm", "run", "start" ]
