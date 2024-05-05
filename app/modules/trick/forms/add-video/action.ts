@@ -21,7 +21,7 @@ async function validateUserInput(request: Request) {
 async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
   const session = await requireAuthSession(request);
-  const trickId = getRequiredParam(params, "trickId", "uuid");
+  const trickId = getRequiredParam(params, "trickId");
   const { externalId } = await validateUserInput(request);
 
   const creator = await getCreatorAction(externalId);
@@ -29,7 +29,7 @@ async function action({ request, params }: ActionFunctionArgs) {
   await addVideo({
     trick: { connect: { id: trickId } },
     externalId,
-    creator,
+    creatorPlatform: creator,
     source: "youtube",
   });
 

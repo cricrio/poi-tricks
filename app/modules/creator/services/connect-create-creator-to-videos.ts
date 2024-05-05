@@ -3,39 +3,39 @@ import { db, type Prisma } from "~/database";
 import { fetchBioAndPicture } from "./get-creator-information";
 import { getMetadataFromNoembed } from "./get-metadata-from-noembed";
 
-async function getCreatorIdFromDB(externalId: string) {
+async function getCreatorPlateformId(externalId: string) {
   const platform = await db.creatorPlatform.findFirst({
     where: {
       externalId,
     },
     select: {
-      creator: { select: { id: true } },
+      id: true,
     },
   });
-  return platform?.creator?.id;
+  return platform?.id;
 }
 
 async function getCreatorAction(
   externalId: string,
-): Promise<Prisma.CreatorCreateNestedOneWithoutVideosInput> {
+): Promise<Prisma.CreatorPlatformCreateNestedOneWithoutVideosInput> {
   const metadata = await getMetadataFromNoembed(externalId);
-  const creatorId = await getCreatorIdFromDB(metadata.platform.externalId);
+  const platformId = await getCreatorPlateformId(metadata.platform.externalId);
 
-  if (creatorId) {
-    return { connect: { id: creatorId } };
+  if (platformId) {
+    return { connect: { id: platformId } };
   }
 
   const creatorMetadata = await fetchBioAndPicture(metadata.platform.url);
 
   return {
     create: {
-      ...metadata.creator,
-      platforms: {
+      ...metadata.platform,
+      creator: {
         create: {
-          ...metadata.platform,
+          ...metadata.creator,
+          ...creatorMetadata,
         },
       },
-      ...creatorMetadata,
     },
   };
 }

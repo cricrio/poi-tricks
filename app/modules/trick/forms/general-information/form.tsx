@@ -26,7 +26,6 @@ const schema = z.object({
   name: z.string(),
   difficulty: z.nativeEnum(trickDifficultyEnum).nullable(),
   tags: z.array(z.string()).nullable(),
-  preview: z.string().nullable(),
 });
 
 export function validate(formData: FormData) {

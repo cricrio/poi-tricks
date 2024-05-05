@@ -23,7 +23,7 @@ import { assertIsPost, getRequiredParam } from "~/utils";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const session = await requireAuthSession(request);
-  const id = getRequiredParam(params, "trickId", "uuid");
+  const id = getRequiredParam(params, "trickId");
   const trick = await getTrickById(id, session.userId);
 
   if (!trick) {
@@ -37,7 +37,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
 export async function action({ params, request }: ActionFunctionArgs) {
   assertIsPost(request);
   const authSession = await requireAuthSession(request);
-  const id = getRequiredParam(params, "trickId", "uuid");
+  const id = getRequiredParam(params, "trickId");
 
   const userData = validateUserInput(await request.formData());
   const trick = await getTrickByIdForContribution(id);
@@ -47,6 +47,7 @@ export async function action({ params, request }: ActionFunctionArgs) {
     { ...userData, id },
     authSession.userId,
   );
+
   await saveContributions(contributions);
   const { connect, disconnect } = getConnections(
     contributions.filter((c) => c.key === "tags"),
