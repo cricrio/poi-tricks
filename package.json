@@ -116,5 +116,8 @@
   "prisma": {
     "schema": "app/database/schema.prisma",
     "seed": "tsx app/database/seed.server.ts"
+  },
+  "dockerfile": {
+    "distroless": true
   }
 }
